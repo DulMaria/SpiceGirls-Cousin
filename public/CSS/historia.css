@@ -1,0 +1,273 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Eagle+Lake&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap');
+
+.titulo{
+    background-color: #ccc9dc;
+    color: white;
+    padding: 20px;
+    text-align: center
+}
+
+.titulo h1 {
+    font-family: "Eagle Lake", serif;
+    font-size: 60px;
+    color: rgb(75, 14, 75);
+}
+
+.historia h2 {
+    font-family: "Walter Turncoat", cursive;
+    color: #2c3e50;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    margin-top: 40px;
+}
+
+.historia p {
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.section-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    margin: 30px 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.timeline h2{
+    font-family: "Walter Turncoat", cursive;
+    color: #2c3e50;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    margin-top: 40px;
+}
+
+.timeline {
+    list-style: none;
+    padding: 0;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    margin: 40px 0;
+    position: relative;
+    flex-wrap: wrap;
+}
+
+.timeline-item-left {
+    flex-direction: row-reverse;
+}
+
+.timeline-item .line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #127475;
+    transform: translateX(-50%);
+}
+
+.timeline-item .text,
+.timeline-item .image {
+    width: 45%;
+    padding: 30px;
+}
+
+.timeline-item .image img {
+    width: 400px;
+    height: 270px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 0 auto;
+}
+
+.timeline-item .year {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #e07a5f;
+    margin-bottom: 10px;
+    display: block;
+    font-size: 35px;
+}
+
+.timeline-item p {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    display: block;
+    font-size: 23px;
+}
+
+.vision-mission {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.vision-mission > div {
+    flex: 1;
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* Animaciones */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+}
+
+.fade-in h3{
+    font-family: "Walter Turncoat", cursive;
+    color: #2c3e50;
+    font-size: 25px;
+}
+
+.fade-in p{
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.contenedor-interno {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    border-radius: 15px;
+}
+
+/* 📱 Media Queries para responsividad */
+@media (max-width: 1024px) {
+    .titulo h1 {
+        font-size: 48px;
+    }
+
+    .timeline-item .text,
+    .timeline-item .image {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .timeline-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .timeline-item-left {
+        flex-direction: column;
+    }
+
+    .vision-mission {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .timeline-item .image img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .titulo h1 {
+        font-size: 36px;
+    }
+
+    .historia h2,
+    .timeline h2 {
+        font-size: 1.5em;
+    }
+
+    .timeline-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 0;
+        width: 100%;
+        position: relative;
+        border-top: 2px solid #127475; /* Línea horizontal */
+        padding-top: 20px;
+        margin-top: 40px;
+    }
+
+    .timeline-item:first-child {
+        border-top: none; /* No mostrar la línea en el primero */
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+    .timeline-item-left {
+        flex-direction: column;
+    }
+
+    .timeline-item .line {
+        display: none;
+    }
+
+    .timeline-item .text,
+    .timeline-item .image {
+        width: 100%;
+        padding: 15px 0;
+        text-align: center;
+    }
+
+    .timeline-item .image img {
+        width: 90%;
+        height: auto;
+    }
+
+    .timeline-item .year {
+        font-size: 24px;
+    }
+
+    .timeline-item p {
+        font-size: 18px;
+    }
+
+    .fade-in h3 {
+        font-size: 22px;
+    }
+
+    .fade-in p {
+        font-size: 16px;
+    }
+
+    .contenedor-interno {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo h1 {
+        font-size: 28px;
+    }
+
+    .timeline-item .year {
+        font-size: 24px;
+    }
+
+    .timeline-item p {
+        font-size: 16px;
+    }
+
+    .section-image {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .timeline-item .line {
+        display: none;
+    }
+}

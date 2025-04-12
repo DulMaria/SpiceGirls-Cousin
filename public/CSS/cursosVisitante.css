@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bitter:ital,wght@0,100..900;1,100..900&display=swap');
+
+/*Pagina de Áreas */
+/* Título principal */
+.title {
+    text-align: center;
+}
+
+.title h1 {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 36px;
+    color: #2E1A47;
+}
+
+.title p {
+    font-family: "Bitter", serif;
+    font-size: 18px;
+    color: #555;
+}
+
+.course-section {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px 20px;
+    flex-wrap: wrap;
+}
+
+.course-item {
+    background-color: #FFFFFF;
+    border-radius: 18px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid transparent;
+    padding: 20px;
+}
+
+.course-item:hover {
+    background-color: #F8E1E7;
+    border-color: #DED1E6;
+    transform: translateY(-10px);
+}
+
+.course-img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.course-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.course-item:hover .course-img img {
+    transform: scale(1.05);
+}
+
+.course-text h2 {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 24px;
+    color: #2E1A47;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.course-item .btn {
+    background-color: #DED1E6;
+    color: #2E1A47;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: none;
+    font-family: "Bitter", serif;
+}
+
+.course-item .btn:hover {
+    background-color: #2E1A47;
+    color: #fff;
+}
