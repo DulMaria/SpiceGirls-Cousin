@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+footer {
+    background-color: #2D1E2F;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    font-family: "Archivo Black", sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px; /* Ajusta el ancho mínimo según tus necesidades */
+    margin: 10px;
+}
+
+/* Reducción de tamaño de fuente */
+.footer-section h4 {
+    font-size: 14px; /* Tamaño de fuente más pequeño para encabezados */
+}
+
+.footer-section p, 
+.footer-section a {
+    font-size: 14px; /* Tamaño de fuente más pequeño para párrafos y enlaces */
+    color: #beb6b6;
+}
+
+.footer-section a:hover {
+    font-size: 14px; /* Tamaño de fuente más pequeño para párrafos y enlaces */
+    color: #dbb4ee;
+}
+
+.legal-links, .social-media, .location, .contact-info, .copyright {
+    margin-right: 10px;
+}
+
+.legal-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.legal-links ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.legal-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.legal-links a:hover {
+    text-decoration: underline;
+}
+
+.social-media a {
+    margin: 5px;
+    display: inline-block; /* Asegura que los enlaces sean en línea */
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column; /* Cambia a una columna en pantallas más pequeñas */
+        align-items: center; /* Alinea al centro */
+    }
+
+    .footer-section {
+        text-align: center; /* Alinea el texto al centro en pantallas más pequeñas */
+    }
+}
