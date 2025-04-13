@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('area', function (Blueprint $table) {
-            $table->integer('ID_Area', true);
-            $table->string('nombreArea', 50);
-            $table->string('descripcionArea', 200);
-            $table->binary('imagenArea')->nullable();
+        Schema::table('area', function (Blueprint $table) {
+            //
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('area');
+        Schema::table('area', function (Blueprint $table) {
+            //
+        });
     }
 };
