@@ -147,7 +147,7 @@
                 <span>Gestionar Áreas</span>
             </a>
 
-            <a href="/admin/cursos" class="{{ Request::is('admin/cursos') ? 'active' : '' }}">
+            <a href="/administrador/cursos" class="{{ Request::is('admininistrador/cursos') ? 'active' : '' }}">
                 <i class="fas fa-book-open"></i>
                 <span>Gestionar Cursos</span>
             </a>

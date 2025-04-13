@@ -18,6 +18,11 @@ class AdminController extends Controller
         $areas = Area::all();
         return view('administrador.cruds.area.areaIndex', compact('areas'));
     }
+    
+    public function cursos()
+    {
+        return view('administrador.cruds.cursos.cursosIndex');
+    }
 
     public function guardarArea(Request $request)
     {
