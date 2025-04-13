@@ -9,28 +9,23 @@
 </head>
 <body class="bg-gray-100 font-sans text-gray-800">
 
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        @include('partials.navAdmi')
+    <!-- Menú lateral -->
+    @include('partials.navAdmi')
 
-        <!-- Main Content -->
-        <main class="flex-1 p-10">
-            <div class="border-b pb-4 mb-6 flex justify-between items-center">
-                <h1 class="text-3xl font-bold text-[#2e1a47]">Panel de Administración</h1>
+    <div class="flex flex-col md:flex-row min-h-screen w-full">
+        @include('partials.headerMovilAdmin')        
+
+        <!-- Contenido principal -->
+        <main class="flex-1 px-4 py-6 md:px-10 md:py-8 mt-0">
+            <div class="border-b pb-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <h1 class="text-2xl sm:text-3xl font-bold text-[#2e1a47] leading-tight">Panel de Administración</h1>
                 <span class="text-sm text-gray-500">Bienvenido al sistema de gestión</span>
             </div>
 
-            <!-- Aquí irá el contenido dinámico de cada módulo -->
-            <div class="bg-white p-8 rounded-lg shadow text-center text-gray-600">
-                <p class="text-lg">Selecciona una opción en el menú lateral izquierdo para comenzar.</p>
+            <div class="bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow text-center text-gray-600">
+                <p class="text-base sm:text-lg">Selecciona una opción en el menú lateral izquierdo para comenzar.</p>
             </div>
         </main>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-[#1a1a1a] text-gray-300 text-center py-4">
-        <p class="text-sm">&copy; 2025 Fundación Criminología Forense. Todos los derechos reservados.</p>
-    </footer>
-
 </body>
 </html>

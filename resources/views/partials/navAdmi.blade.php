@@ -1,45 +1,178 @@
-<!-- resources/views/partials/navbar.blade.php -->
-<aside class="w-64 bg-[#1f1b2e] text-white shadow-lg flex flex-col min-h-screen">
-    <div class="h-16 flex items-center justify-center bg-[#127475]">
-        <span class="text-xl font-bold tracking-wide">Admin Panel</span>
-    </div>
+<!DOCTYPE html>
+<html lang="es">
 
-    <nav class="flex-grow p-6 space-y-6">
-        <h2 class="text-sm text-gray-300 uppercase mb-4">Navegación</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-fondo: #1A1A1A;
+            --color-panel: #2D1E2F;
+            --color-texto: #CCC9DC;
+            --color-hover: #3b2e48;
+            --color-activo: #CCC9DC;
+            --color-texto-activo: #1A1A1A;
+        }
 
-        <a href="{{ url('/administrador/areas') }}" 
-   class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition 
-          {{ Request::is('administrador/areas') ? 'bg-[#3b3a6d]' : '' }}">
-    <i class="fas fa-building text-lg"></i>
-    <span>Gestionar Áreas</span>
-</a>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            display: flex;
+        }
 
+        aside {
+            width: 260px;
+            background-color: var(--color-fondo);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
 
-        <a href="{{ url('/admin/cursos') }}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition {{ Request::is('admin/cursos') ? 'bg-[#e07a5f]' : '' }}">
-            <i class="fas fa-book-open text-lg"></i>
-            <span>Gestionar Cursos</span>
-        </a>
+        .header {
+            height: 64px;
+            background-color: var(--color-panel);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: var(--color-texto);
+        }
 
-        <a href="{{ url('/admin/docentes') }}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition {{ Request::is('admin/docentes') ? 'bg-[#127475]' : '' }}">
-            <i class="fas fa-chalkboard-teacher text-lg"></i>
-            <span>Gestionar Docentes</span>
-        </a>
+        nav {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
 
-        <a href="{{ url('/admin/estudiantes') }}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition {{ Request::is('admin/estudiantes') ? 'bg-[#805d93]' : '' }}">
-            <i class="fas fa-users text-lg"></i>
-            <span>Gestionar Estudiantes</span>
-        </a>
+        nav h2 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--color-texto);
+        }
 
-        <a href="{{ url('/admin/reportes') }}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition {{ Request::is('admin/reportes') ? 'bg-[#1a1a1a]' : '' }}">
-            <i class="fas fa-chart-line text-lg"></i>
-            <span>Reportes</span>
-        </a>
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-texto);
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-        <a href="{{ url('/admin/estadisticas') }}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition {{ Request::is('admin/estadisticas') ? 'bg-[#2e1a47]' : '' }}">
-            <i class="fas fa-tachometer-alt text-lg"></i>
-            <span>Estadísticas</span>
-        </a>
-    </nav>
-</aside>
+        nav a:hover {
+            background-color: var(--color-hover);
+            color: white;
+        }
 
+        nav a.active {
+            background-color: var(--color-activo);
+            color: var(--color-texto-activo);
+        }
 
+        /* Íconos con tamaño uniforme */
+        nav i {
+            font-size: 1.1rem;
+        }
+
+        /* Responsivo: colapsar menú */
+        @media (max-width: 768px) {
+            aside {
+                width: 100%;
+                position: relative;
+                z-index: 1000;
+            }
+
+            nav a {
+                justify-content: center;
+            }
+
+            nav span {
+                display: inline-block;
+                margin-left: 10px;
+            }
+
+            .header {
+                font-size: 1rem;
+            }
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #1A1A1A;
+            color: #CCC9DC;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100vh;
+                width: 260px;
+                transition: left 0.3s ease-in-out;
+                z-index: 999;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="header">Admin Panel</div>
+        <nav>
+            <a href="{{ route('administrador.prinAdmi') }}" class="text-[#127475] hover:text-[#e07a5f] text-lg font-semibold">
+                <i class="fas fa-home mr-2"></i>
+                Inicio
+            </a>
+
+            <a href="/administrador/areas" class="{{ Request::is('administrador/areas') ? 'active' : '' }}">
+                <i class="fas fa-building"></i>
+                <span>Gestionar Áreas</span>
+            </a>
+
+            <a href="/admin/cursos" class="{{ Request::is('admin/cursos') ? 'active' : '' }}">
+                <i class="fas fa-book-open"></i>
+                <span>Gestionar Cursos</span>
+            </a>
+
+            <a href="/admin/docentes" class="{{ Request::is('admin/docentes') ? 'active' : '' }}">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Gestionar Docentes</span>
+            </a>
+
+            <a href="/admin/estudiantes" class="{{ Request::is('admin/estudiantes') ? 'active' : '' }}">
+                <i class="fas fa-users"></i>
+                <span>Gestionar Estudiantes</span>
+            </a>
+
+            <a href="/admin/reportes" class="{{ Request::is('admin/reportes') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i>
+                <span>Reportes</span>
+            </a>
+
+            <a href="/admin/estadisticas" class="{{ Request::is('admin/estadisticas') ? 'active' : '' }}">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Estadísticas</span>
+            </a>
+        </nav>
+    </aside>
+</body>
+
+</html>

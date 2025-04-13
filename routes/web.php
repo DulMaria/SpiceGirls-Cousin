@@ -14,8 +14,9 @@ Route::get('/sobreNosotros', [HomeController::class, 'History'])->name('pag_visi
 use App\Http\Controllers\AdminController;
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi'); 
-    Route::get('/areas', [AdminController::class, 'areas'])->name('.areaIndex');
-    Route::get('/cursos', [AdminController::class, 'cursos'])->name('administrador.cursos');
-    Route::get('/docentes', [AdminController::class, 'docentes'])->name('administrador.docentes');
-    Route::get('/estudiantes', [AdminController::class, 'estudiantes'])->name('administrador.estudiantes');
+    // Rutas para áreas
+    Route::get('/areas', [AdminController::class, 'areas'])->name('admin.areas.index');
+    Route::post('/areas/guardar', [AdminController::class, 'guardarArea'])->name('admin.areas.guardar');
+    Route::get('/areas/editar/{id}', [AdminController::class, 'editar'])->name('admin.areas.editar');
+    Route::put('/areas/actualizar/{id}', [AdminController::class, 'actualizar'])->name('admin.areas.actualizar');
 });
