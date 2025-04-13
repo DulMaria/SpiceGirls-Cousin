@@ -15,7 +15,7 @@
 </a>
 
 
-        <a href="{{ url('/admin/cursos') }}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition {{ Request::is('admin/cursos') ? 'bg-[#e07a5f]' : '' }}">
+        <a href="{{ url('/administrador/cursos') }}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2740] transition {{ Request::is('admin/cursos') ? 'bg-[#e07a5f]' : '' }}">
             <i class="fas fa-book-open text-lg"></i>
             <span>Gestionar Cursos</span>
         </a>

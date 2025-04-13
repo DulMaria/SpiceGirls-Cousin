@@ -18,7 +18,7 @@ class AdminController extends Controller
 
     public function cursos()
     {
-        return view('administrador.cursos');
+        return view('administrador.cruds.cursos.cursosIndex');
     }
 
     public function docentes()

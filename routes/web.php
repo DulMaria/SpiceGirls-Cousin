@@ -12,10 +12,43 @@ Route::get('/sobreNosotros', [HomeController::class, 'History'])->name('pag_visi
 
 //Rutas para el administrador
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CursoController;
+
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi'); 
     Route::get('/areas', [AdminController::class, 'areas'])->name('.areaIndex');
-    Route::get('/cursos', [AdminController::class, 'cursos'])->name('administrador.cursos');
+    Route::get('/cursos', [AdminController::class, 'cursos'])->name('cursos');
+    Route::get('/cursos', [CursoController::class, 'index'])->name('admin.cursos');
     Route::get('/docentes', [AdminController::class, 'docentes'])->name('administrador.docentes');
     Route::get('/estudiantes', [AdminController::class, 'estudiantes'])->name('administrador.estudiantes');
+
+    // Ruta para mostrar los cursos
+    Route::get('/cursos', [CursoController::class, 'index'])->name('ruta.a.lista.de.cursos');
+
+    // Ruta para mostrar el formulario de añadir curso
+    Route::get('/cursos/crear', [CursoController::class, 'mostrarFormularioCurso'])->name('ruta.a.formulario.curso');
+
+    // Ruta para almacenar el nuevo curso
+    Route::post('/cursos', [CursoController::class, 'store'])->name('ruta.del.controlador');
+
+
+
+    // Añadir estas rutas a tu archivo de rutas dentro del grupo de rutas de administrador
+
+// Ruta para obtener los datos del curso a editar
+Route::get('/cursos/{id}/edit', [CursoController::class, 'edit'])->name('curso.edit');
+
+// Ruta para actualizar un curso
+Route::put('/cursos/{id}', [CursoController::class, 'update'])->name('curso.update');
+
+// Ruta para eliminar un curso
+Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('curso.destroy');
+
+// Agrega esta ruta
+Route::post('/administrador/cursos/{id}/cambiar-estado', [CursoController::class, 'cambiarEstado'])
+    ->name('curso.cambiarEstado');
+
+
+
+
 });
