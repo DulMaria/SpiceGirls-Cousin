@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,41 +10,45 @@
     <link rel="stylesheet" href="{{ asset('CSS/pie_pag.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/cursosVisitante.css') }}">
 </head>
+
 <body>
     <div class="menu-btn">&#9776; Menu</div>
     @include('partials.nav')
 
-    <!-- Sección de cursos -->
+    <!-- Sección de áreas -->
     <div id="main-content" class="content">
         <div class="title">
-            <h1>Cursos Disponibles</h1>
-            <p>Explora nuestros cursos principales y cortos para mejorar tus habilidades.</p>
+            <h1>Áreas de Cursos</h1>
+            <p>Explora nuestras áreas temáticas y descubre los cursos que ofrecemos en cada una.</p>
         </div>
 
         <section class="course-section">
+            @forelse($areas as $area)
             <div class="course-item">
                 <div class="course-img">
-                    <img src="https://universidadeuropea.com/resources/media/images/criminologia-y-derecho-800x450.original.jpg" alt="Cursos Principales">
+                    @if($area->imagenArea)
+                    <img src="data:image/jpeg;base64,{{ base64_encode($area->imagenArea) }}" alt="{{ $area->nombreArea }}">
+                    @else
+                    <img src="https://via.placeholder.com/400x250?text=Sin+imagen" alt="Sin imagen">
+                    @endif
                 </div>
-                <div class="course-text">
-                    <h2>Cursos Principales</h2>
-                    <a href="{{ url('/cursosPrincipales') }}" class="btn">Explorar Cursos</a>
-                </div>
-            </div>
 
-            <div class="course-item">
-                <div class="course-img">
-                    <img src="https://blogs.iadb.org/salud/wp-content/uploads/sites/15/2020/08/SPH_Newsletters_Blogs_AUG10_GS-POST.png" alt="Cursos Cortos">
-                </div>
                 <div class="course-text">
-                    <h2>Cursos Cortos</h2>
-                    <a href="{{ url('/cursosCortos') }}" class="btn">Ver más</a>
+                    <h2>{{ $area->nombreArea }}</h2>
+                    <p>{{ $area->descripcionArea }}</p>
+                    <br>
+                    <a class="btn" href="{{ route('pag_visitante.curso_asociado', ['id' => $area->ID_Area]) }}">Ver cursos</a>
                 </div>
             </div>
-           
+            @empty
+            <p>No hay áreas registradas por el momento.</p>
+            @endforelse
         </section>
+
         @include('partials.footer')
     </div>
+
     <script src="{{ asset('JS/menu.js') }}"></script>
 </body>
+
 </html>

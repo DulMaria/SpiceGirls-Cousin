@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Áreas - Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 
 <body class="bg-gray-100 text-gray-800">
@@ -47,7 +48,12 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <button onclick="openEditModal({{ $area->ID_Area }}, '{{ addslashes($area->nombreArea) }}', '{{ addslashes($area->descripcionArea) }}')" class="text-blue-600 hover:underline">
+                                <button
+                                    class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded flex items-center gap-2"
+                                    data-id="{{ $area->ID_Area }}"
+                                    data-nombre="{{ $area->nombreArea }}"
+                                    data-descripcion="{{ $area->descripcionArea }}"
+                                    onclick="handleEditButtonClick(this)">
                                     <!-- Icono de lápiz SVG ajustado -->
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="w-6 h-6" stroke="currentColor">
                                         <path opacity="0.5" d="M1 12C1 6.81455 1 4.22183 2.61091 2.61091C4.22183 1 6.81455 1 12 1C17.1854 1 19.7782 1 21.3891 2.61091C23 4.22183 23 6.81455 23 12C23 17.1854 23 19.7782 21.3891 21.3891C19.7782 23 17.1854 23 12 23C6.81455 23 4.22183 23 2.61091 21.3891C1 19.7782 1 17.1854 1 12Z" fill="#1c4a25"></path>
@@ -126,6 +132,15 @@
     </div>
 
     <script>
+        function handleEditButtonClick(button) {
+            const id = button.dataset.id;
+            const nombre = button.dataset.nombre;
+            const descripcion = button.dataset.descripcion;
+
+            openEditModal(id, nombre, descripcion);
+        }
+
+
         function toggleModal(id) {
             document.getElementById(id).classList.toggle('hidden');
         }

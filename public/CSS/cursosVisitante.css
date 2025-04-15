@@ -75,6 +75,14 @@
     font-weight: 700;
 }
 
+.course-text p {
+    font-family: "Bitter", serif;
+    font-size: 18px;
+    color: #2E1A47;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
 .course-item .btn {
     background-color: #DED1E6;
     color: #2E1A47;
