@@ -147,17 +147,17 @@
                 <span>Gestionar Áreas</span>
             </a>
 
-            <a href="/administrador/cursos" class="{{ Request::is('admininistrador/cursos') ? 'active' : '' }}">
+            <a href="/administrador/cursos" class="{{ Request::is('administrador/cursos') ? 'active' : '' }}">
                 <i class="fas fa-book-open"></i>
                 <span>Gestionar Cursos</span>
             </a>
 
-            <a href="/administrador/docentes" class="{{ Request::is('admin/docentes') ? 'active' : '' }}">
+            <a href="/administrador/docentes" class="{{ Request::is('administrador/docentes') ? 'active' : '' }}">
                 <i class="fas fa-chalkboard-teacher"></i>
                 <span>Gestionar Docentes</span>
             </a>
 
-            <a href="{{ route('admin.estudiantes.index') }}" class="{{ Request::is('administrador/estudiantes') ? 'active' : '' }}">
+            <a href="{{ route('administrador.estudiantes.index') }}" class="{{ Request::is('administrador/estudiantes') ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span>Gestionar Estudiantes</span>
             </a>

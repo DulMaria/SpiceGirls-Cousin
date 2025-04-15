@@ -11,11 +11,6 @@ class HomeController extends Controller
         return view('home'); // Vista para la página de inicio
     }
 
-    public function Cursos()
-    {
-        return view('pag_visitante.cursosUser'); // Vista para la página de cursosUser
-    }
-
     public function Promociones()
     {
         return view('pag_visitante.news'); // Vista para la página de las promociones

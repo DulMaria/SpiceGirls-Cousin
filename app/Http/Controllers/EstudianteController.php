@@ -76,7 +76,7 @@ class EstudianteController extends Controller
 
 
     // Método para obtener datos del Estudiante para editar
-    public function edit($codigoEstudiantil,$ID_Usuario)
+    public function edit($codigoEstudiantil, $ID_Usuario)
     {
         $estudiante = Estudiante::with('usuario')->where('codigoEstudiantil', $codigoEstudiantil)->first();
         $usuario = Usuario::where('ID_Usuario', $ID_Usuario)->first();
@@ -90,23 +90,23 @@ class EstudianteController extends Controller
             'usuario' => $usuario
         ]);
     }
-    
+
 
     // Método para actualizar un estudiante
     public function update(Request $request, $codigoEstudiantil)
     {
         $estudiante = Estudiante::where('codigoEstudiantil', $codigoEstudiantil)->first();
-        
+
         if (!$estudiante) {
             return redirect()->back()->with('error', 'Estudiante no encontrado');
         }
-        
+
         $usuario = Usuario::find($estudiante->ID_Usuario);
-        
+
         if (!$usuario) {
             return redirect()->back()->with('error', 'Usuario no encontrado');
         }
-        
+
         $request->validate([
             'nombre' => 'required|string|max:100',
             'apellidoPaterno' => 'required|string|max:100',
@@ -115,11 +115,11 @@ class EstudianteController extends Controller
             'telefono' => 'nullable|string|max:20',
             'direccion' => 'nullable|string|max:255',
             'fechaNacimiento' => 'nullable|date',
-            'email' => 'required|email|unique:usuario,email,'.$usuario->ID_Usuario.',ID_Usuario',
+            'email' => 'required|email|unique:usuario,email,' . $usuario->ID_Usuario . ',ID_Usuario',
             'ci' => 'nullable|string|max:20',
             'estado' => 'required|in:0,1',
         ]);
-        
+
         // Actualizar usuario
         $usuario->nombre = $request->nombre;
         $usuario->apellidoPaterno = $request->apellidoPaterno;
@@ -131,35 +131,35 @@ class EstudianteController extends Controller
         $usuario->ci = $request->ci;
         $usuario->estado = $request->estado;
         $usuario->save();
-        
+
         // Actualizar estudiante
         $estudiante->nivelAcademico = $request->nivelAcademico;
         $estudiante->save();
-        
+
         return redirect()->route('admin.estudiantes.index')->with('success', 'Estudiante actualizado exitosamente');
     }
 
     public function cambiarEstado($codigoEstudiantil)
-{
-    $estudiante = Estudiante::where('codigoEstudiantil', $codigoEstudiantil)->first();
-    
-    if (!$estudiante) {
-        return redirect()->back()->with('error', 'Estudiante no encontrado');
+    {
+        $estudiante = Estudiante::where('codigoEstudiantil', $codigoEstudiantil)->first();
+
+        if (!$estudiante) {
+            return redirect()->back()->with('error', 'Estudiante no encontrado');
+        }
+
+        $usuario = Usuario::find($estudiante->ID_Usuario);
+
+        if (!$usuario) {
+            return redirect()->back()->with('error', 'Usuario no encontrado');
+        }
+
+        // Cambiar el estado (toggle entre 0 y 1)
+        $usuario->estado = $usuario->estado == 1 ? 0 : 1;
+        $usuario->save();
+
+        $mensaje = $usuario->estado == 1 ? 'habilitado' : 'deshabilitado';
+
+        return redirect()->route('administrador.estudiantes.index')
+            ->with('success', "Estudiante {$mensaje} exitosamente");
     }
-    
-    $usuario = Usuario::find($estudiante->ID_Usuario);
-    
-    if (!$usuario) {
-        return redirect()->back()->with('error', 'Usuario no encontrado');
-    }
-    
-    // Cambiar el estado (toggle entre 0 y 1)
-    $usuario->estado = $usuario->estado == 1 ? 0 : 1;
-    $usuario->save();
-    
-    $mensaje = $usuario->estado == 1 ? 'habilitado' : 'deshabilitado';
-    
-    return redirect()->route('admin.estudiantes.index')
-        ->with('success', "Estudiante {$mensaje} exitosamente");
-}
 }
