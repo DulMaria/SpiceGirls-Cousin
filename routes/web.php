@@ -48,6 +48,8 @@ Route::prefix('administrador')->group(function () {
     // Agrega esta ruta
     Route::post('/administrador/cursos/{id}/cambiar-estado', [CursoController::class, 'cambiarEstado'])
         ->name('curso.cambiarEstado');
+    Route::get('/curso_asociado/{id}', [CursoController::class, 'mostrarPorArea'])->name('pag_visitante.curso_asociado');
+
 
     // Rutas para docentes 
     Route::get('/docentes', [DocenteController::class, 'index'])->name('admin.docentes.index');

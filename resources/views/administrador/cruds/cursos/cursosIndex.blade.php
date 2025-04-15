@@ -71,42 +71,41 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-center" x-data="{ showModal: false }">
-    <!-- Botón que activa el modal -->
-    <button 
-        type="button"
-        @click="showModal = true" 
-        class="bg-indigo-500 hover:bg-indigo-700 text-white px-3 py-1 rounded">
-        Ver módulos
-    </button>
+                                <!-- Botón que activa el modal -->
+                                <button
+                                    type="button"
+                                    @click="showModal = true"
+                                    class="bg-indigo-500 hover:bg-indigo-700 text-white px-3 py-1 rounded">
+                                    Ver módulos
+                                </button>
 
-    <!-- Modal -->
-    <div 
-        x-show="showModal" 
-        x-transition 
-        class="fixed inset-0 z-50 flex items-center justify-center"
-        style="background-color: rgba(0, 0, 0, 0.5);"
-    >
-        <div class="bg-white rounded-lg shadow-lg z-50 max-w-md w-full p-6 relative">
-            <h2 class="text-xl font-semibold mb-4">Módulos del Curso</h2>
+                                <!-- Modal -->
+                                <div
+                                    x-show="showModal"
+                                    x-transition
+                                    class="fixed inset-0 z-50 flex items-center justify-center"
+                                    style="background-color: rgba(0, 0, 0, 0.5);">
+                                    <div class="bg-white rounded-lg shadow-lg z-50 max-w-md w-full p-6 relative">
+                                        <h2 class="text-xl font-semibold mb-4">Módulos del Curso</h2>
 
-            <ol class="list-decimal pl-5 space-y-2 max-h-64 overflow-y-auto">
-                @foreach ($curso->modulos->sortBy('orden') as $modulo)
-                    <li>
-                        <div class="font-medium">{{ $modulo->nombreModulo }}</div>
-                        <div class="text-sm text-gray-500">{{ $modulo->descripcion_modulo }}</div>
-                    </li>
-                @endforeach
-            </ol>
+                                        <ol class="list-decimal pl-5 space-y-2 max-h-64 overflow-y-auto">
+                                            @foreach ($curso->modulos->sortBy('orden') as $modulo)
+                                            <li>
+                                                <div class="font-medium">{{ $modulo->nombreModulo }}</div>
+                                                <div class="text-sm text-gray-500">{{ $modulo->descripcion_modulo }}</div>
+                                            </li>
+                                            @endforeach
+                                        </ol>
 
-            <!-- Botón de cerrar -->
-            <button 
-                @click="showModal = false"
-                class="absolute top-2 right-2 text-gray-600 hover:text-black text-xl font-bold">
-                &times;
-            </button>
-        </div>
-    </div>
-</td>
+                                        <!-- Botón de cerrar -->
+                                        <button
+                                            @click="showModal = false"
+                                            class="absolute top-2 right-2 text-gray-600 hover:text-black text-xl font-bold">
+                                            &times;
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
 
                             <td class="px-6 py-4 text-center">
                                 <button type="button"

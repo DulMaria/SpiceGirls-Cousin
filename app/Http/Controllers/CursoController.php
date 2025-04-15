@@ -252,14 +252,14 @@ class CursoController extends Controller
     }
 
     public function mostrarPorArea($id)
-{
-    // Obtener el área por su ID
-    $area = Area::findOrFail($id); 
+    {
+        // Obtener el área por su ID
+        $area = Area::findOrFail($id);
 
-    // Obtener los cursos relacionados con esta área
-    $cursos = Curso::where('ID_Area', $id)->get(); 
+        // Obtener los cursos relacionados con esta área
+        $cursos = Curso::where('ID_Area', $id)->get();
 
-    // Retornar la vista con los datos del área y los cursos
-    return view('pag_visitante.curso_asociado', compact('area', 'cursos'));
-}
+        // Retornar la vista con los datos del área y los cursos
+        return view('pag_visitante.curso_asociado', compact('area', 'cursos'));
+    }
 }
