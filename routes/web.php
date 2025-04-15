@@ -14,6 +14,9 @@ Route::get('/sobreNosotros', [HomeController::class, 'History'])->name('pag_visi
 use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\CursoController;
+
+
+use App\Http\Controllers\DocenteController;
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi'); 
     // Rutas para áreas
@@ -45,4 +48,16 @@ Route::prefix('administrador')->group(function () {
 
 
 
+    
+
+    
+    // Rutas para docentes 
+    Route::get('/docentes', [DocenteController::class, 'index'])->name('admin.docentes.index');
+    Route::post('/docentes', [DocenteController::class, 'store'])->name('docentes.store');
+    // Rutas para CRUD de docentes
+    Route::get('/docentes/{codigoDocente}/{ID_Usuario}/edit', [DocenteController::class, 'edit'])->name('docentes.edit');
+    Route::put('/docentes/{codigoDocente}', [DocenteController::class, 'update'])->name('docentes.update');
+
+    Route::post('/docentes/{codigoDocente}/cambiar-estado', [DocenteController::class, 'cambiarEstado'])
+    ->name('docentes.cambiarEstado');
 });
