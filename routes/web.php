@@ -17,18 +17,15 @@ Route::get('/ofertasEstudiante', [PromocionController::class, 'mostrarOfertas'])
 
 //Ruta de areas para el visitante
 use App\Http\Controllers\AreaController;
+
 Route::get('/cursosUser', [AreaController::class, 'index'])->name('pag_visitante.cursosUser');
 
 
 //Rutas para el administrador
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CursoController;
-
-<<<<<<< HEAD
-=======
-
 use App\Http\Controllers\DocenteController;
->>>>>>> origin/main
+
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
     // Rutas para áreas
@@ -52,23 +49,12 @@ Route::prefix('administrador')->group(function () {
     Route::post('/administrador/cursos/{id}/cambiar-estado', [CursoController::class, 'cambiarEstado'])
         ->name('curso.cambiarEstado');
 
-<<<<<<< HEAD
-    //Ruta de cursos ascociados a un area, pero este por parte de visitante
-    Route::get('/cursosUser/{id}', [CursoController::class, 'mostrarPorArea'])->name('pag_visitante.curso_asociado');
-=======
-
-
-    
-
-    
     // Rutas para docentes 
     Route::get('/docentes', [DocenteController::class, 'index'])->name('admin.docentes.index');
     Route::post('/docentes', [DocenteController::class, 'store'])->name('docentes.store');
     // Rutas para CRUD de docentes
     Route::get('/docentes/{codigoDocente}/{ID_Usuario}/edit', [DocenteController::class, 'edit'])->name('docentes.edit');
     Route::put('/docentes/{codigoDocente}', [DocenteController::class, 'update'])->name('docentes.update');
-
     Route::post('/docentes/{codigoDocente}/cambiar-estado', [DocenteController::class, 'cambiarEstado'])
-    ->name('docentes.cambiarEstado');
->>>>>>> origin/main
+        ->name('docentes.cambiarEstado');
 });
