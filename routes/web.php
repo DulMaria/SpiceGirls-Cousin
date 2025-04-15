@@ -26,6 +26,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
+
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
     // Rutas para áreas
@@ -60,7 +61,7 @@ Route::prefix('administrador')->group(function () {
     Route::post('/docentes/{codigoDocente}/cambiar-estado', [DocenteController::class, 'cambiarEstado'])->name('docentes.cambiarEstado');
 
     // Rutas para Estudiantes
-    Route::get('/estudiantes', [EstudianteController::class, 'index'])->name('admin.estudiantes.index');
+    Route::get('/estudiantes', [EstudianteController::class, 'index'])->name('administrador.estudiantes.index');
     Route::post('/estudiantes', [EstudianteController::class, 'store'])->name('estudiantes.store');
     // Rutas para CRUD de estudiantes
     Route::get('/estudiantes/{codigoEstudiantil}/{ID_Usuario}/edit', [EstudianteController::class, 'edit'])->name('estudiantes.edit');

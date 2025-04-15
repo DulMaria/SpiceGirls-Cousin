@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cursos de {{ $area->nombreArea }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('CSS/Cursos.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/styleGeneral.css') }}">
+    <link rel="stylesheet" href="{{ asset('CSS/pie_pag.css') }}">
 </head>
+
 <body>
+    <div class="menu-btn">&#9776; Menu</div>
+    @include('partials.nav')
 
-    <!-- Contador de tiempo (Antes de las clases) -->
-    <div id="countdown-container">
-        <h2 id="countdown-title">Tiempo de Inscripción</h2>
-        <p id="countdown"></p>
-    </div>
+    <div id="main-content" class="content">
+        <!-- Contador de tiempo (Antes de las clases) -->
+        <div id="countdown-container">
+            <h2 id="countdown-title">Tiempo de Inscripción</h2>
+            <p id="countdown"></p>
+        </div>
 
-    <!-- Sección de cursos -->
-    <section class="course-section">
-        @foreach($cursos as $curso)
+        <!-- Sección de cursos -->
+        <section class="course-section">
+            @foreach($cursos as $curso)
             <div class="course-item">
                 <div class="course-img">
-                    <img src="{{ $curso->imagen }}" alt="{{ $curso->nombreCurso }}">
+                    <img src="data:image/jpeg;base64,{{ base64_encode($curso->imagen) }}" alt="{{ $curso->nombreCurso }}">
+
                 </div>
                 <div class="course-text">
                     <h2>{{ $curso->nombreCurso }}</h2>
@@ -28,29 +36,29 @@
                     <button class="btn" onclick="openModal('{{ $curso->id }}')">Ver más</button>
                 </div>
             </div>
-        @endforeach
-    </section>
+            @endforeach
+        </section>
 
-    <!-- Ventanas modales -->
-    @foreach($cursos as $curso)
-    <div id="{{ $curso->id }}" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('{{ $curso->id }}')">&times;</span>
-            <h2>{{ $curso->nombreCurso }}</h2>
-            <ul>
-                @foreach($curso->modulos as $modulo)
+        <!-- Ventanas modales -->
+        @foreach($cursos as $curso)
+        <div id="{{ $curso->id }}" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('{{ $curso->id }}')">&times;</span>
+                <h2>{{ $curso->nombreCurso }}</h2>
+                <ul>
+                    @foreach($curso->modulos as $modulo)
                     <li><strong>Módulo {{ $loop->iteration }}:</strong> {{ $modulo }}</li>
-                @endforeach
-            </ul>
-            <p><strong>Costo:</strong> Bs. {{ $curso->costo }}</p>
-            <p><strong>Duración:</strong> {{ $curso->duracion }} meses</p>
-            <button onclick="goToInscription('{{ $curso->nombreCurso }}')">Inscribirse</button>
+                    @endforeach
+                </ul>
+                <p><strong>Costo:</strong> Bs. {{ $curso->costo }}</p>
+                <p><strong>Duración:</strong> {{ $curso->duracion }} meses</p>
+                <button onclick="goToInscription('{{ $curso->nombreCurso }}')">Inscribirse</button>
+            </div>
         </div>
+        @endforeach
+        @include('partials.footer')
     </div>
-    @endforeach
-
-    <a href="{{ route('pag_visitante.cursosUser') }}">Volver a las áreas</a>
-
+    <script src="{{ asset('JS/menu.js') }}"></script>
     <script>
         // Función para abrir la ventana modal correspondiente
         function openModal(courseId) {
@@ -100,4 +108,5 @@
     </script>
 
 </body>
+
 </html>

@@ -157,7 +157,7 @@
                 <span>Gestionar Docentes</span>
             </a>
 
-            <a href="{{ route('admin.estudiantes.index') }}" class="{{ Request::is('administrador/estudiantes') ? 'active' : '' }}">
+            <a href="{{ route('administrador.estudiantes.index') }}" class="{{ Request::is('administrador/estudiantes') ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span>Gestionar Estudiantes</span>
             </a>
