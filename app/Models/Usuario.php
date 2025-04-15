@@ -36,4 +36,8 @@ class Usuario extends Model
     {
         return $this->belongsTo(Docente::class, 'ID_Usuario', 'ID_Usuario');
     }
+    public function estudiante()
+    {
+        return $this->belongsTo(Estudiante::class, 'ID_Usuario', 'ID_Usuario');
+    }
 }

@@ -25,7 +25,7 @@ Route::get('/cursosUser', [AreaController::class, 'index'])->name('pag_visitante
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
-
+use App\Http\Controllers\EstudianteController;
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
     // Rutas para áreas
@@ -57,6 +57,15 @@ Route::prefix('administrador')->group(function () {
     // Rutas para CRUD de docentes
     Route::get('/docentes/{codigoDocente}/{ID_Usuario}/edit', [DocenteController::class, 'edit'])->name('docentes.edit');
     Route::put('/docentes/{codigoDocente}', [DocenteController::class, 'update'])->name('docentes.update');
-    Route::post('/docentes/{codigoDocente}/cambiar-estado', [DocenteController::class, 'cambiarEstado'])
-        ->name('docentes.cambiarEstado');
+    Route::post('/docentes/{codigoDocente}/cambiar-estado', [DocenteController::class, 'cambiarEstado'])->name('docentes.cambiarEstado');
+
+    // Rutas para Estudiantes
+    Route::get('/estudiantes', [EstudianteController::class, 'index'])->name('admin.estudiantes.index');
+    Route::post('/estudiantes', [EstudianteController::class, 'store'])->name('estudiantes.store');
+    // Rutas para CRUD de estudiantes
+    Route::get('/estudiantes/{codigoEstudiantil}/{ID_Usuario}/edit', [EstudianteController::class, 'edit'])->name('estudiantes.edit');
+    Route::put('/estudiantes/{codigoEstudiantil}', [EstudianteController::class, 'update'])->name('estudiantes.update');
+    Route::post('/estudiantes/{codigoEstudiantil}/cambiar-estado', [EstudianteController::class, 'cambiarEstado'])
+    ->name('estudiantes.cambiarEstado');
+
 });
