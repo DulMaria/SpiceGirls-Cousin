@@ -152,7 +152,7 @@
                 <span>Gestionar Cursos</span>
             </a>
 
-            <a href="/admin/docentes" class="{{ Request::is('admin/docentes') ? 'active' : '' }}">
+            <a href="/administrador/docentes" class="{{ Request::is('admin/docentes') ? 'active' : '' }}">
                 <i class="fas fa-chalkboard-teacher"></i>
                 <span>Gestionar Docentes</span>
             </a>
