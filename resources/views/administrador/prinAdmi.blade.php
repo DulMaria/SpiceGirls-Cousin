@@ -135,19 +135,54 @@
                     <button id="btnInscripciones" class="px-3 py-1 rounded-md border border-gray-300 bg-black text-white text-sm font-medium focus:outline-none focus:ring">Inscripciones</button>
                     <button id="btnGraduados" class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium hover:bg-gray-100">Graduados</button>
                     <button id="btnTotales" class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium hover:bg-gray-100">Totales</button><!-- este es para -->
-                    <input type="date" id="startDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
-                    <input type="date" id="endDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
+                    <!--<input type="date" id="startDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
+                    <input type="date" id="endDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">-->
                     </div>
                 </div>
                 <canvas id="inscripcionesChart" height="100"></canvas>
                 </div>
+              <!-- Gráfico de Pagos con responsividad mejorada -->
+                    <div class="mt-8 bg-white rounded-2xl p-4  shadow-md">
+                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Pagos Recibidos por Tipo</h2>
+
+                        <!-- Filtros con mejor adaptación a móviles -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                          <!--  <div class="w-full">
+                                <label class="text-xs sm:text-sm font-medium block mb-1">Fecha:</label>
+                                <input type="month" id="filterDate" class="w-full p-1.5 sm:p-2 border rounded-md text-sm" />
+                            </div>
+                            <div class="w-full">
+                                <label class="text-xs sm:text-sm font-medium block mb-1">Curso:</label>
+                                <select id="filterCurso" class="w-full p-1.5 sm:p-2 border rounded-md text-sm">
+                                    <option value="todos">Todos</option>
+                                    <option value="criminologia">Criminología</option>
+                                    <option value="psicologia">Psicología</option>
+                                </select>
+                            </div>
+                            <div class="w-full">
+                                <label class="text-xs sm:text-sm font-medium block mb-1">Tipo de Pago:</label>
+                                <select id="filterTipo" class="w-full p-1.5 sm:p-2 border rounded-md text-sm">
+                                    <option value="todos">Todos</option>
+                                    <option value="completo">Pago Completo</option>
+                                    <option value="beca">Pago con Beca</option>
+                                    <option value="oferta">Pago con Oferta</option>
+                                </select>
+                            </div>-->
+                        </div>
+
+                        <!-- Contenedor del gráfico con altura responsiva -->
+                        <div class="relative" style="height: 580px;">
+                            <canvas id="graficaPagos"></canvas>
+                        </div>
+                    </div>
+
 
                 <!-- Cursos populares -->
                 <div class="mt-8 bg-white rounded-2xl shadow-md p-6">
-                <h3 class="text-lg font-bold text-gray-700 mb-4">Cursos Más Populares</h3>
-                <div class="relative h-64">
-                    <canvas id="cursosChart"></canvas>
-                </div>
+                    <h3 class="text-lg font-bold text-gray-700 mb-4">Cursos Más Populares</h3>
+                    <div class="relative "style="height: 450px;">
+                        <canvas id="cursosChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Estadísticas de rendimiento y tendencias -->
@@ -179,6 +214,7 @@
 <!-- Scripts para los gráficos - Asegúrate de cargar Chart.js primero -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
     // Colores consistentes para gráficos
     const purpleColor = '#5B21B6';
@@ -186,9 +222,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const purplePalette = ['#5B21B6', '#7C3AED', '#8B5CF6', '#A78BFA', '#C4B5FD'];
     
     // Gráfico de inscripciones mensuales (línea)
-    const ctx = document.getElementById('inscripcionesChart').getContext('2d');
+    const ctxInscripciones = document.getElementById('inscripcionesChart').getContext('2d');
 
-        const dataSets = {
+    const dataSets = {
         inscripciones: {
             label: 'Inscripciones',
             data: [50, 40, 60, 45, 70, 80, 90, 100, 110, 120, 140, 130],
@@ -213,9 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
             fill: true,
             tension: 0.4
         }
-        };
+    };
 
-        const chartConfig = {
+    const chartConfig = {
         type: 'line',
         data: {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
@@ -224,44 +260,104 @@ document.addEventListener('DOMContentLoaded', function() {
         options: {
             responsive: true,
             plugins: {
-            legend: { display: true },
-            tooltip: {
-                callbacks: {
-                label: function(context) {
-                    return `${context.dataset.label}: ${context.parsed.y}`;
+                legend: { display: true },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y}`;
+                        }
+                    }
                 }
-                }
-            }
             },
             scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                stepSize: 50
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 50
+                    }
                 }
             }
-            }
         }
-        };
+    };
 
-        const inscripcionesChart = new Chart(ctx, chartConfig);
+    const inscripcionesChart = new Chart(ctxInscripciones, chartConfig);
 
-        // Botones para cambiar dataset
-        document.getElementById('btnInscripciones').addEventListener('click', () => {
+    // Botones para cambiar dataset
+    document.getElementById('btnInscripciones').addEventListener('click', () => {
         inscripcionesChart.data.datasets = [dataSets.inscripciones];
         inscripcionesChart.update();
-        });
+    });
 
-        document.getElementById('btnGraduados').addEventListener('click', () => {
+    document.getElementById('btnGraduados').addEventListener('click', () => {
         inscripcionesChart.data.datasets = [dataSets.graduados];
         inscripcionesChart.update();
-        });
+    });
 
-        document.getElementById('btnTotales').addEventListener('click', () => {
+    document.getElementById('btnTotales').addEventListener('click', () => {
         inscripcionesChart.data.datasets = [dataSets.totales];
         inscripcionesChart.update();
-        });
+    });
 
+    // Gráfico para pagos
+    const ctxPagos = document.getElementById('graficaPagos').getContext('2d');
+
+    const graficaPagosConfig = {
+        type: 'line',
+        data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'],
+            datasets: [
+                {
+                    label: 'Pago Completo',
+                    data: [1200, 1500, 1400, 1600, 1550, 1700, 1650, 1800],
+                    borderColor: 'pinck',
+                    backgroundColor: 'transparent',
+                    tension: 0.4,
+                },
+                {
+                    label: 'Pago con Beca',
+                    data: [400, 450, 500, 480, 470, 490, 520, 530],
+                    borderColor: 'blue',
+                    backgroundColor: 'transparent',
+                    tension: 0.4,
+                },
+                {
+                    label: 'Pago con Oferta',
+                    data: [300, 350, 330, 360, 340, 370, 380, 400],
+                    borderColor: 'purple',
+                    backgroundColor: 'transparent',
+                    tension: 0.4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Monto en $'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mes'
+                    }
+                }
+            }
+        }
+    };
+
+    const graficaPagos = new Chart(ctxPagos, graficaPagosConfig);
+
+    // Lógica para actualizar con filtros (opcional)
+    document.querySelectorAll('#filterDate, #filterCurso, #filterTipo').forEach(f => {
+        f.addEventListener('change', () => {
+            // Aquí puedes aplicar tu lógica para filtrar y actualizar los datos dinámicamente.
+            console.log("Actualizar datos según los filtros");
+        });
+    });
 
     // Gráfico de cursos populares (barras)
     const cursosCtx = document.getElementById('cursosChart').getContext('2d');
@@ -272,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'Auxiliar de Laboratorio Forense', 'Auxiliar en Odontología Forense', 'Prótesis Dental','Técnico en Criminalística Forense','Investigación Forense en Accidentes de Tráfico','Toxicología Forense'],
             datasets: [{
                 label: 'Estudiantes',
-                data: [50, 250, 80,200, 90, 60, 40, 120, 60, 180, 110, 130], // Datos de estudiantes por curso
+                data: [50, 250, 80, 200, 90, 60, 40, 120, 60, 180, 110, 130], // Datos de estudiantes por curso
                 backgroundColor: purpleColor,
                 borderRadius: 5
             }]
@@ -350,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: ['16-24 años', '25-34 años', '35-44 años', '45-70 años'],
             datasets: [{
-                data: [25, 42, 23, 10],// ejemplo de datos de distribución por edades
+                data: [25, 42, 23, 10], // ejemplo de datos de distribución por edades
                 backgroundColor: purplePalette,
                 borderWidth: 0
             }]
@@ -363,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     position: 'right'
                 }
             },
-            cutout: '60%'// es opcional, puedes ajustar el tamaño del agujero en el centro
+            cutout: '60%' // es opcional, puedes ajustar el tamaño del agujero en el centro
         }
     });
 
