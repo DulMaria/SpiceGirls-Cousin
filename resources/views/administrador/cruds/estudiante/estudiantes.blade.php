@@ -6,6 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Estudiantes - Administración</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      /* Reemplaza el estilo actual de los modales con esto */
+      #modalAddEstudiante, #modalEditEstudiante, #detailsModal {
+          max-height: 90vh; /* altura máxima del 90% de la ventana */
+          overflow-y: visible; /* permite scroll vertical */
+          max-width: 95%; /* ancho máximo del 95% de la ventana */
+          margin: 0 auto; /* centra el modal */
+      }
+      .modal-container {
+          padding: 20px;
+          max-height: calc(90vh - 40px); /* altura máxima menos padding */
+          overflow-y: auto;
+      }
+  </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800">
@@ -138,135 +152,141 @@
   <!-- Modal Añadir Estudiante -->
   <div id="modalAddEstudiante" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl">
-      <h2 class="text-2xl font-bold mb-6 text-[#2e1a47]">Añadir Estudiante</h2>
-      <form method="POST" action="{{ route('estudiantes.store') }}">
-        @csrf
+      <div class="modal-container">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h2 class="text-2xl font-bold mb-6 text-[#2e1a47]">Añadir Estudiante</h2>
+        <form method="POST" action="{{ route('estudiantes.store') }}">
+          @csrf
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div>
+              <label class="block text-gray-700">Nombre:</label>
+              <input type="text" name="nombre" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700">Apellido Paterno:</label>
+              <input type="text" name="apellidoPaterno" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700">Apellido Materno:</label>
+              <input type="text" name="apellidoMaterno" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Nivel Academico:</label>
+              <input type="text" name="nivelAcademico" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Teléfono:</label>
+              <input type="text" name="telefono" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Dirección:</label>
+              <input type="text" name="direccion" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Fecha de Nacimiento:</label>
+              <input type="date" name="fechaNacimiento" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Email:</label>
+              <input type="email" name="email" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700">CI:</label>
+              <input type="text" name="ci" class="w-full border rounded px-3 py-2">
+            </div>
+          </div>
 
           <div>
-            <label class="block text-gray-700">Nombre:</label>
-            <input type="text" name="nombre" class="w-full border rounded px-3 py-2" required>
+            <label class="block text-gray-700">Estado:</label>
+            <select name="estado" class="w-full border rounded px-3 py-2" required>
+              <option value="" disabled selected>Seleccione un estado</option>
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+            </select>
           </div>
-          <div>
-            <label class="block text-gray-700">Apellido Paterno:</label>
-            <input type="text" name="apellidoPaterno" class="w-full border rounded px-3 py-2" required>
-          </div>
-          <div>
-            <label class="block text-gray-700">Apellido Materno:</label>
-            <input type="text" name="apellidoMaterno" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Nivel Academico:</label>
-            <input type="text" name="nivelAcademico" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Teléfono:</label>
-            <input type="text" name="telefono" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Dirección:</label>
-            <input type="text" name="direccion" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Fecha de Nacimiento:</label>
-            <input type="date" name="fechaNacimiento" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Email:</label>
-            <input type="email" name="email" class="w-full border rounded px-3 py-2" required>
-          </div>
-          <div>
-            <label class="block text-gray-700">CI:</label>
-            <input type="text" name="ci" class="w-full border rounded px-3 py-2">
-          </div>
-        </div>
 
-        <div>
-          <label class="block text-gray-700">Estado:</label>
-          <select name="estado" class="w-full border rounded px-3 py-2" required>
-            <option value="" disabled selected>Seleccione un estado</option>
-            <option value="1">Activo</option>
-            <option value="0">Inactivo</option>
-          </select>
-        </div>
-
-        <div class="flex justify-end mt-6 space-x-4">
-          <button type="button" onclick="toggleModal('modalAddEstudiante')" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
-            Cancelar
-          </button>
-          <button type="submit" class="px-4 py-2 bg-[#127475] text-white rounded hover:bg-[#0f5f5e]">
-            Guardar
-          </button>
-        </div>
-      </form>
+          <div class="flex justify-end mt-6 space-x-4">
+            <button type="button" onclick="toggleModal('modalAddEstudiante')" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+              Cancelar
+            </button>
+            <button type="submit" class="px-4 py-2 bg-[#127475] text-white rounded hover:bg-[#0f5f5e]">
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   <!-- Modal Editar Estudiante -->
   <div id="modalEditEstudiante" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl">
-      <h2 class="text-2xl font-bold mb-6 text-[#2e1a47]">Editar Estudiante</h2>
-      <form id="formEditEstudiante" method="POST" action="">
-        @csrf
-        @method('PUT')
+      <div class="modal-container">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="hidden" id="edit_codigo_estudiantil" name="codigoEstudiantil">
+        <h2 class="text-2xl font-bold mb-6 text-[#2e1a47]">Editar Estudiante</h2>
+        <form id="formEditEstudiante" method="POST" action="">
+          @csrf
+          @method('PUT')
 
-          <div>
-            <label class="block text-gray-700">Nombre:</label>
-            <input type="text" id="edit_nombre" name="nombre" class="w-full border rounded px-3 py-2" required>
-          </div>
-          <div>
-            <label class="block text-gray-700">Apellido Paterno:</label>
-            <input type="text" id="edit_apellido_paterno" name="apellidoPaterno" class="w-full border rounded px-3 py-2" required>
-          </div>
-          <div>
-            <label class="block text-gray-700">Apellido Materno:</label>
-            <input type="text" id="edit_apellido_materno" name="apellidoMaterno" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Nivel Academico:</label>
-            <input type="text" id="edit_nivelAcademico" name="nivelAcademico" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Teléfono:</label>
-            <input type="text" id="edit_telefono" name="telefono" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Dirección:</label>
-            <input type="text" id="edit_direccion" name="direccion" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Fecha de Nacimiento:</label>
-            <input type="date" id="edit_fecha_nacimiento" name="fechaNacimiento" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Email:</label>
-            <input type="email" id="edit_email" name="email" class="w-full border rounded px-3 py-2" required>
-          </div>
-          <div>
-            <label class="block text-gray-700">CI:</label>
-            <input type="text" id="edit_ci" name="ci" class="w-full border rounded px-3 py-2">
-          </div>
-          <div>
-            <label class="block text-gray-700">Estado:</label>
-            <select id="edit_estado" name="estado" class="w-full border rounded px-3 py-2" required>
-              <option value="1">Activo</option>
-              <option value="0">Inactivo</option>
-            </select>
-          </div>
-        </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="hidden" id="edit_codigo_estudiantil" name="codigoEstudiantil">
 
-        <div class="flex justify-end mt-6 space-x-4">
-          <button type="button" onclick="toggleModal('modalEditEstudiante')" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
-            Cancelar
-          </button>
-          <button type="submit" class="px-4 py-2 bg-[#127475] text-white rounded hover:bg-[#0f5f5e]">
-            Actualizar
-          </button>
-        </div>
-      </form>
+            <div>
+              <label class="block text-gray-700">Nombre:</label>
+              <input type="text" id="edit_nombre" name="nombre" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700">Apellido Paterno:</label>
+              <input type="text" id="edit_apellido_paterno" name="apellidoPaterno" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700">Apellido Materno:</label>
+              <input type="text" id="edit_apellido_materno" name="apellidoMaterno" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Nivel Academico:</label>
+              <input type="text" id="edit_nivelAcademico" name="nivelAcademico" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Teléfono:</label>
+              <input type="text" id="edit_telefono" name="telefono" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Dirección:</label>
+              <input type="text" id="edit_direccion" name="direccion" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Fecha de Nacimiento:</label>
+              <input type="date" id="edit_fecha_nacimiento" name="fechaNacimiento" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Email:</label>
+              <input type="email" id="edit_email" name="email" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+              <label class="block text-gray-700">CI:</label>
+              <input type="text" id="edit_ci" name="ci" class="w-full border rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Estado:</label>
+              <select id="edit_estado" name="estado" class="w-full border rounded px-3 py-2" required>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end mt-6 space-x-4">
+            <button type="button" onclick="toggleModal('modalEditEstudiante')" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+              Cancelar
+            </button>
+            <button type="submit" class="px-4 py-2 bg-[#127475] text-white rounded hover:bg-[#0f5f5e]">
+              Actualizar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   <!-- Modal para detalles que no son importantes del todo en estudiante-->
