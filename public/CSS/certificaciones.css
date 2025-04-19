@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://avatars.mds.yandex.net/get-shedevrum/11083974/img_f023c0163ad911ef9b2cb2803b23326e/orig');
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    color: #fff;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 2.75rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Archivo Black', sans-serif;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+/* Section Styles */
+section {
+    padding: 5rem 1rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 1.125rem;
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Benefits Section */
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.benefit-card {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+}
+
+.benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    background-color: #ccc9dc;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    color: #2d1e2f;
+}
+
+.benefit-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Certificates Section */
+.certificates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.certificate-card {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.certificate-card:hover {
+    transform: translateY(-5px);
+}
+
+.certificate-img {
+    height: 200px;
+    width: 100%;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.certificate-img img {
+    max-height: 230px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.certificate-content {
+    padding: 1.5rem;
+}
+
+.certificate-content h3 {
+    font-size: 18px;
+    margin-bottom: 0.5rem;
+    font-family: 'Archivo Black', sans-serif;
+    color: purple;
+    text-align: center;
+}
+
+.certificate-content p {
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.certificate-content a {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: 16px;
+    background-color: lavender;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.certificate-content a:hover {
+    background-color: purple;
+    color: white;
+}
+
+.certificate-details {
+    margin: 1rem 0;
+}
+
+.certificate-details li {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.certificate-details i {
+    color: purple;
+    margin-right: 0.5rem;
+}
+
+/* CTA Section */
+.cta {
+    background: linear-gradient(135deg, #4b2a50 0%, #472d4a 100%);
+    color: #fff;
+    text-align: center;
+}
+
+.cta h2 {
+    font-size: 2.25rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Archivo Black', sans-serif;
+}
+
+.cta p {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta a {
+    font-size: 16px;
+    background-color: lavender;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.cta a:hover {
+    background-color: purple;
+    color: white;
+}
+
+/* FAQ Section */
+.faq-item {
+    background-color: white;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.faq-question {
+    padding: 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+    background-color: #ccc9dc;
+}
+
+.faq-answer {
+    padding: 0 1.5rem 1.5rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .certificates-grid,
+    .benefits-grid,
+    .testimonial-grid {
+        grid-template-columns: 1fr;
+    }
+}

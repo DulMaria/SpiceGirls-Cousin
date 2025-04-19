@@ -17,10 +17,12 @@
 
     <!-- Sección de áreas -->
     <div id="main-content" class="content">
-        <div class="title">
-            <h1>Áreas de Cursos</h1>
-            <p>Explora nuestras áreas temáticas y descubre los cursos que ofrecemos en cada una.</p>
-        </div>
+        <section class="hero"><br>
+            <div class="hero-content">
+                <h1>Áreas de Cursos</h1>
+                <p>Explora nuestras áreas temáticas y descubre los cursos que ofrecemos en cada una.</p>
+            </div><br>
+        </section>
 
         <section class="course-section">
             @forelse($areas as $area)
