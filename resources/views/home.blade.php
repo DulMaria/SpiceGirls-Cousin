@@ -7,6 +7,8 @@
     <title>Fundación Santa Germana Cousin</title>
     <link rel="stylesheet" href="{{ asset('CSS/styleGeneral.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/pie_pag.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
 <body>
@@ -15,58 +17,27 @@
     @include('partials.nav')
 
     <div id="main-content" class="content">
-        <!-- Banner -->
-        <div class="banner-container">
-            <img src="{{ asset('img/slogan.png') }}" alt="Banner" class="banner-cropped" onclick="showFullImage()">
-        </div>
 
         <!-- Carrusel -->
         <section class="carousel-section">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                        <img src="{{ asset('img/ejemplo1.jpg') }}" alt="Evento 1">
+                        <img src="https://cdn.leonardo.ai/users/155b71f2-4da7-4c04-a85a-d14e23b9bd41/generations/ec4e71f2-c503-4c1e-be58-36bcd5ca8116/Leonardo_Phoenix_10_Create_an_image_wider_than_tall_depicting_1.jpg" alt="Evento 1">
                     </div>
                     <div class="swiper-slide">
-                        <img src="{{ asset('img/ejemplo2.jpg') }}" alt="Evento 2">
+                        <img src="https://cdn.leonardo.ai/users/155b71f2-4da7-4c04-a85a-d14e23b9bd41/generations/01ec9243-e5ec-4eed-b81e-4d0dba1b65c7/Leonardo_Phoenix_10_a_wide_horizontal_image_depicting_a_scient_2.jpg" alt="Evento 2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://cdn.leonardo.ai/users/155b71f2-4da7-4c04-a85a-d14e23b9bd41/generations/c603ce4e-e8d2-4605-9219-8b881385589d/Leonardo_Phoenix_10_Create_an_image_wider_than_tall_depicting_2.jpg" alt="Evento 3">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://i.ytimg.com/vi/YKDHUZqDU0U/maxresdefault.jpg" alt="Evento 3">
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
-        </section>
-
-        <!-- Estilos y JS del carrusel -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <style>
-            .carousel-section {
-                margin: 2rem 0;
-            }
-
-            .swiper-slide img {
-                width: 100%;
-                height: 400px;
-                object-fit: cover;
-                border-radius: 10px;
-            }
-        </style>
-        <script>
-            const swiper = new Swiper(".mySwiper", {
-                autoplay: {
-                    delay: 3000
-                },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true
-                },
-            });
-        </script>
-
-        <div class="contenedor-titulo_ini">
-            <img src="{{ asset('img/Icon_Playa.png') }}" alt="Piscina" width="300" height="200">
-            <h2 class="Titulo_pag">Fundación</h2>
-            <h2 class="Titulo_pag">"Santa Germana Cousin"</h2>
-        </div><br>
+        </section><br>
 
         <!-- Contenido principal -->
         <section class="principal">
@@ -135,63 +106,54 @@
             </div>
         </section>
 
-        <!-- Botones interactivos - Beneficios -->
+        <!-- Sección de Beneficios Mejorada -->
         <section class="benefits">
             <h2 class="section-title">Nuestros Beneficios</h2>
+
             <div class="benefit-item">
-                <button class="benefit-btn">📚 Educación Gratuita <span class="arrow">▼</span></button>
-                <div class="benefit-content">
-                    <p>Cursos certificados sin costo para comunidades vulnerables.</p>
-                </div>
-            </div>
-            <div class="benefit-item">
-                <button class="benefit-btn">👥 Apoyo Psicológico <span class="arrow">▼</span></button>
-                <div class="benefit-content">
-                    <p>Sesiones con profesionales para superar situaciones difíciles.</p>
+                <button class="benefit-btn" aria-expanded="false" aria-controls="certificates-content">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                            <path d="m9 16 2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <span class="benefit-title">Certificaciones Profesionales</span>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="benefit-content" id="certificates-content">
+                    <p>Obtén certificados reconocidos en el mercado laboral que impulsarán tu carrera profesional.</p>
+                    <ul>
+                        <li>Certificados avalados por la USFA</li>
+                        <li>Reconocimiento por la calidad y actualidad de los certificados obtenidos</li>
+                        <li>Certificados que mejoran tu perfil laboral para distintas áreas</li>
+                    </ul>
+                    <a href="{{ url('/certificados') }}" class="benefit-link">Ver certificaciones disponibles →</a>
                 </div>
             </div>
         </section>
 
-        <style>
-            .benefits {
-                max-width: 800px;
-                margin: 2rem auto;
-            }
-
-            .benefit-btn {
-                width: 100%;
-                padding: 1rem;
-                text-align: left;
-                background: #127475;
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 5px;
-                margin: 5px 0;
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .benefit-content {
-                padding: 0 1rem;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                background: #f0f0f0;
-                border-radius: 0 0 5px 5px;
-            }
-
-            .benefit-content p {
-                padding: 1rem;
-            }
-        </style>
         <script>
-            document.querySelectorAll('.benefit-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const content = button.nextElementSibling;
-                    content.style.maxHeight = content.style.maxHeight ? null : `${content.scrollHeight}px`;
-                    button.querySelector('.arrow').textContent =
-                        content.style.maxHeight ? '▲' : '▼';
+            document.addEventListener('DOMContentLoaded', function() {
+                const benefitButtons = document.querySelectorAll('.benefit-btn');
+
+                benefitButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const expanded = this.getAttribute('aria-expanded') === 'true';
+
+                        // Cerrar todos los paneles
+                        benefitButtons.forEach(btn => {
+                            btn.setAttribute('aria-expanded', 'false');
+                        });
+
+                        // Si estaba cerrado, abrirlo (toggle)
+                        if (!expanded) {
+                            this.setAttribute('aria-expanded', 'true');
+                        }
+                    });
                 });
             });
         </script>
@@ -203,39 +165,24 @@
                 <span class="stat-text">Estudiantes graduados</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number" data-target="85">0</span>
+                <span class="stat-number" data-target="{{ $numeroDeCursos }}">0</span>
                 <span class="stat-text">Cursos impartidos</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number" data-target="5000">0</span>
+                <span class="stat-number" data-target="1000">0</span>
                 <span class="stat-text">Personas ayudadas</span>
             </div>
         </section>
-
-        <style>
-            .stats {
-                display: flex;
-                justify-content: space-around;
-                background: #127475;
-                color: white;
-                padding: 2rem;
-                margin: 2rem 0;
-                text-align: center;
-            }
-
-            .stat-number {
-                font-size: 3rem;
-                font-weight: bold;
-                display: block;
-            }
-        </style>
         <script>
+            let statsAnimated = false;
+
             function animateStats() {
                 document.querySelectorAll('.stat-number').forEach(stat => {
                     const target = +stat.getAttribute('data-target');
                     const duration = 2000;
                     const step = target / (duration / 16);
                     let current = 0;
+
                     const update = () => {
                         current += step;
                         if (current < target) {
@@ -248,21 +195,32 @@
                     update();
                 });
             }
-            // Activar al hacer scroll a la sección
-            window.addEventListener('scroll', () => {
+
+            window.addEventListener('scroll', function onScroll() {
                 const statsSection = document.querySelector('.stats');
-                if (statsSection.getBoundingClientRect().top < window.innerHeight - 100) {
+                if (!statsAnimated && statsSection.getBoundingClientRect().top < window.innerHeight - 100) {
                     animateStats();
-                    window.removeEventListener('scroll', this);
+                    statsAnimated = true;
+                    window.removeEventListener('scroll', onScroll);
                 }
             });
         </script>
-        <a href="{{ route('administrador.prinAdmi') }}" class="text-[#127475] hover:text-[#e07a5f] text-lg font-semibold">Ir al Panel de Administración</a>
 
-
+        <!-- Inicialización del carrusel -->
+        <script>
+            const swiper = new Swiper(".mySwiper", {
+                autoplay: {
+                    delay: 3000
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true
+                },
+                loop: true
+            });
+        </script>
         @include('partials.footer')
     </div>
-
     <script src="{{ asset('JS/menu.js') }}"></script>
 </body>
 

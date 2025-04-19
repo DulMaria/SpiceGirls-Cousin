@@ -2,21 +2,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bitter:ital,wght@0,100..900;1,100..900&display=swap');
 
 /*Pagina de Áreas */
-/* Título principal */
-.title {
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://statics-diariomedico.uecdn.es/cms/2020-07/m%C3%A9dico%20forense.jpg');
+    background-size: cover;
+    background-position: center;
     text-align: center;
+    color: #fff;
 }
 
-.title h1 {
-    font-family: "Archivo Black", sans-serif;
-    font-size: 36px;
-    color: #2E1A47;
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.title p {
-    font-family: "Bitter", serif;
-    font-size: 18px;
-    color: #555;
+.hero h1 {
+    font-size: 2.75rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Archivo Black', sans-serif;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
 }
 
 .course-section {
@@ -100,3 +108,4 @@
     background-color: #2E1A47;
     color: #fff;
 }
+

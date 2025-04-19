@@ -3,454 +3,688 @@
 
 /* Estilos generales */
 body {
-    font-family: "Bitter", serif;
-    margin: 0;
-    background-color: #FBEFF2;
+  font-family: "Bitter", serif;
+  margin: 0;
+  background-color: #FBEFF2;
 }
 
 /*menu en general*/
 /* Botón para abrir el menú */
 .menu-btn {
-    font-size: 25px;
-    cursor: pointer;
-    padding: 10px;
-    background-color: #2D1E2F;
-    color: white;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 2;
-    border-radius: 5px;
+  font-size: 25px;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #2D1E2F;
+  color: white;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  border-radius: 5px;
 }
+
 /* Menú lateral desplegable */
 .menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: #2D1E2F;
-    width: 200px;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: -220px;
-    z-index: 1;
-    transition: left 0.3s ease;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #2D1E2F;
+  width: 200px;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: -220px;
+  z-index: 1;
+  transition: left 0.3s ease;
 }
+
 /* Cuando el menú está abierto */
 .menu.open {
-    left: 0; /* Mostrar el menú */
+  left: 0;
+  /* Mostrar el menú */
 }
+
 /* Estilos para los enlaces del menú */
 .menu ul {
-    padding: 50px 0; /* Asegura que el contenido esté debajo del botón */
+  padding: 50px 0;
+  /* Asegura que el contenido esté debajo del botón */
 }
+
 .menu li {
-    display: block;
+  display: block;
 }
+
 .menu li a {
-    display: block;
-    color: white;
-    padding: 15px;
-    text-decoration: none;
-    transition: background-color 0.3s;
+  display: block;
+  color: white;
+  padding: 15px;
+  text-decoration: none;
+  transition: background-color 0.3s;
 }
+
 .menu li a:hover {
-    background-color: #937c96; 
+  background-color: #937c96;
 }
+
 /* Responsividad del menu*/
 @media (max-width: 768px) {
-    .menu {
-        width: 100%; /* Menú ocupa el 100% en pantallas pequeñas */
-        left: -100%; /* Comienza oculto fuera de la pantalla */
-    }
-    body.menu-open .content {
-        margin-left: 0; /* El contenido no se desplaza cuando el menú está abierto */
-    }
-    body.menu-open .menu {
-        left: 0; /* Mostrar el menú en pantallas pequeñas */
-    }
+  .menu {
+    width: 100%;
+    /* Menú ocupa el 100% en pantallas pequeñas */
+    left: -100%;
+    /* Comienza oculto fuera de la pantalla */
+  }
+
+  body.menu-open .content {
+    margin-left: 0;
+    /* El contenido no se desplaza cuando el menú está abierto */
+  }
+
+  body.menu-open .menu {
+    left: 0;
+    /* Mostrar el menú en pantallas pequeñas */
+  }
 }
+
 .menu ul li span,
 .menu ul li button {
-    color: currentColor;
-    text-decoration: none;
-    padding: 10px 15px;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
+  color: currentColor;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
 }
+
 .menu ul li button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: inherit;
-    font-family: inherit;
-    width: 100%;
-    text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
 }
+
 .menu ul li span svg,
 .menu ul li button svg {
-    margin-right: 8px;
+  margin-right: 8px;
 }
+
 .menu ul li:hover span,
 .menu ul li:hover button {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
+
 /* Si estás usando fondo claro en el menú */
 .menu.light ul li:hover span,
 .menu.light ul li:hover button {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: #000;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #000;
 }
 
 /* Contenido principal */
-.content{
-    transition: margin-left 0.3s ease; 
-    flex: 1; 
+.content {
+  transition: margin-left 0.3s ease;
+  flex: 1;
 }
 
 /* Mover el contenido solo cuando el menú esté abierto */
-body.menu-open .content{
-    margin-left: 200px; 
+body.menu-open .content {
+  margin-left: 200px;
 }
 
 /*titulo de la pagina web*/
 .contenedor-titulo_ini {
-    text-align: center; 
+  text-align: center;
 }
+
 .contenedor-titulo_ini img {
-    width: 100%;
-    max-width: 300px; 
-    height: auto;
-    margin-bottom: -55px; 
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin-bottom: -55px;
 }
 
 
 .Titulo_pag {
-    font-family: 'Archivo Black', sans-serif; 
-    font-size: 40px; 
-    font-weight: 700; 
-    color: #333; 
-    text-transform: uppercase;
-    letter-spacing: 1px; 
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    margin-top: -20px; 
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  margin-top: -20px;
 }
 
 @media screen and (max-width: 768px) {
-    .contenedor-titulo_ini img {
-        max-width: 200px; /* Reducción del tamaño de la imagen */
-    }
+  .contenedor-titulo_ini img {
+    max-width: 200px;
+    /* Reducción del tamaño de la imagen */
+  }
 
-    .Titulo_pag {
-        font-size: 28px; /* Reduce el tamaño del texto */
-        margin-top: 10px; /* Ajuste en el margen superior */
-    }
+  .Titulo_pag {
+    font-size: 28px;
+    /* Reduce el tamaño del texto */
+    margin-top: 10px;
+    /* Ajuste en el margen superior */
+  }
 }
 
 /* En pantallas muy pequeñas (por ejemplo, móviles muy pequeños o smartphones) */
 @media screen and (max-width: 480px) {
-    .contenedor-titulo_ini img {
-        max-width: 150px; /* Aún más pequeña en pantallas muy pequeñas */
-    }
+  .contenedor-titulo_ini img {
+    max-width: 150px;
+    /* Aún más pequeña en pantallas muy pequeñas */
+  }
 
-    .Titulo_pag {
-        font-size: 24px; /* Reduce aún más el tamaño del texto */
-        margin-top: 15px; /* Ajuste en el margen superior */
-    }
+  .Titulo_pag {
+    font-size: 24px;
+    /* Reduce aún más el tamaño del texto */
+    margin-top: 15px;
+    /* Ajuste en el margen superior */
+  }
 }
 
 /* Estilos para la sección principal */
 .principal {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
 }
+
 .container-principal {
-    text-align: center;
-    max-width: 600px; /* Asegura que no ocupe todo el ancho */
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-    width: 90%;
+  text-align: center;
+  max-width: 600px;
+  /* Asegura que no ocupe todo el ancho */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  /* Sombra sutil */
+  width: 90%;
 }
+
 /* Estilos para el título */
 .heading-principal h1 {
-    font-size: 40px;
-    font-family: "Archivo Black", sans-serif;
-    color: #2d1e2d; 
-    margin-bottom: 20px;
+  font-size: 40px;
+  font-family: "Archivo Black", sans-serif;
+  color: #2d1e2d;
+  margin-bottom: 20px;
 }
+
 /* Estilos para el texto descriptivo */
 .description-principal p {
-    font-size: 20px; /* Tamaño pequeño */
-    color: #333;
-    margin-bottom: 20px;
+  font-size: 20px;
+  /* Tamaño pequeño */
+  color: #333;
+  margin-bottom: 20px;
 }
+
 /* Responsividad */
 @media (max-width: 768px) {
-    .principal {
-        height: auto; 
-    }
+  .principal {
+    height: auto;
+  }
 
-    .container-principal {
-        max-width: 100%; 
-        padding: 15px; 
-    }
+  .container-principal {
+    max-width: 100%;
+    padding: 15px;
+  }
 
-    .heading-principal h1 {
-        font-size: 30px;
-    }
+  .heading-principal h1 {
+    font-size: 30px;
+  }
 
-    .description-principal p {
-        font-size: 16px; 
-    }
+  .description-principal p {
+    font-size: 16px;
+  }
 }
+
 /* Estilos para el botón */
 .login-button .btn {
-    font-size: 16px;
-    background-color: #127475;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+  font-size: 16px;
+  background-color: #127475;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
+
 .login-button .btn:hover {
-    background-color: #90C8AC; /* Color más oscuro al pasar el ratón */
-    color: black;
+  background-color: #90C8AC;
+  /* Color más oscuro al pasar el ratón */
+  color: black;
 }
 
 /* Parte de Contenido del curso */
 .features {
-    display: flex;
-    flex-direction: column;
-    gap: 60px;
-    padding: 60px 30px;
-    background: #f9f9fb;
-  }
-  
-  .feature-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  padding: 60px 30px;
+  background: #f9f9fb;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeInUp 1s ease forwards;
+  transition: background-color 0.5s ease, transform 0.5s ease;
+}
+
+.feature-item img {
+  flex: 1;
+  max-width: 500px;
+  min-width: 300px;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Overlay lavanda */
+.feature-item img::after,
+.feature-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(150, 130, 230, 0.4);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.feature-item:hover img {
+  transform: scale(1.05);
+}
+
+.feature-item:hover img::after,
+.feature-item:hover .feature-img::after {
+  opacity: 1;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.feature-text {
+  flex: 1;
+  padding: 50px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feature-text h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #2e2e3a;
+  font-family: "Archivo Black", sans-serif;
+}
+
+.feature-text p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.6;
+  font-family: "Bitter", serif;
+}
+
+
+.feature-text .btn {
+  display: inline-block;
+  background-color: #6c5dd3;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.feature-text .btn:hover {
+  background-color: #5842c3;
+  transform: translateY(-2px);
+}
+
+/* Efecto hover para el div completo */
+.feature-item:hover {
+  background-color: #e8d9f1;
+  transform: translateY(-5px);
+  transition: background-color 0.5s ease, transform 0.5s ease;
+}
+
+/* Animación al cargar */
+@keyframes fadeInUp {
+  from {
     opacity: 0;
     transform: translateY(40px);
-    animation: fadeInUp 1s ease forwards;
-    transition: background-color 0.5s ease, transform 0.5s ease;
   }
-  
-  .feature-item img {
-    flex: 1;
-    max-width: 500px;
-    min-width: 300px;
-    height: 300px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-    position: relative;
-    z-index: 1;
-  }
-  
-  /* Overlay lavanda */
-  .feature-item img::after,
-  .feature-img::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(150, 130, 230, 0.4);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 2;
-    pointer-events: none;
-  }
-  
-  .feature-item:hover img {
-    transform: scale(1.05);
-  }
-  
-  .feature-item:hover img::after,
-  .feature-item:hover .feature-img::after {
+
+  to {
     opacity: 1;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transform: translateY(0);
   }
-  
-  .feature-text {
-    flex: 1;
-    padding: 50px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .feature-text h2 {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #2e2e3a;
-    font-family: "Archivo Black", sans-serif;
-  }
-
-  .feature-text p {
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 25px;
-    line-height: 1.6;
-    font-family: "Bitter", serif;
-  }
-  
-  
-  .feature-text .btn {
-    display: inline-block;
-    background-color: #6c5dd3;
-    color: #fff;
-    padding: 14px 28px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .feature-text .btn:hover {
-    background-color: #5842c3;
-    transform: translateY(-2px);
-  }
-
-  /* Efecto hover para el div completo */
-.feature-item:hover {
-    background-color: #e8d9f1; 
-    transform: translateY(-5px);
-    transition: background-color 0.5s ease, transform 0.5s ease;
 }
-  
-  /* Animación al cargar */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .feature-item {
+    flex-direction: column;
+    text-align: center;
   }
-  
-  /* Responsive */
-  @media (max-width: 1024px) {
-    .feature-item {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .feature-text {
-      padding: 30px 20px;
-    }
-  
-    .feature-text h2 {
-      font-size: 26px;
-    }
-  
-    .feature-text .btn {
-      font-size: 15px;
-      padding: 12px 24px;
-    }
-  
-    .feature-item img {
-      width: 100%;
-      max-width: 100%;
-      height: 220px;
-    }
+
+  .feature-text {
+    padding: 30px 20px;
   }
-  
-  @media (max-width: 600px) {
-    .features {
-      padding: 40px 20px;
-    }
-  
-    .feature-text {
-      padding: 25px 15px;
-    }
-  
-    .feature-text h2 {
-      font-size: 22px;
-    }
-  
-    .feature-text .btn {
-      padding: 10px 20px;
-    }
-  
-    .feature-item img {
-      height: 200px;
-    }
+
+  .feature-text h2 {
+    font-size: 26px;
   }
-  
+
+  .feature-text .btn {
+    font-size: 15px;
+    padding: 12px 24px;
+  }
+
+  .feature-item img {
+    width: 100%;
+    max-width: 100%;
+    height: 220px;
+  }
+}
+
+@media (max-width: 600px) {
+  .features {
+    padding: 40px 20px;
+  }
+
+  .feature-text {
+    padding: 25px 15px;
+  }
+
+  .feature-text h2 {
+    font-size: 22px;
+  }
+
+  .feature-text .btn {
+    padding: 10px 20px;
+  }
+
+  .feature-item img {
+    height: 200px;
+  }
+}
+
 
 /* Título */
 .title-container {
-    text-align: center;
+  text-align: center;
 }
+
 .title-container h2 {
-    font-family: "Archivo Black", sans-serif;
-    color: #3a406f;
-    font-size: 30px;
+  font-family: "Archivo Black", sans-serif;
+  color: #3a406f;
+  font-size: 30px;
 }
 
 /* Responsividad */
 @media (max-width: 768px) {
-    .map-container-wrapper {
-        flex-direction: column; 
-        align-items: center;
-    }
+  .map-container-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .map-section, .location-info {
-        width: 95%; /* Ocupan todo el ancho */
-    }
+  .map-section,
+  .location-info {
+    width: 95%;
+    /* Ocupan todo el ancho */
+  }
 }
 
 /* Banner de la pagina*/
 .banner-container {
-    width: 100%; 
-    overflow: hidden; 
-    background-color: rgba(0, 0, 0, 0.7); 
-    position: relative; 
+  width: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: relative;
 }
+
 .banner-cropped {
-    width: 100%;
-    height: auto; 
-    max-height: 200px;
-    object-fit: cover; 
-    filter: brightness(0.5);
-    transition: filter 0.3s ease;
-    cursor: pointer; 
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  filter: brightness(0.5);
+  transition: filter 0.3s ease;
+  cursor: pointer;
 }
+
 .banner-cropped:hover {
-    filter: brightness(1);
+  filter: brightness(1);
 }
+
 .full-image-container {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
+
 .banner-full {
-    max-width: 90%;
-    max-height: 90%;
-    cursor: pointer; /* Cambia el cursor para indicar que se puede cerrar */
+  max-width: 90%;
+  max-height: 90%;
+  cursor: pointer;
+  /* Cambia el cursor para indicar que se puede cerrar */
+}
+
+/* Estadisticas */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  background: #127475;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  margin: 1rem;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: bold;
+  display: block;
+}
+
+.stat-text {
+  font-size: 1.2rem;
+}
+
+/* Estilo de tarjetas */
+.benefits {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+
+.section-title {
+  font-family: "Archivo Black", sans-serif;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 2rem;
+  color: #333;
+  position: relative;
+}
+
+.section-title:after {
+  content: "";
+  display: block;
+  width: 380px;
+  height: 4px;
+  background: linear-gradient(to right, #6366f1, #8b5cf6);
+  margin: 0.8rem auto 0;
+  border-radius: 2px;
+}
+
+.benefit-item {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.benefit-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  background: #fff;
+  border: none;
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.benefit-btn:hover {
+  background: #f9fafb;
+}
+
+.benefit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-right: 1rem;
+  background: #127475;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.benefit-title {
+  flex-grow: 1;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.benefit-btn[aria-expanded="true"] .arrow {
+  transform: rotate(180deg);
+}
+
+.benefit-content {
+  max-height: 0;
+  overflow: hidden;
+  background: #fff;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 1.5rem;
+}
+
+.benefit-btn[aria-expanded="true"]+.benefit-content {
+  max-height: 500px;
+  padding: 1.5rem;
+}
+
+.benefit-content p {
+  margin-top: 0;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.benefit-content ul {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+  color: #4b5563;
+}
+
+.benefit-content li {
+  margin-bottom: 0.5rem;
+}
+
+.benefit-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: #127475;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.benefit-link:hover {
+  color: #104a4b;
+  text-decoration: underline;
+}
+
+/* Carrusel */
+.carousel-section {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(0.95);
+  /* <- Esto reduce visualmente el tamaño */
+  transition: transform 0.4s ease-in-out;
+  border-radius: 10px;
+}
+
+.swiper-slide img:hover {
+  transform: scale(1.02);
+  /* efecto suave al pasar el mouse */
 }

@@ -16,6 +16,11 @@
     @include('partials.nav')
 
     <div id="main-content" class="content">
+        <section class="hero"><br>
+            <div class="hero-content">
+                <h1>BIENVENIDOS Y GRACIAS POR ESCOGERNOS</h1>
+            </div><br>
+        </section>
         <!-- Contador de tiempo (Antes de las clases) -->
         <div id="countdown-container">
             <h2 id="countdown-title">Tiempo de Inscripción</h2>
@@ -33,7 +38,7 @@
                 <div class="course-text">
                     <h2>{{ $curso->nombreCurso }}</h2>
                     <p>{{ $curso->descripcion }}</p>
-                    <button class="btn" onclick="openModal('{{ $curso->id }}')">Ver más</button>
+                    <button class="btn" onclick="openModal('{{ $curso->ID_Curso }}')">Ver más</button>
                 </div>
             </div>
             @endforeach
@@ -41,21 +46,26 @@
 
         <!-- Ventanas modales -->
         @foreach($cursos as $curso)
-        <div id="{{ $curso->id }}" class="modal">
+        <div id="{{ $curso->ID_Curso }}" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal('{{ $curso->id }}')">&times;</span>
+                <span class="close" onclick="closeModal('{{ $curso->ID_Curso }}')">&times;</span>
                 <h2>{{ $curso->nombreCurso }}</h2>
-                <ul>
-                    @foreach($curso->modulos as $modulo)
-                    <li><strong>Módulo {{ $loop->iteration }}:</strong> {{ $modulo }}</li>
-                    @endforeach
-                </ul>
-                <p><strong>Costo:</strong> Bs. {{ $curso->costo }}</p>
-                <p><strong>Duración:</strong> {{ $curso->duracion }} meses</p>
-                <button onclick="goToInscription('{{ $curso->nombreCurso }}')">Inscribirse</button>
+                <div class="modal-description">
+                    <h3>Módulos del Curso</h3>
+                    <ul>
+                        @foreach($curso->modulos as $modulo)
+                        <li>
+                            <strong>{{ $modulo->nombreModulo }}</strong><br>
+                            <small>{{ $modulo->descripcionModulo }}</small>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <button href='#'>Inscribirse</button>
             </div>
         </div>
         @endforeach
+
         @include('partials.footer')
     </div>
     <script src="{{ asset('JS/menu.js') }}"></script>
@@ -89,7 +99,7 @@
             } else {
                 // Mostrar la cuenta regresiva hasta el 1 del siguiente mes
                 targetDate = new Date(now.getFullYear(), currentMonth + 1, 1, 0, 0, 0);
-                document.getElementById("countdown-title").innerText = "Tiempo para abertura de clases";
+                document.getElementById("countdown-title").innerText = "Tiempo para apertura de clases";
             }
 
             const timeRemaining = targetDate - now;
@@ -102,7 +112,6 @@
             document.getElementById('countdown').innerHTML =
                 `<span id="countdown-days">${days} días</span>, <span id="countdown-hours">${hours} horas</span>, <span id="countdown-minutes">${minutes} minutos</span>, <span id="countdown-seconds">${seconds} segundos</span>`;
         }
-
         setInterval(updateCountdown, 1000); // Actualizar el contador cada segundo
         updateCountdown(); // Inicializar contador
     </script>

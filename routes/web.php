@@ -8,7 +8,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/news', [HomeController::class, 'Promociones'])->name('pag_visitante.news');
 Route::get('/contacto', [HomeController::class, 'showContact'])->name('pag_visitante.contacto');
 Route::get('/sobreNosotros', [HomeController::class, 'History'])->name('pag_visitante.sobreNosotros');
-
+Route::get('/', [HomeController::class, 'totalCurso'])->name('home');
+Route::get('/certificados', [HomeController::class, 'Certificaiones'])->name('pag_visitante.certificados');
 //Ruta de promociones y ofertas para el visitante
 use App\Http\Controllers\PromocionController;
 
@@ -67,6 +68,6 @@ Route::prefix('administrador')->group(function () {
     Route::get('/estudiantes/{codigoEstudiantil}/{ID_Usuario}/edit', [EstudianteController::class, 'edit'])->name('estudiantes.edit');
     Route::put('/estudiantes/{codigoEstudiantil}', [EstudianteController::class, 'update'])->name('estudiantes.update');
     Route::post('/estudiantes/{codigoEstudiantil}/cambiar-estado', [EstudianteController::class, 'cambiarEstado'])
-    ->name('estudiantes.cambiarEstado');
+    ->name('estudiantes.cambiarEstado');    
 
 });
