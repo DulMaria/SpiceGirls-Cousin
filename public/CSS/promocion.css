@@ -1,3 +1,4 @@
+
 /* Fuente y título principal */
 .title {
     font-family: 'Archivo Black', sans-serif;
@@ -8,37 +9,57 @@
     letter-spacing: 1px;
     text-align: center;
     margin-top: -20px;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://www.shutterstock.com/image-vector/oferta-especial-special-offer-spanish-260nw-2141284761.jpg');
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;/* Espacio superior */
+    margin-bottom: 45px; /* Espacio inferior */
+    background-size: cover;
 }
+
+.title h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 3.5rem;
+    margin: 40px 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
 
 /* Contenedor de tarjetas con altura fija y uniformidad */
 .card {
-    border: 1px solid #CCC9DC;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: #fcfcfc65;
+    border: none;
+    position: relative;
     padding: 1rem;
-    background-color: #F7F7F7;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    justify-content: space-between;
     display: flex;
     flex-direction: column;
     text-align: center;
-    transition: transform 0.5s ease;
-    border-radius: 50px;
+    justify-content: space-between;
+    height: 90%; /* Altura fija para todas las tarjetas */
+    margin: 1rem;
 }
 
 .card:hover {
-    background-color: lavender;
     transform: translateY(-5px);
-    transition: transform 0.5s ease;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    background-color: lavender;
 }
 
+/* Estilo de texto en la tarjeta */
 .card-body h5, h6 {
-    text-align: center;
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 22px;
     color: #1A1A1A;
 }
 
+
 .card-body p {
-    text-align: center;
     font-size: 16px;
     color: #2D1E2F;
 }
@@ -48,6 +69,13 @@
     list-style: none;
     font-size: 14px;
     color: #127475;
+}
+
+/* Estilos generales para la página */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7f7f76a;
+    color: #333;
 }
 
 .row {
@@ -134,13 +162,114 @@
     color: #127475;
 }
 
-.modal-body a {
-    text-decoration: none;
-}
-
 .modal-footer {
     margin-top: 1rem;
     text-align: right;
+}
+
+/* Estilos para la etiqueta de descuento (rojo) */
+.discount-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #fd0000;
+    color: white;
+    border-radius: 50px;
+    padding: 8px 15px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4);
+}
+
+/* Estilo para las fechas */
+.date-range {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 15px 0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.date-icon {
+    background-color: #6c5ce7;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.date-text {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.date-divider {
+    margin: 0 5px;
+    color: #666;
+}
+
+/* Botón atractivo (color lila oscuro) */
+.btn-primary {
+    background: linear-gradient(45deg, #6c5ce7, #9b59b6);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(108, 92, 231, 0.4);
+}
+
+/* Estilo para la lista de cursos */
+.courses-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.courses-list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #e0e0e0;
+    display: flex;
+    align-items: center;
+}
+
+.courses-list li:last-child {
+    border-bottom: none;
+}
+
+.courses-list li:before {
+    content: "\f02d";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin-right: 10px;
+    color: #6c5ce7;
+}
+
+/* Botón WhatsApp */
+.btn-success {
+    background-color: #2ecc71;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
 }
 
 /* Animación */
@@ -157,19 +286,19 @@
 }
 
 /* Responsividad */
-@media screen and (max-width: 992px) {
+@media (max-width: 992px) {
     .col-md-4 {
         width: 45%;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
     .col-md-4 {
         width: 100%;
     }
 
-    .title {
-        font-size: 1.8rem;
+    .title h1 {
+        font-size: 2.5rem;
     }
 
     .card {
@@ -182,12 +311,16 @@
     }
 }
 
+@media (max-width: 576px) {
+    .title h1 {
+        font-size: 2rem;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+}
+
 *, *::before, *::after {
     transition: all 0.25s ease-in-out;
-}
-.card {
-    box-shadow: 0 6px 20px rgba(45, 30, 47, 0.08);
-}
-.modal-dialog {
-    box-shadow: 0 12px 30px rgba(18, 116, 117, 0.15);
 }
