@@ -20,7 +20,7 @@ class DocenteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'apellidoPaterno' => 'required|string|max:100',
+            'apellidoPaterno' => 'nullable|string|max:100',
             'apellidoMaterno' => 'nullable|string|max:100',
             'especialidad' => 'nullable|string|max:100',
             'telefono' => 'nullable|string|max:20',
@@ -47,8 +47,27 @@ class DocenteController extends Controller
 
         // Generar automáticamente el código del docente
         $nombreInicial = strtoupper(substr($request->nombre, 0, 1));
-        $apellidoPaternoInicial = strtoupper(substr($request->apellidoPaterno, 0, 1));
-        $apellidoMaternoInicial = strtoupper(substr($request->apellidoMaterno ?? '', 0, 1));
+    
+        // Para el código de docente, usamos la lógica de duplicar la inicial si solo hay un apellido
+        if (!empty($request->apellidoPaterno)) {
+            $apellidoPaternoInicial = strtoupper(substr($request->apellidoPaterno, 0, 1));
+        } else {
+            $apellidoPaternoInicial = '';
+        }
+        
+        if (!empty($request->apellidoMaterno)) {
+            $apellidoMaternoInicial = strtoupper(substr($request->apellidoMaterno, 0, 1));
+        } else {
+            $apellidoMaternoInicial = '';
+        }
+        
+        // Si solo hay un apellido, duplicamos su inicial para el código
+        if (empty($apellidoPaternoInicial) && !empty($apellidoMaternoInicial)) {
+            $apellidoPaternoInicial = $apellidoMaternoInicial;
+        } elseif (!empty($apellidoPaternoInicial) && empty($apellidoMaternoInicial)) {
+            $apellidoMaternoInicial = $apellidoPaternoInicial;
+        }
+        
         $prefijo = $nombreInicial . $apellidoPaternoInicial . $apellidoMaternoInicial;
 
         // Obtener el último número SIN importar el prefijo
@@ -109,7 +128,7 @@ class DocenteController extends Controller
         
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'apellidoPaterno' => 'required|string|max:100',
+            'apellidoPaterno' => 'nullable|string|max:100',
             'apellidoMaterno' => 'nullable|string|max:100',
             'especialidad' => 'nullable|string|max:100',
             'telefono' => 'nullable|string|max:20',

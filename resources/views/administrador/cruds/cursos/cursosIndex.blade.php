@@ -20,6 +20,17 @@
             /* Limita el ancho del modal */
             margin: auto;
         }
+        /* Estilos adicionales para validación de campos */
+    input.border-red-500, textarea.border-red-500, select.border-red-500 {
+        border: 1px solid #f56565 !important;
+        background-color: #fff5f5 !important;
+    }
+    .error-message {
+        color: #e53e3e !important;
+        font-size: 0.75rem !important;
+        margin-top: 0.25rem !important;
+        display: block !important;
+    }
     </style>
 </head>
 
@@ -275,6 +286,338 @@
 </html>
 
 <script>
+    // Función principal para validar campos y mostrar errores
+function validarCampo(input, condicion, mensajeError) {
+    // Eliminar mensajes de error anteriores
+    const errorMsgExistente = input.parentNode.querySelector('.error-message');
+    if (errorMsgExistente) {
+        errorMsgExistente.remove();
+    }
+
+    // Quitar clase de error
+    input.classList.remove('border-red-500');
+
+    // Si no cumple la condición, mostrar error
+    if (!condicion) {
+        input.classList.add('border-red-500');
+        const errorMsg = document.createElement('span');
+        errorMsg.className = 'error-message text-red-500 text-xs mt-1 block';
+        errorMsg.textContent = mensajeError;
+        
+        // Insertar el mensaje de error justo después del campo
+        if (input.nextElementSibling) {
+            input.parentNode.insertBefore(errorMsg, input.nextElementSibling);
+        } else {
+            input.parentNode.appendChild(errorMsg);
+        }
+        return false;
+    }
+    return true;
+}
+
+// Validar nombre del curso (solo letras y espacios, máximo 70 caracteres)
+function validarNombreCurso(input) {
+    // Reemplazar números mientras escribe
+    input.value = input.value.replace(/[0-9]/g, '');
+
+    // Limitar a 70 caracteres
+    if (input.value.length > 70) {
+        input.value = input.value.substring(0, 70);
+    }
+
+    // Validar que no esté vacío y no contenga números
+    return validarCampo(
+        input,
+        input.value.trim() !== '' && !/[0-9]/.test(input.value),
+        'El nombre no debe contener números (máximo 70 caracteres) y es obligatorio'
+    );
+}
+
+// Validar descripción del curso (máximo 200 caracteres)
+function validarDescripcionCurso(input) {
+    // Limitar a 200 caracteres
+    if (input.value.length > 200) {
+        input.value = input.value.substring(0, 200);
+    }
+
+    // Validar que no esté vacío
+    return validarCampo(
+        input,
+        input.value.trim() !== '',
+        'La descripción es obligatoria (máximo 200 caracteres)'
+    );
+}
+
+// Validar nombre del módulo (máximo 100 caracteres)
+function validarNombreModulo(input) {
+    // Limitar a 100 caracteres
+    if (input.value.length > 100) {
+        input.value = input.value.substring(0, 100);
+    }
+
+    // Validar que no esté vacío
+    return validarCampo(
+        input,
+        input.value.trim() !== '',
+        'El nombre del módulo es obligatorio (máximo 100 caracteres)'
+    );
+}
+
+// Validar descripción del módulo (máximo 200 caracteres)
+function validarDescripcionModulo(input) {
+    // Limitar a 200 caracteres
+    if (input.value.length > 200) {
+        input.value = input.value.substring(0, 200);
+    }
+
+    // Validar que no esté vacío
+    return validarCampo(
+        input,
+        input.value.trim() !== '',
+        'La descripción del módulo es obligatoria (máximo 200 caracteres)'
+    );
+}
+
+// Validar imagen (tipo de archivo)
+function validarImagen(input) {
+    if (!input.files || input.files.length === 0) {
+        // Si es un modal de edición, la imagen puede ser opcional
+        if (input.closest('form').id === 'formEditarCurso') {
+            return true;
+        }
+        return validarCampo(input, false, 'Debe seleccionar una imagen');
+    }
+    
+    const archivo = input.files[0];
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+    
+    return validarCampo(
+        input,
+        tiposPermitidos.includes(archivo.type),
+        'El archivo debe ser una imagen (JPG, PNG o GIF)'
+    );
+}
+
+// Función para validar los campos de módulos
+function validarModulos(container) {
+    let modulosValidos = true;
+    
+    // Obtener todos los módulos del contenedor
+    const modulos = container.querySelectorAll('div.mb-4.p-4.border');
+    
+    modulos.forEach(moduloDiv => {
+        // Validar nombre del módulo
+        const nombreModulo = moduloDiv.querySelector('input[name="modulos[]"]');
+        if (nombreModulo && !validarNombreModulo(nombreModulo)) {
+            modulosValidos = false;
+        }
+        
+        // Validar descripción del módulo
+        const descripcionModulo = moduloDiv.querySelector('textarea[name="descripcionModulo[]"]');
+        if (descripcionModulo && !validarDescripcionModulo(descripcionModulo)) {
+            modulosValidos = false;
+        }
+    });
+    
+    return modulosValidos;
+}
+
+// Función para validar formulario completo antes de enviar
+function validarFormularioCurso(event) {
+    const form = event.target;
+    let formValido = true;
+
+    // Validar nombre del curso
+    const nombreCurso = form.querySelector('[name="nombreCurso"]');
+    if (nombreCurso && !validarNombreCurso(nombreCurso)) formValido = false;
+
+    // Validar descripción del curso
+    const descripcionCurso = form.querySelector('[name="descripcionCurso"]');
+    if (descripcionCurso && !validarDescripcionCurso(descripcionCurso)) formValido = false;
+
+    // Validar área seleccionada
+    const area = form.querySelector('[name="ID_Area"]');
+    if (area && !validarCampo(area, area.value !== '', 'Debe seleccionar un área')) formValido = false;
+    
+    // Validar estado seleccionado
+    const estado = form.querySelector('[name="estado"]');
+    if (estado && !validarCampo(estado, estado.value !== '', 'Debe seleccionar un estado')) formValido = false;
+
+    // Validar imagen (solo en formulario de añadir)
+    const imagenCurso = form.querySelector('[name="imagenCurso"]');
+    if (imagenCurso && !validarImagen(imagenCurso)) formValido = false;
+
+    // Validar módulos
+    let modulosContainer;
+    if (form.id === 'formEditarCurso') {
+        modulosContainer = document.getElementById('editModulosContainer');
+    } else {
+        modulosContainer = document.getElementById('modulosContainer');
+    }
+    
+    if (modulosContainer && !validarModulos(modulosContainer)) {
+        formValido = false;
+    }
+
+    // Prevenir envío si hay errores
+    if (!formValido) {
+        event.preventDefault();
+        return false;
+    }
+
+    return true;
+}
+
+// Agregar estilos CSS para los campos con error
+function agregarEstilosValidacion() {
+    if (!document.getElementById('validacion-estilos-cursos')) {
+        const style = document.createElement('style');
+        style.id = 'validacion-estilos-cursos';
+        style.innerHTML = `
+        input.border-red-500, textarea.border-red-500, select.border-red-500 {
+            border: 1px solid #f56565 !important;
+            background-color: #fff5f5 !important;
+        }
+        .error-message {
+            color: #e53e3e !important;
+            font-size: 0.75rem !important;
+            margin-top: 0.25rem !important;
+            display: block !important;
+        }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Actualizar la función addModulo para agregar validaciones a los nuevos módulos
+const originalAddModulo = addModulo;
+addModulo = function() {
+    originalAddModulo();
+    
+    // Obtener el último módulo añadido
+    const modulosContainer = document.getElementById('modulosContainer');
+    const modulos = modulosContainer.querySelectorAll('div.mb-4.p-4.border');
+    const ultimoModulo = modulos[modulos.length - 1];
+    
+    // Agregar validaciones al nuevo módulo
+    const nombreModulo = ultimoModulo.querySelector('input[name="modulos[]"]');
+    const descripcionModulo = ultimoModulo.querySelector('textarea[name="descripcionModulo[]"]');
+    
+    nombreModulo.addEventListener('input', () => validarNombreModulo(nombreModulo));
+    nombreModulo.addEventListener('blur', () => validarNombreModulo(nombreModulo));
+    
+    descripcionModulo.addEventListener('input', () => validarDescripcionModulo(descripcionModulo));
+    descripcionModulo.addEventListener('blur', () => validarDescripcionModulo(descripcionModulo));
+    
+    // Establecer atributos maxlength
+    nombreModulo.setAttribute('maxlength', '100');
+    descripcionModulo.setAttribute('maxlength', '200');
+};
+
+// Actualizar la función addEditModulo para agregar validaciones a los nuevos módulos
+const originalAddEditModulo = addEditModulo;
+addEditModulo = function() {
+    originalAddEditModulo();
+    
+    // Obtener el último módulo añadido
+    const modulosContainer = document.getElementById('editModulosContainer');
+    const modulos = modulosContainer.querySelectorAll('div.mb-4.p-4.border');
+    const ultimoModulo = modulos[modulos.length - 1];
+    
+    // Agregar validaciones al nuevo módulo
+    const nombreModulo = ultimoModulo.querySelector('input[name="modulos[]"]');
+    const descripcionModulo = ultimoModulo.querySelector('textarea[name="descripcionModulo[]"]');
+    
+    nombreModulo.addEventListener('input', () => validarNombreModulo(nombreModulo));
+    nombreModulo.addEventListener('blur', () => validarNombreModulo(nombreModulo));
+    
+    descripcionModulo.addEventListener('input', () => validarDescripcionModulo(descripcionModulo));
+    descripcionModulo.addEventListener('blur', () => validarDescripcionModulo(descripcionModulo));
+    
+    // Establecer atributos maxlength
+    nombreModulo.setAttribute('maxlength', '100');
+    descripcionModulo.setAttribute('maxlength', '200');
+};
+
+// Actualizar addEditModuloWithData para incluir validaciones
+const originalAddEditModuloWithData = addEditModuloWithData;
+addEditModuloWithData = function(modulo) {
+    originalAddEditModuloWithData(modulo);
+    
+    // Obtener el último módulo añadido
+    const modulosContainer = document.getElementById('editModulosContainer');
+    const modulos = modulosContainer.querySelectorAll('div.mb-4.p-4.border');
+    const ultimoModulo = modulos[modulos.length - 1];
+    
+    // Agregar validaciones al módulo cargado
+    const nombreModulo = ultimoModulo.querySelector('input[name="modulos[]"]');
+    const descripcionModulo = ultimoModulo.querySelector('textarea[name="descripcionModulo[]"]');
+    
+    nombreModulo.addEventListener('input', () => validarNombreModulo(nombreModulo));
+    nombreModulo.addEventListener('blur', () => validarNombreModulo(nombreModulo));
+    
+    descripcionModulo.addEventListener('input', () => validarDescripcionModulo(descripcionModulo));
+    descripcionModulo.addEventListener('blur', () => validarDescripcionModulo(descripcionModulo));
+    
+    // Establecer atributos maxlength
+    nombreModulo.setAttribute('maxlength', '100');
+    descripcionModulo.setAttribute('maxlength', '200');
+};
+
+// Inicializar validaciones cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    // Agregar estilos CSS
+    agregarEstilosValidacion();
+
+    // Establecer atributos maxlength directamente en los elementos
+    document.querySelectorAll('input[name="nombreCurso"]')
+        .forEach(input => {
+        input.setAttribute('maxlength', '70');
+        input.setAttribute('required', 'required');
+        input.addEventListener('input', () => validarNombreCurso(input));
+        input.addEventListener('blur', () => validarNombreCurso(input));
+    });
+
+    document.querySelectorAll('textarea[name="descripcionCurso"]')
+        .forEach(textarea => {
+        textarea.setAttribute('maxlength', '200');
+        textarea.setAttribute('required', 'required');
+        textarea.addEventListener('input', () => validarDescripcionCurso(textarea));
+        textarea.addEventListener('blur', () => validarDescripcionCurso(textarea));
+    });
+
+    // Validar imagen del curso al cambiar
+    document.querySelectorAll('input[name="imagenCurso"]')
+        .forEach(input => {
+        input.addEventListener('change', () => validarImagen(input));
+    });
+
+    // Configurar validación para módulos existentes
+    document.querySelectorAll('#modulosContainer input[name="modulos[]"]')
+        .forEach(input => {
+        input.setAttribute('maxlength', '100');
+        input.addEventListener('input', () => validarNombreModulo(input));
+        input.addEventListener('blur', () => validarNombreModulo(input));
+    });
+
+    document.querySelectorAll('#modulosContainer textarea[name="descripcionModulo[]"]')
+        .forEach(textarea => {
+        textarea.setAttribute('maxlength', '200');
+        textarea.addEventListener('input', () => validarDescripcionModulo(textarea));
+        textarea.addEventListener('blur', () => validarDescripcionModulo(textarea));
+    });
+
+    // Validar formularios al enviar
+    const formAdd = document.querySelector('#modal form');
+    if (formAdd) {
+        formAdd.addEventListener('submit', validarFormularioCurso);
+    }
+
+    const formEdit = document.getElementById('formEditarCurso');
+    if (formEdit) {
+        formEdit.addEventListener('submit', validarFormularioCurso);
+    }
+});
     function toggleModal() {
         const modal = document.getElementById('modal');
         modal.classList.toggle('hidden');
@@ -478,4 +821,6 @@
             });
         });
     });
+
+    
 </script>

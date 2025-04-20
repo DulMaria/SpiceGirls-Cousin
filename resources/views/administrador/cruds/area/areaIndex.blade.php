@@ -7,6 +7,18 @@
     <title>Áreas - Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+    input.border-red-500, textarea.border-red-500 {
+        border: 1px solid #f56565 !important;
+        background-color: #fff5f5 !important;
+    }
+    .error-message {
+        color: #e53e3e !important;
+        font-size: 0.75rem !important;
+        margin-top: 0.25rem !important;
+        display: block !important;
+    }
+    </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800">
@@ -132,6 +144,7 @@
     </div>
 
     <script>
+        
         function handleEditButtonClick(button) {
             const id = button.dataset.id;
             const nombre = button.dataset.nombre;
@@ -201,6 +214,186 @@
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Actualizar';
             }
+        });
+
+
+
+
+                // Función para validar campo y mostrar error
+        function validarCampo(input, condicion, mensajeError) {
+        // Eliminar mensajes de error anteriores
+        const errorMsgExistente = input.parentNode.querySelector('.error-message');
+        if (errorMsgExistente) {
+            errorMsgExistente.remove();
+        }
+
+        // Quitar clase de error
+        input.classList.remove('border-red-500');
+
+        // Si no cumple la condición, mostrar error
+        if (!condicion) {
+            input.classList.add('border-red-500');
+            const errorMsg = document.createElement('span');
+            errorMsg.className = 'error-message text-red-500 text-xs mt-1 block';
+            errorMsg.textContent = mensajeError;
+            input.parentNode.appendChild(errorMsg);
+            return false;
+        }
+        return true;
+        }
+
+        // Validar nombre del área (solo letras y espacios, máximo 50 caracteres)
+        function validarNombreArea(input) {
+        // Reemplazar caracteres no permitidos mientras escribe
+        input.value = input.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ\s]/g, '');
+
+        // Limitar a 50 caracteres
+        if (input.value.length > 50) {
+            input.value = input.value.substring(0, 50);
+        }
+
+        // Validar que no esté vacío y solo contenga letras
+        return validarCampo(
+            input,
+            input.value.trim() !== '' && /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/.test(input.value),
+            'El nombre solo debe contener letras (máximo 50 caracteres) y es obligatorio'
+        );
+        }
+
+        // Validar descripción del área (máximo 200 caracteres)
+        function validarDescripcionArea(input) {
+        // Limitar a 200 caracteres
+        if (input.value.length > 200) {
+            input.value = input.value.substring(0, 200);
+        }
+
+        // Validar que no esté vacío
+        return validarCampo(
+            input,
+            input.value.trim() !== '',
+            'La descripción es obligatoria (máximo 200 caracteres)'
+        );
+        }
+
+        // Validar campo obligatorio
+        function validarObligatorio(input) {
+        return validarCampo(
+            input,
+            input.value.trim() !== '',
+            'Este campo es obligatorio'
+        );
+        }
+
+        // Validar imagen (tipo de archivo)
+        function validarImagen(input) {
+        if (!input.files || input.files.length === 0) {
+            // Si es un modal de edición, la imagen puede ser opcional
+            if (input.closest('form').id === 'formEdit') {
+            return true;
+            }
+            return validarCampo(input, false, 'Debe seleccionar una imagen');
+        }
+        
+        const archivo = input.files[0];
+        const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+        
+        return validarCampo(
+            input,
+            tiposPermitidos.includes(archivo.type),
+            'El archivo debe ser una imagen (JPG, PNG o GIF)'
+        );
+        }
+
+        // Función para validar formulario completo antes de enviar
+        function validarFormularioArea(event) {
+        const form = event.target;
+        let formValido = true;
+
+        // Validar nombre del área
+        const nombreArea = form.querySelector('[name="nombreArea"]');
+        if (nombreArea && !validarNombreArea(nombreArea)) formValido = false;
+
+        // Validar descripción del área
+        const descripcionArea = form.querySelector('[name="descripcionArea"]');
+        if (descripcionArea && !validarDescripcionArea(descripcionArea)) formValido = false;
+
+        // Validar imagen (solo en formulario de añadir)
+        const imagenArea = form.querySelector('[name="imagenArea"]');
+        if (imagenArea && !validarImagen(imagenArea)) formValido = false;
+
+        // Prevenir envío si hay errores
+        if (!formValido) {
+            event.preventDefault();
+            return false;
+        }
+
+        return true;
+        }
+
+        // Agregar estilos CSS para los campos con error
+        function agregarEstilosValidacion() {
+        if (!document.getElementById('validacion-estilos')) {
+            const style = document.createElement('style');
+            style.id = 'validacion-estilos';
+            style.innerHTML = `
+            input.border-red-500, textarea.border-red-500 {
+                border: 1px solid #f56565 !important;
+                background-color: #fff5f5 !important;
+            }
+            .error-message {
+                color: #e53e3e !important;
+                font-size: 0.75rem !important;
+                margin-top: 0.25rem !important;
+                display: block !important;
+            }
+            `;
+            document.head.appendChild(style);
+        }
+        }
+
+        // Inicializar validaciones
+        document.addEventListener('DOMContentLoaded', function() {
+        // Agregar estilos CSS
+        agregarEstilosValidacion();
+
+        // Establecer atributos maxlength directamente en los elementos
+        document.querySelectorAll('input[name="nombreArea"]')
+            .forEach(input => {
+            input.setAttribute('maxlength', '50');
+            input.setAttribute('required', 'required');
+            });
+
+        document.querySelectorAll('textarea[name="descripcionArea"]')
+            .forEach(textarea => {
+            textarea.setAttribute('maxlength', '200');
+            textarea.setAttribute('required', 'required');
+            });
+
+        // Validar formularios al enviar
+        const formularios = document.querySelectorAll('#modalAdd form, #formEdit');
+        formularios.forEach(form => {
+            form.addEventListener('submit', validarFormularioArea);
+        });
+
+        // Validar nombre del área en tiempo real
+        const camposNombre = document.querySelectorAll('input[name="nombreArea"]');
+        camposNombre.forEach(input => {
+            input.addEventListener('input', () => validarNombreArea(input));
+            input.addEventListener('blur', () => validarNombreArea(input));
+        });
+
+        // Validar descripción del área en tiempo real
+        const camposDescripcion = document.querySelectorAll('textarea[name="descripcionArea"]');
+        camposDescripcion.forEach(textarea => {
+            textarea.addEventListener('input', () => validarDescripcionArea(textarea));
+            textarea.addEventListener('blur', () => validarDescripcionArea(textarea));
+        });
+
+        // Validar imagen del área al cambiar
+        const camposImagen = document.querySelectorAll('input[name="imagenArea"]');
+        camposImagen.forEach(input => {
+            input.addEventListener('change', () => validarImagen(input));
+        });
         });
     </script>
 </body>
