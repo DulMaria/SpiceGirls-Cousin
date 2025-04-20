@@ -7,7 +7,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('CSS/styleGeneral.css') }}">
         <link rel="stylesheet" href="{{ asset('CSS/pie_pag.css') }}">
-        <link rel="stylesheet" href="{{ asset('CSS/cursosVisitante.css') }}">
+        <link rel="stylesheet" href="{{ asset('CSS/news.css') }}">
     </head>
     <body>
         <div class="menu-btn">&#9776; Menu</div>
@@ -15,10 +15,13 @@
 
         <!-- Sección de cursos -->
         <div id="main-content" class="content">
-            <div class="title">
-                <h1>Novedades</h1>
-                <p>Unete y aprovecha las oportunidades que te daremos a lo largo de tu viaje.</p>
-            </div>
+            <section class="hero"><br>
+                <div class="hero-content">
+                    <h1>Novedades</h1>
+                    <p>Unete y aprovecha las oportunidades que te daremos a lo largo de tu viaje.</p>
+                </div> <br>
+            </section>
+       
             <section class="course-section">
                 <div class="course-item">
                     <div class="course-img">
@@ -27,7 +30,7 @@
                     <div class="course-text">
                         <h2>Becas</h2>
                         <p>Pregúntate si lo que estás haciendo hoy te acerca al lugar en el que quieres estar mañana</p>
-                        <a href="{{ url('/becasEstudiante') }}" class="btn">Explorar tus Becas</a>
+                        <br><a href="{{ url('/becasEstudiante') }}" class="btn">Explorar tus Becas</a>
                     </div>
                 </div>
 
@@ -36,9 +39,9 @@
                         <img src="https://img.static-af.com/transform/6c735e9c-4ea3-4e79-9a5c-0f054c80a0bd/" alt="Cursos Cortos">
                     </div>
                     <div class="course-text">
-                        <h2>Ofertas</h2>
+                        <h2>Ofertas</h2><br>
                         <p>No te pierdas esta gran ocasión. ¡Únete a nosotros!</p>
-                        <a href="{{ url('/ofertasEstudiante') }}" class="btn">Ofertas del mes</a>
+                        <br><a href="{{ url('/ofertasEstudiante') }}" class="btn">Ofertas del mes</a>
                     </div>
                 </div>
             

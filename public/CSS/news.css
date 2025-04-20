@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bitter:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/*Pagina Novedades NOvedades estilos de titulo */
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)), url('https://www.shutterstock.com/image-vector/whats-new-on-speech-bubble-260nw-2506130855.jpg');
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    color: #fff;
+    
+}
+
+.hero-content{
+    max-width: 800px;
+    margin: 0 auto;
+}
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Archivo Black', sans-serif;
+
+}
+.hero-content p {
+    font-size: 1.55rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+/*--------------------------------*/
+.course-section {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px 20px;
+    flex-wrap: wrap;
+}
+
+.course-item {
+    background-color: #FFFFFF;
+    border-radius: 18px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid transparent;
+    padding: 20px;
+}
+
+.course-item:hover {
+    background-color: #F8E1E7;
+    border-color: #DED1E6;
+    transform: translateY(-10px);
+}
+
+.course-img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.course-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.course-item:hover .course-img img {
+    transform: scale(1.05);
+}
+.course-text {
+    display: flex;
+    flex-direction: column;
+    height: 55%;
+}
+.course-text h2 {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 24px;
+    color: #2E1A47;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.course-text p {
+    font-family: "Bitter", serif;
+    font-size: 20px;
+    color: #2E1A47;
+    margin-bottom: 12px;
+    font-weight: 700;
+    flex-grow: 0.4;
+}
+
+.course-item .btn {
+    background-color: #DED1E6;
+    color: #2E1A47;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: none;
+    font-family: "Bitter", serif;
+}
+
+.course-item .btn:hover {
+    background-color: #2E1A47;
+    color: #fff;
+}
+
