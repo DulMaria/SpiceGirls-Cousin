@@ -17,7 +17,7 @@
     @include('partials.nav')
 
     <div id="main-content" class="content">
-        <div class="title">
+        <div class="title"><br>
             <h1>Ofertas Disponibles</h1>
         </div>
 
@@ -26,7 +26,7 @@
             @if ($oferta->estado == 1 && $oferta->tipo == 0 ) 
             <div class="col-md-4">
                 <div class="card">
-                    <div class="discount-badge">-{{ $oferta->descuento }}%</div>
+                    <div class="discount-badge">{{ $oferta->descuento }}%</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $oferta->descripcion }}</h5>
                         

@@ -17,8 +17,8 @@
     @include('partials.nav')
 
     <div id="main-content" class="content">
-        <div class="title">
-            <h1>Becas Disponibles</h1>
+        <div class="title1">
+            <h1>Becas Disponibles</h1><br>
         </div>
 
         <div class="row">
