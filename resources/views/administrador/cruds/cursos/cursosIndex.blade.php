@@ -87,10 +87,19 @@
                                 <!-- Botón que activa el modal -->
                                 <button
                                     type="button"
-                                    @click="showModal = true"
-                                    class="bg-indigo-500 hover:bg-indigo-700 text-white px-3 py-1 rounded w-full">
-                                    Ver módulos
+                                    @click="showModal = !showModal"
+                                    class="bg-black hover:bg-black-700 text-white px-3 py-2 rounded-full flex items-center justify-center gap-2">
+                                    
+                                    <template x-if="!showModal">
+                                        <i class="bi bi-eye-slash text-lg"></i> <!-- Ojo cerrado -->
+                                    </template>
+
+                                    <template x-if="showModal">
+                                        <i class="bi bi-eye text-lg"></i> <!-- Ojo abierto -->
+                                    </template>
+
                                 </button>
+
 
                                 <!-- Modal -->
                                 <div
