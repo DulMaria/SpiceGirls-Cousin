@@ -14,7 +14,21 @@
     padding: 20px 0;
     margin-bottom: 45px;
 }
-
+.title1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: -60px;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://png.pngtree.com/background/20230330/original/pngtree-graduation-gorgeous-golden-doctor-hat-pattern-border-background-picture-image_2206984.jpg');
+    background-size: cover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    margin-bottom: 45px;
+}
 .title h1 {
     font-family: 'Archivo Black', sans-serif;
     font-size: 3.5rem;
@@ -421,6 +435,10 @@ body {
 
     /* Corregir el título principal en móviles */
     .title h1 {
+        font-size: 2rem;
+        padding: 0 10px;
+    }
+    .title1 h1 {
         font-size: 2rem;
         padding: 0 10px;
     }
