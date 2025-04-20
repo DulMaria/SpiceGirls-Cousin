@@ -173,7 +173,7 @@
             </div>
             <div>
               <label class="block text-gray-700">Apellido Paterno:</label>
-              <input type="text" name="apellidoPaterno" class="w-full border rounded px-3 py-2" required>
+              <input type="text" name="apellidoPaterno" class="w-full border rounded px-3 py-2" >
             </div>
             <div>
               <label class="block text-gray-700">Apellido Materno:</label>
@@ -244,7 +244,7 @@
             </div>
             <div>
               <label class="block text-gray-700">Apellido Paterno:</label>
-              <input type="text" id="edit_apellido_paterno" name="apellidoPaterno" class="w-full border rounded px-3 py-2" required>
+              <input type="text" id="edit_apellido_paterno" name="apellidoPaterno" class="w-full border rounded px-3 py-2" >
             </div>
             <div>
               <label class="block text-gray-700">Apellido Materno:</label>
@@ -506,12 +506,34 @@
       const form = event.target;
       let formValido = true;
 
-      // Validar campos de texto (nombre y apellidos)
-      const camposTexto = form.querySelectorAll('[name="nombre"], [name="apellidoPaterno"], [name="apellidoMaterno"]');
-      camposTexto.forEach(input => {
-        if (!validarTexto(input)) formValido = false;
-      });
-
+      // Validar nombre (siempre obligatorio)
+      const nombre = form.querySelector('[name="nombre"]');
+      if (nombre && !validarTexto(nombre)) formValido = false;
+      
+      // Validar apellidos (al menos uno debe estar presente)
+      const apellidoPaterno = form.querySelector('[name="apellidoPaterno"]');
+      const apellidoMaterno = form.querySelector('[name="apellidoMaterno"]');
+      
+      // Validar formato de texto para los apellidos que tengan contenido
+      if (apellidoPaterno && apellidoPaterno.value.trim() !== '' && !validarTextoApellido(apellidoPaterno)) {
+        formValido = false;
+      }
+      
+      if (apellidoMaterno && apellidoMaterno.value.trim() !== '' && !validarTextoApellido(apellidoMaterno)) {
+        formValido = false;
+      }
+      
+      // Verificar que al menos uno de los apellidos esté presente
+      if (apellidoPaterno && apellidoMaterno && 
+          apellidoPaterno.value.trim() === '' && 
+          apellidoMaterno.value.trim() === '') {
+        validarCampo(
+          apellidoPaterno,
+          false,
+          'Debe ingresar al menos un apellido'
+        );
+        formValido = false;
+      }
       // Validar especialidad
       const especialidad = form.querySelector('[name="especialidad"]');
       if (especialidad && !validarEspecialidad(especialidad)) formValido = false;
@@ -548,7 +570,22 @@
 
       return true;
     }
+    function validarTextoApellido(input) {
+      // Reemplazar caracteres no permitidos mientras escribe
+      input.value = input.value.replace(/[^A-Za-zÁáÉéÍíÓóÚúÑñ\s]/g, '');
 
+      // Limitar a 30 caracteres
+      if (input.value.length > 30) {
+        input.value = input.value.substring(0, 30);
+      }
+
+      // Validar que solo contenga letras si tiene contenido
+      return validarCampo(
+        input,
+        input.value.trim() === '' || /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/.test(input.value),
+        'Este campo solo debe contener letras (máximo 30 caracteres)'
+      );
+    }
     // Agregar estilos CSS para los campos con error
     function agregarEstilos() {
       const style = document.createElement('style');
@@ -573,8 +610,21 @@
       agregarEstilos();
 
       // Establecer atributos maxlength directamente en los elementos
-      document.querySelectorAll('input[name="nombre"], input[name="apellidoPaterno"], input[name="apellidoMaterno"]')
-        .forEach(input => input.setAttribute('maxlength', '30'));
+      document.querySelectorAll('input[name="nombre"]')
+        .forEach(input => {
+          input.setAttribute('maxlength', '30');
+          input.setAttribute('required', 'required');
+        });
+
+      // Configurar apellidos: paterno y materno ya no son individualmente requeridos
+      document.querySelectorAll('input[name="apellidoPaterno"], input[name="apellidoMaterno"]')
+        .forEach(input => {
+          input.setAttribute('maxlength', '30');
+          // Quitamos el atributo required ya que la validación se hará en JS
+          if (input.hasAttribute('required')) {
+            input.removeAttribute('required');
+          }
+        });
 
       document.querySelectorAll('input[name="direccion"]')
         .forEach(input => input.setAttribute('maxlength', '150'));
@@ -597,13 +647,44 @@
         form.addEventListener('submit', validarFormulario);
       });
 
-      // Validar campos de texto (nombre, apellidos) en tiempo real
-      const camposTexto = document.querySelectorAll('input[name="nombre"], input[name="apellidoPaterno"], input[name="apellidoMaterno"]');
-      camposTexto.forEach(input => {
-        input.setAttribute('required', 'required');
+      // Validar nombres en tiempo real
+      const camposNombre = document.querySelectorAll('input[name="nombre"]');
+      camposNombre.forEach(input => {
         input.addEventListener('input', () => validarTexto(input));
         input.addEventListener('blur', () => validarTexto(input));
       });
+      
+      // Validar apellidos en tiempo real pero con la nueva función
+      const camposApellidos = document.querySelectorAll('input[name="apellidoPaterno"], input[name="apellidoMaterno"]');
+      camposApellidos.forEach(input => {
+        input.addEventListener('input', () => validarTextoApellido(input));
+        input.addEventListener('blur', () => validarTextoApellido(input));
+        
+        // Evento adicional para verificar la combinación de apellidos
+        input.addEventListener('blur', function() {
+          const form = this.closest('form');
+          const apellidoPaterno = form.querySelector('[name="apellidoPaterno"]');
+          const apellidoMaterno = form.querySelector('[name="apellidoMaterno"]');
+          
+          if (apellidoPaterno && apellidoMaterno && 
+              apellidoPaterno.value.trim() === '' && 
+              apellidoMaterno.value.trim() === '') {
+            validarCampo(
+              apellidoPaterno,
+              false,
+              'Debe ingresar al menos un apellido'
+            );
+          } else {
+            // Eliminar mensaje de error si ya hay al menos un apellido
+            const errorMsgExistente = apellidoPaterno.parentNode.querySelector('.error-message');
+            if (errorMsgExistente) {
+              errorMsgExistente.remove();
+            }
+            apellidoPaterno.classList.remove('border-red-500');
+          }
+        });
+      });
+
 
       // Validar especialidad con restricción de solo letras
       const camposEspecialidad = document.querySelectorAll('input[name="especialidad"]');

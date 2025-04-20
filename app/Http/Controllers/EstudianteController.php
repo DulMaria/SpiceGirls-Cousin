@@ -20,7 +20,7 @@ class EstudianteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'apellidoPaterno' => 'required|string|max:100',
+            'apellidoPaterno' => 'nullable|string|max:100',
             'apellidoMaterno' => 'nullable|string|max:100',
             'nivelAcademico' => 'nullable|string|max:100',
             'telefono' => 'nullable|string|max:20',
@@ -47,9 +47,29 @@ class EstudianteController extends Controller
 
         // Generar automáticamente el código del estudiante
         $nombreInicial = strtoupper(substr($request->nombre, 0, 1));
-        $apellidoPaternoInicial = strtoupper(substr($request->apellidoPaterno, 0, 1));
-        $apellidoMaternoInicial = strtoupper(substr($request->apellidoMaterno ?? '', 0, 1));
+        
+        // Para el código de estudiante, usamos la lógica de duplicar la inicial si solo hay un apellido
+        if (!empty($request->apellidoPaterno)) {
+            $apellidoPaternoInicial = strtoupper(substr($request->apellidoPaterno, 0, 1));
+        } else {
+            $apellidoPaternoInicial = '';
+        }
+        
+        if (!empty($request->apellidoMaterno)) {
+            $apellidoMaternoInicial = strtoupper(substr($request->apellidoMaterno, 0, 1));
+        } else {
+            $apellidoMaternoInicial = '';
+        }
+        
+        // Si solo hay un apellido, duplicamos su inicial para el código
+        if (empty($apellidoPaternoInicial) && !empty($apellidoMaternoInicial)) {
+            $apellidoPaternoInicial = $apellidoMaternoInicial;
+        } elseif (!empty($apellidoPaternoInicial) && empty($apellidoMaternoInicial)) {
+            $apellidoMaternoInicial = $apellidoPaternoInicial;
+        }
+        
         $prefijo = $nombreInicial . $apellidoPaternoInicial . $apellidoMaternoInicial;
+
 
         // Obtener el último número SIN importar el prefijo
         $ultimoEstudiante = \App\Models\Estudiante::orderByRaw('CAST(SUBSTRING(codigoEstudiantil, 4) AS UNSIGNED) DESC')->first();
@@ -109,7 +129,7 @@ class EstudianteController extends Controller
 
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'apellidoPaterno' => 'required|string|max:100',
+            'apellidoPaterno' => 'nullable|string|max:100',
             'apellidoMaterno' => 'nullable|string|max:100',
             'nivelAcademico' => 'nullable|string|max:100',
             'telefono' => 'nullable|string|max:20',
@@ -136,7 +156,7 @@ class EstudianteController extends Controller
         $estudiante->nivelAcademico = $request->nivelAcademico;
         $estudiante->save();
 
-        return redirect()->route('admin.estudiantes.index')->with('success', 'Estudiante actualizado exitosamente');
+        return redirect()->route('administrador.estudiantes.index')->with('success', 'Estudiante actualizado exitosamente');
     }
 
     public function cambiarEstado($codigoEstudiantil)
