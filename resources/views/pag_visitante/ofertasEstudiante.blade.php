@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="{{ asset('CSS/styleGeneral.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/pie_pag.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/promocion.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Archivo+Black&family=Poppins&display=swap" rel="stylesheet">
+
+
 </head>
 
 <body>
@@ -24,26 +28,35 @@
             @if ($oferta->estado == 1 && $oferta->tipo == 0 ) 
             <div class="col-md-4 mb-4">
                 <div class="card">
+                    <div class="discount-badge">-{{ $oferta->descuento }}%</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $oferta->descripcion }}</h5>
-                        <p class="card-text">Descuento: {{ $oferta->descuento }}%</p>
-                        <p class="card-text">Válida desde: {{ $oferta->fechaInicio }} hasta: {{ $oferta->fechaFin }}</p>
+                        
+                        <!-- Fechas estilizadas -->
+                        <div class="date-range">
+                            <div class="date-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="date-text">
+                                <span class="date-value">{{ $oferta->fechaInicio }}</span>
+                                <span class="date-divider">hasta</span>
+                                <span class="date-value">{{ $oferta->fechaFin }}</span>
+                            </div>
+                        </div>
 
                         <!-- Mostrar los cursos asociados -->
-                        <!-- Mostrar los cursos asociados solo si hay -->
                         @if ($oferta->cursos->isNotEmpty())
-                        <h6>Cursos asociados:</h6>
-                        <ul>
+                        <h6><i class="fas fa-graduation-cap"></i> Cursos asociados:</h6>
+                        <ul class="courses-list">
                             @foreach ($oferta->cursos as $curso)
                             <li>{{ $curso->nombreCurso }}</li>
                             @endforeach
                         </ul>
                         @endif
 
-
                         <!-- Botón que activa el modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#becaModal{{ $oferta->ID_Promo }}">
-                            Ver más
+                            <i class="fas fa-info-circle"></i> Ver más
                         </button>
                     </div>
                 </div>
@@ -65,7 +78,6 @@
                             <p><strong>Descripción:</strong> {{ $oferta->descripcion }}</p>
 
                             <!-- Mostrar los cursos en el modal -->
-                            <!-- Mostrar los cursos en el modal solo si hay -->
                             @if ($oferta->cursos->isNotEmpty())
                             <h6>Cursos asociados:</h6>
                             <ul>
