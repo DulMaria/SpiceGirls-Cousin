@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ asset('CSS/styleGeneral.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/pie_pag.css') }}">
     <link rel="stylesheet" href="{{ asset('CSS/promocion.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Archivo+Black&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -21,29 +23,39 @@
 
         <div class="row">
             @foreach ($becas as $beca)
-            @if ($beca->estado == 1 && $beca->tipo == 1 ) <!-- Solo mostrar becas activas y de tipo 'beca' -->
-            <div class="col-md-4 mb-4">
+            @if ($beca->estado == 1 && $beca->tipo == 1 )
+            <div class="col-md-4">
                 <div class="card">
+                    <!-- Etiqueta de beca con estilo similar al descuento -->
+                    <div class="discount-badge">{{ $beca->descuento }}%</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $beca->descripcion }}</h5>
-                        <p class="card-text">Descuento: {{ $beca->descuento }}%</p>
-                        <p class="card-text">Válida desde: {{ $beca->fechaInicio }} hasta: {{ $beca->fechaFin }}</p>
+                        
+                        <!-- Fechas estilizadas como en la página de ofertas -->
+                        <div class="date-range">
+                            <div class="date-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="date-text">
+                                <span class="date-value">{{ $beca->fechaInicio }}</span>
+                                <span class="date-divider">hasta</span>
+                                <span class="date-value">{{ $beca->fechaFin }}</span>
+                            </div>
+                        </div>
 
-                        <!-- Mostrar los cursos asociados -->
-                        <!-- Mostrar los cursos asociados solo si hay -->
+                        <!-- Mostrar los cursos asociados con el mismo estilo -->
                         @if ($beca->cursos->isNotEmpty())
-                        <h6>Cursos asociados:</h6>
-                        <ul>
+                        <h6><i class="fas fa-graduation-cap"></i> Cursos asociados:</h6>
+                        <ul class="courses-list">
                             @foreach ($beca->cursos as $curso)
                             <li>{{ $curso->nombreCurso }}</li>
                             @endforeach
                         </ul>
                         @endif
 
-
                         <!-- Botón que activa el modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#becaModal{{ $beca->ID_Promo }}">
-                            Ver más
+                            <i class="fas fa-info-circle"></i> Ver más
                         </button>
                     </div>
                 </div>
@@ -55,7 +67,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="becaModalLabel{{ $beca->ID_Promo }}">{{ $beca->descripcion }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                         </div>
                         <div class="modal-body">
                             <p><strong>Descuento:</strong> {{ $beca->descuento }}%</p>
@@ -65,7 +77,6 @@
                             <p><strong>Descripción:</strong> {{ $beca->descripcion }}</p>
 
                             <!-- Mostrar los cursos en el modal -->
-                            <!-- Mostrar los cursos en el modal solo si hay -->
                             @if ($beca->cursos->isNotEmpty())
                             <h6>Cursos asociados:</h6>
                             <ul>
@@ -79,19 +90,19 @@
                             <a class="btn btn-success mt-3"
                                 href="https://wa.me/59177762869?text={{ urlencode('Hola, estoy interesado/a en la beca: ' . $beca->descripcion . '. Quisiera recibir más información sobre la beca disponibles y los requisitos para acceder.')}}"
                                 target="_blank">
-                                Comunicarse por WhatsApp
+                                <i class="fab fa-whatsapp"></i> Comunicarse por WhatsApp
                             </a>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn" data-bs-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
                 </div>
             </div>
             @endif
             @endforeach
-
-        </div><br>
+        </div>
+        
         @include('partials.footer')
     </div>
 
@@ -99,15 +110,38 @@
         // Reemplazo de data-bs-toggle para mostrar el modal personalizado
         document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
             button.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-bs-target').replace('#', '');
+                const targetId = this.getAttribute('data-bs-target').substring(1);
                 const modal = document.getElementById(targetId);
-                if (modal) modal.classList.add('show');
+                if (modal) {
+                    modal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
             });
         });
 
+        // Mejorado para cerrar modal con cualquier botón de cierre
         document.querySelectorAll('.btn-close, .modal-footer .btn-secondary').forEach(button => {
             button.addEventListener('click', function() {
-                this.closest('.modal').classList.remove('show');
+                const modal = this.closest('.modal');
+                if (modal) {
+                    modal.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Cerrar modal al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal') && event.target.classList.contains('show')) {
+                event.target.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Prevenir que los clics dentro del modal propaguen al contenedor
+        document.querySelectorAll('.modal-content').forEach(content => {
+            content.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
         });
     </script>
