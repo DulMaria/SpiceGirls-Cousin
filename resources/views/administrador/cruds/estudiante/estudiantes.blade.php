@@ -6,12 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Estudiantes - Administración</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
   <style>
       /* Reemplaza el estilo actual de los modales con esto */
       #modalAddEstudiante, #modalEditEstudiante, #detailsModal {
-          max-height: 90vh; /* altura máxima del 90% de la ventana */
+          max-height: 100vh; /* altura máxima del 90% de la ventana */
           overflow-y: visible; /* permite scroll vertical */
-          max-width: 95%; /* ancho máximo del 95% de la ventana */
+          max-width: 100%; /* ancho máximo del 95% de la ventana */
           margin: 0 auto; /* centra el modal */
       }
       .modal-container {
@@ -70,18 +73,31 @@
                 {{ $estudiante->usuario->apellidoMaterno }}
               </td>
               <td class="px-6 py-4">{{ $estudiante->nivelAcademico }}</td>
-              <td class="px-6 py-4">
-                <button class="bg-indigo-500 hover:bg-indigo-700 text-white px-3 py-1 rounded"
+            
+
+              <td class="px-6 py-4 flex items-center justify-center" x-data="{ showModal: false }">
+                <button 
+                  class="bg-black hover:bg-black-700 text-white px-3 py-2 rounded-full flex items-center  gap-2"
                   type="button"
-                  @click="showModal = true" onclick="openDetailsModal(
-                  '{{ $estudiante->usuario->telefono }}',
+                  @click="showModal = !showModal; openDetailsModal(
+                    '{{ $estudiante->usuario->telefono }}',
                   '{{ $estudiante->usuario->direccion }}',
                   '{{ $estudiante->usuario->fechaNacimiento }}',
                   '{{ $estudiante->usuario->email }}',
                   '{{ $estudiante->usuario->ci }}'
-                )" class="text-blue-600 hover:text-blue-900 mr-2">
-                  Ver más
+                  )" class="text-blue-600 hover:text-blue-900 mr-2">
+                  
+                  <template x-if="!showModal">
+                    <i class="bi bi-eye-slash text-lg"></i>
+                  </template>
+                  <template x-if="showModal">
+                    <i class="bi bi-eye text-lg"></i>
+                  </template>
                 </button>
+                <!-- Modal -->
+                <div x-show="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center" @click.away="showModal = false">
+                  
+                </div>
               </td>
               <!--
               <td class="px-6 py-4">
@@ -101,41 +117,40 @@
               </td>
 -->
               <td class="px-6 py-4">
-                {{ $estudiante->usuario->estado == 1 ? 'Activo' : 'Inactivo'}}
+                  <div class="inline-flex items-center gap-2">
+                      <span class="w-3.5 h-3.5 rounded-full {{ $estudiante->usuario->estado == 1 ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                      <span class="text-sm">
+                          {{ $estudiante->usuario->estado == 1 ? 'Activo' : 'Inactivo' }}
+                      </span>
+                  </div>
               </td>
-              <td class="px-6 py-4 text-center">
-                <button onclick="openEditModal('{{ $estudiante->codigoEstudiantil }}', '{{ $estudiante->ID_Usuario }}')" class="editar-curso bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="w-6 h-6" stroke="currentColor">
-                    <path opacity="0.5" d="M1 12C1 6.81455 1 4.22183 2.61091 2.61091C4.22183 1 6.81455 1 12 1C17.1854 1 19.7782 1 21.3891 2.61091C23 4.22183 23 6.81455 23 12C23 17.1854 23 19.7782 21.3891 21.3891C19.7782 23 17.1854 23 12 23C6.81455 23 4.22183 23 2.61091 21.3891C1 19.7782 1 17.1854 1 12Z" fill="#1c4a25"></path>
-                    <path d="M13.9261 14.3018C14.1711 14.1107 14.3933 13.8885 14.8377 13.4441L20.378 7.90374C20.512 7.7698 20.4507 7.53909 20.2717 7.477C19.6178 7.25011 18.767 6.82414 17.9713 6.02835C17.1755 5.23257 16.7495 4.38186 16.5226 3.72788C16.4605 3.54892 16.2298 3.48761 16.0959 3.62156L10.5555 9.16192C10.1111 9.60634 9.88888 9.82854 9.69778 10.0736C9.47235 10.3626 9.27908 10.6753 9.12139 11.0062C8.98771 11.2867 8.88834 11.5848 8.68959 12.181L8.43278 12.9515L8.02443 14.1765L7.64153 15.3252C7.54373 15.6186 7.6201 15.9421 7.8388 16.1608C8.0575 16.3795 8.38099 16.4559 8.67441 16.3581L9.82308 15.9752L11.0481 15.5668L11.8186 15.31L11.8186 15.31C12.4148 15.1113 12.7129 15.0119 12.9934 14.8782C13.3243 14.7205 13.637 14.5273 13.9261 14.3018Z" fill="#1c4a25"></path>
-                    <path d="M22.1127 6.16905C23.2952 4.98656 23.2952 3.06936 22.1127 1.88687C20.9302 0.704377 19.013 0.704377 17.8306 1.88687L17.6524 2.06499C17.4806 2.23687 17.4027 2.47695 17.4456 2.7162C17.4726 2.8667 17.5227 3.08674 17.6138 3.3493C17.796 3.87439 18.14 4.56368 18.788 5.21165C19.4359 5.85961 20.1252 6.20364 20.6503 6.38581C20.9129 6.4769 21.1329 6.52697 21.2834 6.55399C21.5227 6.59693 21.7627 6.51905 21.9346 6.34717L22.1127 6.16905Z" fill="#1c4a25"></path>
-                  </svg>
-                </button>
 
-                @if($estudiante->usuario->estado == 1)
-                <form method="POST" action="{{ route('estudiantes.cambiarEstado', $estudiante->codigoEstudiantil) }}" class="inline-block">
-                  @csrf
-                  <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white px-3 py-1 rounded flex items-center gap-2" onclick="return confirm('¿Está seguro que desea deshabilitar este estudiante?')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-5 h-5" stroke="currentColor"
-                      viewBox="0 0 24 24" stroke-width="2">
-                      <path d="M6 6l12 12M6 18L18 6" stroke="#fff"></path>
-                    </svg>
-                    Deshabilitar
+              <td class="px-6 py-4 text-center">
+                <div class="flex items-center gap-4">
+                  <button type="button" onclick="openEditModal('{{ $estudiante->codigoEstudiantil }}', '{{ $estudiante->ID_Usuario }}')"
+                          class="editar-curso bg-purple-800 hover:bg-purple-700 text-white px-4 py-3 rounded-full flex items-center gap-5">
+                        <!-- Nuevo ícono de Bootstrap -->
+                      <i class="bi bi-pencil-fill"></i> 
                   </button>
-                </form>
-                @else
-                <form method="POST" action="{{ route('estudiantes.cambiarEstado', $estudiante->codigoEstudiantil) }}" class="inline-block">
+
+                  <form method="POST" action="{{ route('estudiantes.cambiarEstado', $estudiante->codigoEstudiantil) }}"
+                    class="inline" onsubmit="return confirm('¿Estás seguro de cambiar el estado de este estudiante?');">
                   @csrf
-                  <button type="submit" class="bg-green-500 hover:bg-green-700 text-white px-3 py-1 rounded flex items-center gap-2" onclick="return confirm('¿Está seguro que desea habilitar este estudiante?')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-5 h-5" stroke="currentColor"
-                      viewBox="0 0 24 24" stroke-width="2">
-                      <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#fff"></path>
-                      <path d="M12 2v10l10 5v-10l-10-5z" stroke="#fff"></path>
-                    </svg>
-                    Habilitar
+                  <button type="submit"
+                      class="{{ $estudiante->usuario->estado == 1 
+                          ? 'bg-red-500 hover:bg-red-700'  // Amarillo para deshabilitar
+                          : 'bg-green-500 hover:bg-green-700' }}  // Verde para habilitar
+                          text-white px-4 py-3 rounded-full flex items-center gap-3 text-sm font-medium shadow-sm transition duration-300">
+
+                      @if($estudiante->usuario->estado == 1)
+                          <i class="bi bi-x-circle-fill"></i> 
+                      @else
+                          <i class="bi bi-check-circle-fill"></i> 
+                      @endif
                   </button>
-                </form>
-                @endif
+                 </form>
+              </div>
+
               </td>
             </tr>
             @empty
