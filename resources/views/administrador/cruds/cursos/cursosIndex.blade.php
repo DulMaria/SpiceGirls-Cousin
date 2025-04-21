@@ -71,7 +71,14 @@
                             <td class="px-6 py-4">{{ $curso->area->nombreArea ?? 'Sin Área' }}</td>
                             <td class="px-6 py-4">{{ $curso->nombreCurso }}</td>
                             <td class="px-6 py-4">{{ $curso->descripcionCurso }}</td>
-                            <td class="px-6 py-4">{{ $curso->estado == 1 ? 'Activo' : 'Inactivo' }}</td>
+                            <td class="px-6 py-4">
+                                <div class="inline-flex items-center gap-2">
+                                    <span class="w-3.5 h-3.5 rounded-full {{ $curso->estado == 1 ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                                    <span class="text-sm">
+                                    {{ $curso->estado == 1 ? 'Activo' : 'Inactivo' }}
+                                    </span>
+                                </div>
+                            </td>
                             <td class="px-6 py-4">
                                 @if ($curso->imagen)
                                 <img src="data:image/jpeg;base64,{{ base64_encode($curso->imagen) }}"
@@ -146,16 +153,16 @@
                                     @csrf
                                     <button type="submit"
                                         class="{{ $curso->estado == 1 
-                                            ? 'bg-[#2ecc71] hover:bg-[#27ae60]'  /* Rojo para deshabilitar */
-                                            : 'bg-[#e74c3c] hover:bg-[#c0392b] ' }} /* Verde para habilitar */
+                                            ? 'bg-[#e74c3c] hover:bg-[#c0392b]'  /* Rojo para deshabilitar */
+                                            : ' bg-[#2ecc71] hover:bg-[#27ae60]' }} /* Verde para habilitar */
                                             text-white px-4 py-3 rounded-full flex items-center gap-3 text-sm font-medium shadow-sm transition duration-300">
                                         
                                         @if ($curso->estado == 1)
                                         <!-- Icono de deshabilitar de Bootstrap -->
-                                        <i class="bi bi-check-circle-fill"></i> 
+                                        <i class=" bi bi-x-circle-fill"></i> 
                                         @else
                                         <!-- Icono de habilitar de Bootstrap -->
-                                        <i class=" bi bi-x-circle-fill"></i> 
+                                        <i class="bi bi-check-circle-fill"></i> 
                                         @endif
                                     </button>
                                 </form>
