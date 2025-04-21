@@ -93,7 +93,7 @@
                             </a>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn " data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn-close " data-bs-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
                 </div>
