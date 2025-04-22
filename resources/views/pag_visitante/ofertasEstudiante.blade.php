@@ -92,7 +92,6 @@
                                 <i class="fab fa-whatsapp"></i> Comunicarse por WhatsApp
                             </a>
                         </div>
-                       
                     </div>
                 </div>
             </div>
