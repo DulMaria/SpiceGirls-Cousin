@@ -10,6 +10,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 
     <style>
         /* Estilos adicionales para el modal */
@@ -90,28 +93,21 @@
                                     class="w-12 h-12 object-cover rounded-full">
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-center" x-data="{ showModal: false }">
+                            <td class="px-6 py-4 text-center" x-data="{ showModal: false }" x-init="$nextTick(() => showModal = false)">
                                 <!-- Botón que activa el modal -->
                                 <button
                                     type="button"
                                     @click="showModal = !showModal"
                                     class="bg-black hover:bg-black-700 text-white px-3 py-2 rounded-full flex items-center justify-center gap-2">
                                     
-                                    <template x-if="!showModal">
-                                        <i class="bi bi-eye-slash text-lg"></i> <!-- Ojo cerrado -->
-                                    </template>
-
-                                    <template x-if="showModal">
-                                        <i class="bi bi-eye text-lg"></i> <!-- Ojo abierto -->
-                                    </template>
-
+                                    <i class="bi" :class="showModal ? 'bi-eye' : 'bi-eye-slash'" class="text-lg"></i>
                                 </button>
-
 
                                 <!-- Modal -->
                                 <div
                                     x-show="showModal"
                                     x-transition
+                                    x-cloak
                                     class="fixed inset-0 z-50 flex items-center justify-center"
                                     style="background-color: rgba(0, 0, 0, 0.5);">
                                     <div class="bg-white rounded-lg shadow-lg z-50 max-w-md w-full p-6 relative">
@@ -148,24 +144,24 @@
 
 
                                 <!-- Formulario Habilitar / Deshabilitar -->
-                                <form method="POST" action="{{ route('curso.cambiarEstado', ['id' => $curso->ID_Curso]) }}"
-                                    class="inline" onsubmit="return confirm('¿Estás seguro de cambiar el estado de este curso?');">
+                                <!-- Formulario Habilitar / Deshabilitar -->
+                                <form id="formCambiarEstado" method="POST" action="{{ route('curso.cambiarEstado', ['id' => $curso->ID_Curso]) }}"
+                                    class="inline">
                                     @csrf
                                     <button type="submit"
                                         class="{{ $curso->estado == 1 
-                                            ? 'bg-[#e74c3c] hover:bg-[#c0392b]'  /* Rojo para deshabilitar */
-                                            : ' bg-[#2ecc71] hover:bg-[#27ae60]' }} /* Verde para habilitar */
+                                            ? 'bg-[#e74c3c] hover:bg-[#c0392b]'  
+                                            : 'bg-[#2ecc71] hover:bg-[#27ae60]' }} 
                                             text-white px-4 py-3 rounded-full flex items-center gap-3 text-sm font-medium shadow-sm transition duration-300">
                                         
                                         @if ($curso->estado == 1)
-                                        <!-- Icono de deshabilitar de Bootstrap -->
-                                        <i class=" bi bi-x-circle-fill"></i> 
+                                        <i class="bi bi-x-circle-fill"></i> 
                                         @else
-                                        <!-- Icono de habilitar de Bootstrap -->
                                         <i class="bi bi-check-circle-fill"></i> 
                                         @endif
                                     </button>
                                 </form>
+
                             </div>
 
                             </td>
@@ -295,12 +291,77 @@
             </div>
         </div>
     </div>
-
+    
+    <!-- Modal de confirmación personalizado -->
+    <div id="confirmacionModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-80 max-w-md">
+            <div class="mb-4">
+                <p class="text-lg font-semibold text-[#2e1a47]">La fundación dice:</p>
+                <p class="mt-2" id="confirmacionMensaje"></p>
+            </div>
+            <div class="flex justify-end gap-3">
+                <button id="cancelarConfirmacion" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg">Cancelar</button>
+                <button id="aceptarConfirmacion" class="px-4 py-2 bg-[#127475] hover:bg-[#0f5f5e] text-white rounded-lg">Aceptar</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
 
 <script>
+    
+
+    // Función para mostrar el modal de confirmación personalizado
+    function mostrarConfirmacion(mensaje) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmacionModal');
+            const mensajeElement = document.getElementById('confirmacionMensaje');
+            
+            mensajeElement.textContent = mensaje;
+            modal.classList.remove('hidden');
+            
+            const btnAceptar = document.getElementById('aceptarConfirmacion');
+            const btnCancelar = document.getElementById('cancelarConfirmacion');
+            
+            function limpiarEventos() {
+                btnAceptar.removeEventListener('click', handleAceptar);
+                btnCancelar.removeEventListener('click', handleCancelar);
+            }
+            
+            function handleAceptar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(true);
+            }
+            
+            function handleCancelar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(false);
+            }
+            
+            btnAceptar.addEventListener('click', handleAceptar);
+            btnCancelar.addEventListener('click', handleCancelar);
+        });
+    }
+
+    // Reemplazar el confirm en los formularios de cambio de estado
+    document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('formCambiarEstado');
+            
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault(); // Detiene el envío por defecto
+                
+                const mensaje = "{{ $curso->estado == 1 ? '¿Estás seguro de deshabilitar este curso?' : '¿Estás seguro de habilitar este curso?' }}";
+
+                const confirmar = await mostrarConfirmacion(mensaje);
+
+                if (confirmar) {
+                    form.submit(); // Envía el formulario si acepta
+                }
+            });
+        });
     // Función principal para validar campos y mostrar errores
 function validarCampo(input, condicion, mensajeError) {
     // Eliminar mensajes de error anteriores
@@ -822,7 +883,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Modificar el botón de editar en la tabla
     document.addEventListener('DOMContentLoaded', function() {
         // Obtener todos los botones de editar
-        const editButtons = document.querySelectorAll('.bg-blue-500');
+        const editButtons = document.querySelectorAll('.editar-curso');
 
         // Agregar evento de clic a cada botón
         editButtons.forEach(button => {

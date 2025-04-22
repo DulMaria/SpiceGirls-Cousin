@@ -133,8 +133,8 @@
                       <i class="bi bi-pencil-fill"></i> 
                   </button>
 
-                  <form method="POST" action="{{ route('estudiantes.cambiarEstado', $estudiante->codigoEstudiantil) }}"
-                    class="inline" onsubmit="return confirm('¿Estás seguro de cambiar el estado de este estudiante?');">
+                  <form id="formCambiarEstado" method="POST" action="{{ route('estudiantes.cambiarEstado', $estudiante->codigoEstudiantil) }}"
+                    class="inline">
                   @csrf
                   <button type="submit"
                       class="{{ $estudiante->usuario->estado == 1 
@@ -321,10 +321,72 @@
     </div>
   </div>
 
-
+  <!-- Modal de confirmación personalizado -->
+  <div id="confirmacionModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-80 max-w-md">
+          <div class="mb-4">
+              <p class="text-lg font-semibold text-[#2e1a47]">La fundación dice:</p>
+              <p class="mt-2" id="confirmacionMensaje"></p>
+          </div>
+          <div class="flex justify-end gap-3">
+              <button id="cancelarConfirmacion" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg">Cancelar</button>
+              <button id="aceptarConfirmacion" class="px-4 py-2 bg-[#127475] hover:bg-[#0f5f5e] text-white rounded-lg">Aceptar</button>
+          </div>
+      </div>
+  </div>
 
   <!-- Scripts opcionales -->
   <script>
+    // Función para mostrar el modal de confirmación personalizado
+    function mostrarConfirmacion(mensaje) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmacionModal');
+            const mensajeElement = document.getElementById('confirmacionMensaje');
+            
+            mensajeElement.textContent = mensaje;
+            modal.classList.remove('hidden');
+            
+            const btnAceptar = document.getElementById('aceptarConfirmacion');
+            const btnCancelar = document.getElementById('cancelarConfirmacion');
+            
+            function limpiarEventos() {
+                btnAceptar.removeEventListener('click', handleAceptar);
+                btnCancelar.removeEventListener('click', handleCancelar);
+            }
+            
+            function handleAceptar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(true);
+            }
+            
+            function handleCancelar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(false);
+            }
+            
+            btnAceptar.addEventListener('click', handleAceptar);
+            btnCancelar.addEventListener('click', handleCancelar);
+        });
+    }
+
+// Reemplazar el confirm en los formularios de cambio de estado
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('formCambiarEstado');
+        
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault(); // Detiene el envío por defecto
+            
+        const mensaje = "{{ $estudiante->usuario->estado == 1 ? '¿Estás seguro de deshabilitar este estudiante?' : '¿Estás seguro de habilitar este estudiante?' }}";
+
+        const confirmar = await mostrarConfirmacion(mensaje);
+
+        if (confirmar) {
+        form.submit(); // Envía el formulario si acepta
+        }
+        });
+    });
     function openDetailsModal(telefono, direccion, nacimiento, email, ci) {
       document.getElementById('modalTelefono').textContent = telefono;
       document.getElementById('modalDireccion').textContent = direccion;
