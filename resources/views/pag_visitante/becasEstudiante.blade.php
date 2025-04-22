@@ -93,9 +93,6 @@
                                 <i class="fab fa-whatsapp"></i> Comunicarse por WhatsApp
                             </a>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
                     </div>
                 </div>
             </div>

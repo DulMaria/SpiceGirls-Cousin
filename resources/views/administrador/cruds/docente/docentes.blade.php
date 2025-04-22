@@ -132,26 +132,24 @@
                     </button>
                     
                     <!-- Formulario Habilitar / Deshabilitar -->
-                    <form method="POST" action="{{ route('docentes.cambiarEstado', $docente->codigoDocente) }}" class="inline-block"
-                      onsubmit="return confirm('¿Está seguro que desea {{ $docente->usuario->estado == 1 ? 'deshabilitar' : 'habilitar' }} este docente?');">
-                      @csrf
-                      <button type="submit"
-                        class="{{ $docente->usuario->estado == 1 
-                          ? ' bg-red-500 hover:bg-red-700' 
-                          : 'bg-green-500 hover:bg-green-700' }} 
-                          text-white px-4 py-3 rounded-full flex items-center gap-3 text-sm font-medium shadow-sm transition duration-300">
-                        
-                        @if ($docente->usuario->estado == 1)
-                        <!-- Icono activo (check) -->
-                        <i class="bi bi-x-circle-fill"></i>
-                        @else
-                        <!-- Icono inactivo (x) -->
-                        <i class="bi bi-check-circle-fill "></i>
-                        @endif
-                      </button>
+                    <form id="formCambiarEstado" method="POST" action="{{ route('docentes.cambiarEstado', $docente->codigoDocente) }}" 
+                          class="inline-block"
+                          data-estado="{{ $docente->usuario->estado }}"
+                          id="form-estado-{{ $docente->codigoDocente }}">
+                        @csrf
+                        <button type="submit" 
+                                class="{{ $docente->usuario->estado == 1 ? 'bg-red-500 hover:bg-red-700' : 'bg-green-500 hover:bg-green-700' }} 
+                                      text-white px-4 py-3 rounded-full flex items-center gap-3 text-sm font-medium shadow-sm transition duration-300">
+                            
+                            @if ($docente->usuario->estado == 1)
+                            <i class="bi bi-x-circle-fill"></i>
+                            @else
+                            <i class="bi bi-check-circle-fill"></i>
+                            @endif
+                        </button>
                     </form>
                   </div>
-</td>
+              </td>
             </tr>
             @empty
             <tr>
@@ -321,9 +319,83 @@
   </div>
 
 
-
+  <!-- Modal de confirmación personalizado -->
+  <div id="confirmacionModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-80 max-w-md">
+          <div class="mb-4">
+              <p class="text-lg font-semibold text-[#2e1a47]">La fundación dice:</p>
+              <p class="mt-2" id="confirmacionMensaje"></p>
+          </div>
+          <div class="flex justify-end gap-3">
+              <button id="cancelarConfirmacion" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg">Cancelar</button>
+              <button id="aceptarConfirmacion" class="px-4 py-2 bg-[#127475] hover:bg-[#0f5f5e] text-white rounded-lg">Aceptar</button>
+          </div>
+      </div>
+  </div>
   <!-- Scripts opcionales -->
   <script>
+
+    // Función para mostrar el modal de confirmación personalizado
+    function mostrarConfirmacion(mensaje) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmacionModal');
+            const mensajeElement = document.getElementById('confirmacionMensaje');
+            
+            mensajeElement.textContent = mensaje;
+            modal.classList.remove('hidden');
+            
+            const btnAceptar = document.getElementById('aceptarConfirmacion');
+            const btnCancelar = document.getElementById('cancelarConfirmacion');
+            
+            function limpiarEventos() {
+                btnAceptar.removeEventListener('click', handleAceptar);
+                btnCancelar.removeEventListener('click', handleCancelar);
+            }
+            
+            function handleAceptar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(true);
+            }
+            
+            function handleCancelar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(false);
+            }
+            
+            btnAceptar.addEventListener('click', handleAceptar);
+            btnCancelar.addEventListener('click', handleCancelar);
+        });
+    }
+
+    // Reemplazar el confirm en los formularios de cambio de estado
+    document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('formCambiarEstado');
+            
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault(); // Detiene el envío por defecto
+                
+                const mensaje = "{{ $docente->usuario->estado == 1 ? '¿Estás seguro de deshabilitar este docente?' : '¿Estás seguro de habilitar este docente?' }}";
+
+                const confirmar = await mostrarConfirmacion(mensaje);
+
+                if (confirmar) {
+                    form.submit(); // Envía el formulario si acepta
+                }
+            });
+        });
+
+
+    function confirmarEstado(button) {
+    const form = button.closest('form');
+    const estado = form.getAttribute('data-estado');
+    const accion = estado == 1 ? 'deshabilitar' : 'habilitar';
+    
+    if (confirm(`¿Está seguro que desea ${accion} este docente?`)) {
+        form.submit();
+    }
+}
     // Función para validar campo y mostrar error
     function validarCampo(input, condicion, mensajeError) {
       // Eliminar mensajes de error anteriores

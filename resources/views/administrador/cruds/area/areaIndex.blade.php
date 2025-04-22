@@ -66,6 +66,7 @@
                                 data-id="{{ $area->ID_Area }}"
                                     data-nombre="{{ $area->nombreArea }}"
                                     data-descripcion="{{ $area->descripcionArea }}"
+                                    data-imagen="{{ $area->imagenArea ? base64_encode($area->imagenArea) : '' }}"
                                     onclick="handleEditButtonClick(this)"
                                     class="editar-curso bg-purple-800 hover:bg-purple-700 text-white px-4 py-3 rounded-full flex items-center gap-5">
                                     <!-- Nuevo ícono de Bootstrap -->
@@ -160,6 +161,30 @@
             document.getElementById('editNombre').value = nombre;
             document.getElementById('editDescripcion').value = descripcion;
             document.getElementById('editId').value = id;
+            
+            // Get the current image container (or create one if it doesn't exist)
+            let imagePreviewContainer = document.getElementById('currentImagePreview');
+            if (!imagePreviewContainer) {
+                imagePreviewContainer = document.createElement('div');
+                imagePreviewContainer.id = 'currentImagePreview';
+                imagePreviewContainer.className = 'mb-4';
+                
+                // Insert it before the file input in the edit form
+                const fileInputContainer = document.querySelector('#modalEdit [name="imagenArea"]').parentNode;
+                fileInputContainer.parentNode.insertBefore(imagePreviewContainer, fileInputContainer);
+            }
+            
+            // Update or clear the image preview
+            const imageData = event.currentTarget.dataset.imagen;
+            if (imageData) {
+                imagePreviewContainer.innerHTML = `
+                    <p class="mb-2 font-medium">Imagen actual:</p>
+                    <img src="data:image/jpeg;base64,${imageData}" alt="Imagen actual" class="w-32 h-32 object-cover rounded-lg border">
+                    <p class="text-xs text-gray-500 mt-1">Sube una nueva imagen para reemplazarla o deja el campo vacío para mantener esta.</p>
+                `;
+            } else {
+                imagePreviewContainer.innerHTML = '<p class="text-gray-500 italic mb-2">Sin imagen actual</p>';
+            }
 
             const form = document.getElementById('formEdit');
             form.action = `/administrador/areas/actualizar/${id}`;
