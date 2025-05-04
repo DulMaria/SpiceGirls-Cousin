@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PromoCurso extends Model
 {
-    protected $table = 'promocion_cursos';
+    protected $table = 'promocion_curso';
     protected $primaryKey = 'ID_PromoCurso';
     public $timestamps = false;
 
@@ -21,8 +21,11 @@ class PromoCurso extends Model
         return $this->belongsTo(Curso::class, 'ID_Curso');
     }
 
+     /**
+     * Relación inversa con la promoción
+     */
     public function promocion()
     {
-        return $this->belongsTo(Promocion::class, 'ID_Promo');
+        return $this->belongsTo(Promocion::class, 'ID_Promo', 'ID_Promo');
     }
 }

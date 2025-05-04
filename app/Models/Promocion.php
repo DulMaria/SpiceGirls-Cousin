@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
+
 
 class Promocion extends Model
 {
@@ -26,5 +28,13 @@ class Promocion extends Model
     public function cursos()
     {
         return $this->belongsToMany(Curso::class, 'promocion_curso', 'ID_Promo', 'ID_Curso');
+    }
+    
+    /**
+     * Relación uno a muchos con promocion_curso
+     */
+    public function promocion_cursos()
+    {
+        return $this->hasMany(PromoCurso::class, 'ID_Promo');
     }
 }

@@ -70,4 +70,14 @@ Route::prefix('administrador')->group(function () {
     Route::post('/estudiantes/{codigoEstudiantil}/cambiar-estado', [EstudianteController::class, 'cambiarEstado'])
     ->name('estudiantes.cambiarEstado');    
 
+    // Rutas para promociones
+    Route::get('/promociones', [PromocionController::class, 'index'])->name('administrador.promociones.index');
+    Route::post('/promociones', [PromocionController::class, 'store'])->name('promocion.store');
+    Route::post('/promociones/{id}/cambiar-estado', [PromocionController::class, 'cambiarEstado'])->name('promocion.cambiarEstado');
+    // Dentro del grupo de rutas del administrador
+    // Ruta para obtener la promoción a editar
+    Route::get('/promociones/{id}/edit', [PromocionController::class, 'edit'])->name('promocion.edit');
+    // Ruta para actualizar una promoción
+    Route::put('/promociones/{id}', [PromocionController::class, 'update'])->name('promocion.update');
+    Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
 });

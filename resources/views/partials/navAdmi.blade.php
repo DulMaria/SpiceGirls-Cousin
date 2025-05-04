@@ -167,9 +167,9 @@
                 <span>Reportes</span>
             </a>
 
-            <a href="/admin/estadisticas" class="{{ Request::is('admin/estadisticas') ? 'active' : '' }}">
+            <a href="{{ route('administrador.promociones.index') }}" class="{{ Request::is('administrador/promociones') ? 'active' : '' }}">
                 <i class="fas fa-tachometer-alt"></i>
-                <span>Estadísticas</span>
+                <span>Promociones</span>
             </a>
         </nav>
     </aside>
