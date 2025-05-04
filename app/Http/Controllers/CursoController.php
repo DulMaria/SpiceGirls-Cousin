@@ -12,6 +12,14 @@ use App\Models\ModuloCurso;
 
 class CursoController extends Controller
 {
+    /**
+     * Devuelve la lista de cursos disponibles en formato JSON para usar en el modal
+     */
+    public function getCursosDisponibles()
+    {
+        $cursos = Curso::where('estado', 1)->get(['ID_Curso', 'nombreCurso']);
+        return response()->json($cursos);
+    }
     public function index()
     {
         $cursos = Curso::with(['area', 'modulos'])->get();
