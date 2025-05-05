@@ -97,7 +97,11 @@ class PromocionController extends Controller
     public function edit($id)
     {
         try {
-            $promocion = Promocion::with('cursos')->findOrFail($id);
+            //$promocion = Promocion::find($id);
+            $promocion = Promocion::with('promocion_cursos')->findOrFail($id);
+            //dd($promocion->promocion_cursos);
+            //$cursos = $promocion->promocion_cursos;
+            
             return response()->json($promocion);
         } catch (ModelNotFoundException $e) {
             Log::warning("Promoción no encontrada con ID: $id");
