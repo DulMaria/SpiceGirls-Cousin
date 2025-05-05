@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Usuario extends Model
 {
@@ -40,4 +42,10 @@ class Usuario extends Model
     {
         return $this->belongsTo(Estudiante::class, 'ID_Usuario', 'ID_Usuario');
     }
+    public function getAuthPassword()
+    {
+        return $this->contrasenia;
+    }
+
+    
 }

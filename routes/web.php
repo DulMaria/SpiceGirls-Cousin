@@ -28,6 +28,7 @@ use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
 
+
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
     // Rutas para áreas
