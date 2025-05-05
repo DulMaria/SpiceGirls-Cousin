@@ -28,6 +28,7 @@ use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
 
+
 Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
     // Rutas para áreas
@@ -80,4 +81,14 @@ Route::prefix('administrador')->group(function () {
     // Ruta para actualizar una promoción
     Route::put('/promociones/{id}', [PromocionController::class, 'update'])->name('promocion.update');
     Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
+
 });
+
+
+// rutas para el administrador estadisticas
+use App\Http\Controllers\EstadisticasController;
+
+Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+
+
+

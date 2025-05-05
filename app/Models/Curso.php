@@ -46,4 +46,9 @@ class Curso extends Model
     {
         return $this->belongsToMany(Promocion::class, 'promocion_curso', 'ID_Curso', 'ID_Promo');
     }
+    // Relación con el modelo Inscripcion
+    public function inscripciones()
+    {
+        return $this->hasMany(Inscripcion::class, 'ID_Curso');
+    }
 }
