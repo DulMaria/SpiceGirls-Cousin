@@ -22,6 +22,28 @@ class TwoFactorController extends Controller
         return view('emails.auth.two-factor');
     }
 
+    // Método para enviar el código inicial (NUEVO)
+    public function sendInitialCode()
+    {
+        $user = Auth::user();
+        $code = rand(100000, 999999);
+        
+        session([
+            '2fa_code' => $code,
+            '2fa_expires_at' => now()->addMinutes(10)
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new TwoFactorCode($code));
+            Log::info("Código 2FA inicial enviado a {$user->email}");
+            return redirect()->route('2fa.show')->with('status', 'Código enviado. Revisa tu correo.');
+            
+        } catch (\Exception $e) {
+            Log::error("Error enviando código inicial: " . $e->getMessage());
+            return back()->withErrors(['email' => 'Error al enviar el código.']);
+        }
+    }
+    
     public function verify2fa(Request $request)
     {
         $request->validate([
