@@ -361,6 +361,7 @@ function cargarDatosPromocion(promoId) {
     // Realizar la petición para obtener los datos de la promoción
     fetch(`/administrador/promociones/${promoId}/edit`)
         .then(response => {
+            console.log('Respuesta del servidor:', response);
             // Verificar si la respuesta es correcta
             if (!response.ok) {
                 throw new Error(`Error HTTP: ${response.status}`);
@@ -371,14 +372,15 @@ function cargarDatosPromocion(promoId) {
             console.log('Datos recuperados:', data);
             
             // Llenar el formulario con los datos recibidos
-            document.getElementById('editPromoId').value = data.ID_Promo;
-            document.getElementById('editTipo').value = data.tipo;
-            document.getElementById('editDescuento').value = data.descuento;
-            document.getElementById('editDescripcion').value = data.descripcion;
+            document.getElementById('editPromoId').value = data.ID_Promo ? data.ID_Promo : "";
+            document.getElementById('editTipo').value = data.tipo? data.tipo : "";
+            console.log('Tipo de promoción:', data.descuento);
+            document.getElementById('editDescuento').value = data.descuento ? data.descuento : "";
+            document.getElementById('editDescripcion').value = data.descripcion? data.descripcion: "";
             
             // Formatear las fechas en YYYY-MM-DD para el input date
-            const fechaInicio = new Date(data.fechaInicio);
-            const fechaFin = new Date(data.fechaFin);
+            const fechaInicio = data.fechaInicio? new Date(data.fechaInicio): "";
+            const fechaFin = data.fechaFin? new Date(data.fechaFin):"";
             
             document.getElementById('editFechaInicio').value = fechaInicio.toISOString().split('T')[0];
             document.getElementById('editFechaFin').value = fechaFin.toISOString().split('T')[0];
@@ -389,7 +391,7 @@ function cargarDatosPromocion(promoId) {
             cursosContainer.innerHTML = ''; // Limpiar el contenedor
             
             // Obtener los IDs de los cursos asociados a esta promoción
-            const cursosSeleccionados = data.cursos.map(curso => curso.ID_Curso);
+            const cursosSeleccionados = data.promocion_cursos.map(curso => curso.ID_Curso);
             
             // Cargar todos los cursos desde el controlador
             fetch('/administrador/cursos-disponibles')

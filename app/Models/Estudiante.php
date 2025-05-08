@@ -32,4 +32,9 @@ class Estudiante extends Model
     {
         return $this->belongsTo(Usuario::class, 'ID_Usuario');
     }
+    // Relación con el modelo Inscripcion
+    public function inscripciones()
+    {
+        return $this->hasMany(Inscripcion::class, 'codigoEstudiantil', 'codigoEstudiantil');
+    }
 }

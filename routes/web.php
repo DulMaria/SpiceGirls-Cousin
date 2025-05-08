@@ -28,27 +28,7 @@ Route::get('/ofertasEstudiante', [PromocionController::class, 'mostrarOfertas'])
 //Ruta de areas para el visitante
 Route::get('/cursosUser', [AreaController::class, 'index'])->name('pag_visitante.cursosUser');
 
-//Rutas de Logeo
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
-Route::get('/verify-2fa', function () {return view('emails.auth.two-factor');})->name('verify-2fa');
-Route::post('/verify-2fa', [AuthController::class, 'verify2fa'])->name('verify-2fa.submit');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/2fa', [TwoFactorController::class, 'show'])->name('2fa.show');
-Route::post('/2fa', [TwoFactorController::class, 'verify'])->name('2fa.verify');
-Route::post('/2fa/resend', [TwoFactorController::class, 'resend'])->name('2fa.resend');
-// // Mostrar formulario de "Olvidé mi contraseña"
-// Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
-// // Enviar el enlace de recuperación al correo del usuario
-// Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
-// // Mostrar formulario para restablecer la contraseña
-// Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
-// // Procesar el restablecimiento de la contraseña
-// Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
-
-// Rutas para el administrador con middleware auth y verificacion de 2 pasos
-Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(function () {
-
+Route::prefix('administrador')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
 
     // Rutas para áreas
@@ -90,5 +70,11 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::get('/promociones/{id}/edit', [PromocionController::class, 'edit'])->name('promocion.edit');
     Route::put('/promociones/{id}', [PromocionController::class, 'update'])->name('promocion.update');
     Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
-    
 });
+
+// rutas para el administrador estadisticas
+use App\Http\Controllers\EstadisticasController;
+Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+
+
+
