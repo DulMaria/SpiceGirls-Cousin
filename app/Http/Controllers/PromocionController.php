@@ -51,7 +51,7 @@ class PromocionController extends Controller
     {
         $request->validate([
             'tipo' => 'required|string|max:100',
-            'descuento' => 'required|numeric|min:1|max:100',
+            'descuento' => 'required|min:1|max:100',
             'descripcion' => 'required|string',
             'fechaInicio' => 'required|date',
             'fechaFin' => 'required|date|after_or_equal:fechaInicio',
@@ -118,16 +118,24 @@ class PromocionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Obtener ID desde el formulario para asegurar que coincide con la URL
+        $id = $request->input('ID_Promo', $id);
+        
+        Log::info('Actualizando promoción ID: ' . $id);
+        Log::info('Datos recibidos: ', $request->all());
+        
         $request->validate([
-            'tipo' => 'required|string|max:100',
-            'descuento' => 'required|numeric|min:1|max:100',
+            'tipo' => 'required|numeric|in:0,1',
+            'descuento' => 'required|min:1|max:100',
             'descripcion' => 'required|string',
             'fechaInicio' => 'required|date',
             'fechaFin' => 'required|date|after_or_equal:fechaInicio',
             'estado' => 'required|in:0,1',
-            'cursos' => 'array'
+            'cursos' => 'nullable|array'
         ]);
 
+        DB::beginTransaction();
+        
         try {
             $promocion = Promocion::findOrFail($id);
             
@@ -153,15 +161,21 @@ class PromocionController extends Controller
                 }
             }
             
+            DB::commit();
+            
             return redirect()->route('promociones.index')
                 ->with('success', 'Promoción actualizada correctamente');
                 
         } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar promoción: ' . $e->getMessage());
+            
             return redirect()->back()
                 ->with('error', 'Error al actualizar la promoción: ' . $e->getMessage())
                 ->withInput();
         }
     }
+    
     
     /**
      * Cambia el estado de una promoción (activar/desactivar)

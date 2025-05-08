@@ -61,7 +61,7 @@
                         @endforeach
                     </ul>
                 </div>
-                <button href='#'>Inscribirse</button>
+                <button onclick="goToInscription('{{ $curso->ID_Curso }}')">Inscribirse</button>
             </div>
         </div>
         @endforeach
@@ -81,8 +81,8 @@
         }
 
         // Función para redirigir a la página de inscripción
-        function goToInscription(courseName) {
-            window.location.href = `/inscripcion?curso=${courseName}`;
+        function goToInscription(ID) {
+            window.location.href = `/inscripcion/${ID}`;
         }
 
         // Contador de tiempo con reinicio mensual

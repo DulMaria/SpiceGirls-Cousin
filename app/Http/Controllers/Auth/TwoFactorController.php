@@ -124,8 +124,8 @@ class TwoFactorController extends Controller
         case 3: // Estudiante
             return redirect()->route('estudiante.dashboard');
             
-        default:
-            return redirect('/');
+            default:
+            return redirect()->back()->with('error', 'Usuario no encontrado. Por favor comuníquese con soporte técnico.');    
     }
 }
 

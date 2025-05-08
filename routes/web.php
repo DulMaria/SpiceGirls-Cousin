@@ -27,6 +27,7 @@ Route::get('/becasEstudiante', [PromocionController::class, 'mostrarBecas']);
 Route::get('/ofertasEstudiante', [PromocionController::class, 'mostrarOfertas']);
 //Ruta de areas para el visitante
 Route::get('/cursosUser', [AreaController::class, 'index'])->name('pag_visitante.cursosUser');
+Route::get('/curso_asociado/{id}', [CursoController::class, 'mostrarPorArea'])->name('pag_visitante.curso_asociado');
 
 //Rutas de Logeo
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -66,7 +67,6 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('curso.destroy');
     Route::post('/administrador/cursos/{id}/cambiar-estado', [CursoController::class, 'cambiarEstado'])
         ->name('curso.cambiarEstado');
-    Route::get('/curso_asociado/{id}', [CursoController::class, 'mostrarPorArea'])->name('pag_visitante.curso_asociado');
 
     // Rutas para docentes 
     Route::get('/docentes', [DocenteController::class, 'index'])->name('admin.docentes.index');
@@ -95,3 +95,6 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
 // rutas para el administrador estadisticas
 use App\Http\Controllers\EstadisticasController;
 Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+
+//rutas para el visitante inscripcion
+Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController::class, 'formulario'])->name('inscripcion.formulario');

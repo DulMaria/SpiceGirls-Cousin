@@ -4,10 +4,9 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
-
+use HasFactory;
 class Inscripcion extends Model
 {
-    use HasFactory;
     
     // Nombre de la tabla si es diferente al nombre del modelo en plural
     protected $table = 'inscripcion';
