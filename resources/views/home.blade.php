@@ -52,7 +52,7 @@
                 </div>
                 @guest
                 <div class="login-button">
-                    <a href="{{ url('/login') }}"
+                    <a href="{{ route('login') }}"
                         class="btn hover:bg-blue-700 transition duration-300 shadow-lg flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mr-2"
                             viewBox="0 0 16 16">

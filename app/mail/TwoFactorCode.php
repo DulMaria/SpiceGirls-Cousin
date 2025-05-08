@@ -19,7 +19,8 @@ class TwoFactorCode extends Mailable
 
     public function build()
     {
-        return $this->view('emails.twofactor')
-                    ->with('code', $this->code);
+        return $this->subject('Tu código de verificación')
+                    ->text('emails.auth.2fa_plain')
+                    ->with(['code' => $this->code]);
     }
 }

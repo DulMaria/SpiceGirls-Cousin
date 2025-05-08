@@ -171,6 +171,15 @@
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Promociones</span>
             </a>
+
+            <!-- Botón de Cerrar Sesión -->
+            <form action="{{ route('logout') }}" method="POST" class="mt-auto">
+                @csrf
+                <button type="submit" class="w-full text-left flex items-center p-3 rounded hover:bg-red-700 hover:text-white transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </form>
         </nav>
     </aside>
 </body>
