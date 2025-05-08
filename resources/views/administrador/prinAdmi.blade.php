@@ -202,9 +202,9 @@
                 </div>-->
                 <!-- Distribución de edades-->
                    <!-- Distribución de edades -->
-                    <div class="bg-white rounded-2xl shadow-md p-6">
+                   <div class="bg-white rounded-2xl shadow-md p-6">
                         <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">Distribución por Edades</h3>
-                        <div class="relative h-72"> <!-- Aumenté la altura para mejor visualización -->
+                        <div class="relative h-100"> <!-- Aumenté la altura para mejor visualización -->
                             <div id="chart-edades" class="w-full h-full"></div>
                         </div>
                     </div>
@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
     chart.render();
 });
   
-// Gráfico de distribución por género
+// * * * * * * Gráfico de distribución por género * * * * * * * * * *//
 document.addEventListener("DOMContentLoaded", () => {
   const generoChart = {
     chart: {
@@ -349,10 +349,27 @@ document.addEventListener("DOMContentLoaded", () => {
     legend: {
       position: 'bottom'
     },
-
     dataLabels: {
       formatter: function (val, opts) {
         return val.toFixed(1) + "%";
+      }
+    },
+    tooltip: {
+      y: {
+        formatter: function (val, opts) {
+          // Obtener el índice de la serie actual
+          const seriesIndex = opts.seriesIndex;
+          
+          // Array con las cantidades absolutas
+          const cantidades = [
+            {{ $distribucion['mujeres_cantidad'] }},
+            {{ $distribucion['hombres_cantidad'] }},
+            {{ $distribucion['otros_cantidad'] }}
+          ];
+          
+          // Mostrar la cantidad absoluta según el índice
+          return cantidades[seriesIndex] + " personas";
+        }
       }
     }
   };
@@ -380,6 +397,16 @@ document.addEventListener("DOMContentLoaded", () => {
             dataLabels: {
                 formatter: function (val) {
                     return val.toFixed(1) + "%";
+                }
+            },
+            tooltip: {
+                custom: function({ series, seriesIndex, dataPointIndex, w }) {
+                    // Obtener el contenido original del tooltip (como "18-24: 17")
+                    const label = w.config.labels[seriesIndex];
+                    const value = w.globals.series[seriesIndex];
+                    
+                    // Simplemente añadir la palabra "personas" al final
+                    return `<div class="apexcharts-tooltip-title">${label}: ${value} personas</div>`;
                 }
             }
         };
