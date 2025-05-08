@@ -84,10 +84,8 @@ Route::prefix('administrador')->group(function () {
 
 });
 
-
 // rutas para el administrador estadisticas
 use App\Http\Controllers\EstadisticasController;
-
 Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
 
 

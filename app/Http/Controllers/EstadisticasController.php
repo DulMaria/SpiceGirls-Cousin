@@ -47,17 +47,29 @@ class EstadisticasController extends Controller
             SUM(CASE WHEN genero = 0 THEN 1 ELSE 0 END) as hombres,
             SUM(CASE WHEN genero = 2 THEN 1 ELSE 0 END) as otros
         '))->first();
-
+    
         $total = $generos->mujeres + $generos->hombres + $generos->otros;
-
+    
         if ($total == 0) {
-            return ['mujeres' => 0, 'hombres' => 0, 'otros' => 0];
+            return [
+                'mujeres' => 0, 
+                'hombres' => 0, 
+                'otros' => 0,
+                'mujeres_cantidad' => 0,
+                'hombres_cantidad' => 0,
+                'otros_cantidad' => 0,
+                'total' => 0
+            ];
         }
-
+    
         return [
             'mujeres' => round(($generos->mujeres / $total) * 100, 2),
             'hombres' => round(($generos->hombres / $total) * 100, 2),
-            'otros'   => round(($generos->otros   / $total) * 100, 2)
+            'otros'   => round(($generos->otros   / $total) * 100, 2),
+            'mujeres_cantidad' => $generos->mujeres,
+            'hombres_cantidad' => $generos->hombres,
+            'otros_cantidad'   => $generos->otros,
+            'total' => $total
         ];
     }
 
