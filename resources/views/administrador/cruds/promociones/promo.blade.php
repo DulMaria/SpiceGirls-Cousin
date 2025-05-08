@@ -188,7 +188,7 @@
 
                     <div class="mb-4">
                         <label for="descuento" class="block text-sm font-medium text-gray-700">Descuento (%)</label>
-                        <input type="number" id="descuento" name="descuento" min="1" max="100" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        <input type="text" id="descuento" name="descuento" min="1" max="100" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
 
                     <div class="mb-4">
@@ -255,7 +255,7 @@
 
                     <div class="mb-4">
                         <label for="editDescuento" class="block text-sm font-medium text-gray-700">Descuento (%)</label>
-                        <input type="number" id="editDescuento" name="descuento" min="1" max="100" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                        <input type="text" id="editDescuento" name="descuento" min="1" max="100" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                     </div>
 
                     <div class="mb-4">
@@ -351,6 +351,33 @@
                     cargarDatosPromocion(promoId);
                 });
             });
+            // Configurar formulario de edición para evitar problemas de envío
+        const formEditarPromocion = document.getElementById('formEditarPromocion');
+        if (formEditarPromocion) {
+            formEditarPromocion.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevenir envío por defecto
+                
+                // Obtener ID de promoción
+                const promoId = document.getElementById('editPromoId').value;
+                
+                // Actualizar la acción del formulario con el ID correcto
+                this.action = `/administrador/promociones/${promoId}`;
+                
+                // Verificar si hay cursos seleccionados
+                const cursosSeleccionados = document.querySelectorAll('#editCursosContainer input[type="checkbox"]:checked');
+                if (cursosSeleccionados.length === 0) {
+                    // Si no hay cursos seleccionados, crear un input hidden para enviar un array vacío
+                    const emptyInput = document.createElement('input');
+                    emptyInput.type = 'hidden';
+                    emptyInput.name = 'cursos';
+                    emptyInput.value = '';
+                    this.appendChild(emptyInput);
+                }
+                
+                // Enviar el formulario
+                this.submit();
+            });
+        }
         });
 
         // Función para cargar datos de promoción en el modal de edición
@@ -442,7 +469,325 @@ function cargarDatosPromocion(promoId) {
             alert(`Error al cargar los datos de la promoción: ${error.message}. Por favor, intenta de nuevo o contacta al administrador.`);
         });
 }
+
+
+// Script para validar formularios de promociones
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener referencias a los formularios
+    const formAgregar = document.querySelector('form[action*="promocion.store"]');
+    const formEditar = document.getElementById('formEditarPromocion');
+    
+    // Referencias a los campos del formulario para añadir
+    const camposAgregar = {
+        tipo: document.getElementById('tipo'),
+        descuento: document.getElementById('descuento'),
+        descripcion: document.getElementById('descripcion'),
+        fechaInicio: document.getElementById('fechaInicio'),
+        fechaFin: document.getElementById('fechaFin'),
+        estado: document.getElementById('estado')
+    };
+    
+    // Referencias a los campos del formulario para editar
+    const camposEditar = {
+        tipo: document.getElementById('editTipo'),
+        descuento: document.getElementById('editDescuento'),
+        descripcion: document.getElementById('editDescripcion'),
+        fechaInicio: document.getElementById('editFechaInicio'),
+        fechaFin: document.getElementById('editFechaFin'),
+        estado: document.getElementById('editEstado')
+    };
+    
+    // Configurar fecha mínima (hoy) para los inputs de fecha
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (camposAgregar.fechaInicio) {
+        camposAgregar.fechaInicio.min = today;
+    }
+    
+    if (camposEditar.fechaInicio) {
+        camposEditar.fechaInicio.min = today;
+    }
+    
+    // ----- VALIDACIONES PARA FORMULARIO DE AGREGAR -----
+    
+    // Validar campo de descuento (sólo números entre 1-100, máximo 2 decimales)
+    if (camposAgregar.descuento) {
+        camposAgregar.descuento.addEventListener('input', function() {
+            validarDescuento(this);
+        });
+    }
+    
+    // Validar fechas
+    if (camposAgregar.fechaInicio) {
+        camposAgregar.fechaInicio.addEventListener('change', function() {
+            validarFechaInicio(camposAgregar.fechaInicio, camposAgregar.fechaFin);
+        });
+    }
+    
+    if (camposAgregar.fechaFin) {
+        camposAgregar.fechaFin.addEventListener('change', function() {
+            validarFechaFin(camposAgregar.fechaInicio, camposAgregar.fechaFin);
+        });
+    }
+    
+    // Validar descripción (no vacía)
+    if (camposAgregar.descripcion) {
+        camposAgregar.descripcion.addEventListener('input', function() {
+            validarCampoNoVacio(this, 'La descripción no puede estar vacía');
+        });
+    }
+    
+    // ----- VALIDACIONES PARA FORMULARIO DE EDITAR -----
+    
+    // Validar campo de descuento (sólo números entre 1-100, máximo 2 decimales)
+    if (camposEditar.descuento) {
+        camposEditar.descuento.addEventListener('input', function() {
+            validarDescuento(this);
+        });
+    }
+    
+    // Validar fechas
+    if (camposEditar.fechaInicio) {
+        camposEditar.fechaInicio.addEventListener('change', function() {
+            validarFechaInicio(camposEditar.fechaInicio, camposEditar.fechaFin);
+        });
+    }
+    
+    if (camposEditar.fechaFin) {
+        camposEditar.fechaFin.addEventListener('change', function() {
+            validarFechaFin(camposEditar.fechaInicio, camposEditar.fechaFin);
+        });
+    }
+    
+    // Validar descripción (no vacía)
+    if (camposEditar.descripcion) {
+        camposEditar.descripcion.addEventListener('input', function() {
+            validarCampoNoVacio(this, 'La descripción no puede estar vacía');
+        });
+    }
+    
+    // ----- VALIDACIÓN DE FORMULARIOS COMPLETOS -----
+    
+    // Validación al enviar formulario de agregar
+    if (formAgregar) {
+        formAgregar.addEventListener('submit', function(e) {
+            if (!validarFormularioCompleto(camposAgregar)) {
+                e.preventDefault();
+                mostrarAlerta('Por favor, corrige los errores antes de enviar el formulario');
+            }
+        });
+    }
+    
+    // Validación al enviar formulario de editar
+    if (formEditar) {
+        formEditar.addEventListener('submit', function(e) {
+            if (!validarFormularioCompleto(camposEditar)) {
+                e.preventDefault();
+                mostrarAlerta('Por favor, corrige los errores antes de enviar el formulario');
+            }
+        });
+    }
+    
+    // ----- FUNCIONES DE VALIDACIÓN -----
+    
+    // Validar campo de descuento
+    function validarDescuento(input) {
+        // Eliminar caracteres no numéricos excepto el punto decimal
+        input.value = input.value.replace(/[^\d.]/g, '');
+        
+        // Asegurar que solo hay un punto decimal
+        const parts = input.value.split('.');
+        if (parts.length > 2) {
+            input.value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        // Limitar a dos decimales
+        if (parts.length > 1 && parts[1].length > 2) {
+            input.value = parts[0] + '.' + parts[1].substring(0, 2);
+        }
+        
+        // Verificar rango (1-100)
+        const valor = parseFloat(input.value);
+        
+        if (isNaN(valor) || valor <= 0 || valor > 100) {
+            mostrarError(input, 'El descuento debe estar entre 1 y 100');
+            return false;
+        } else {
+            eliminarError(input);
+            return true;
+        }
+    }
+    
+    // Validar fecha de inicio
+    function validarFechaInicio(fechaInicioInput, fechaFinInput) {
+        const fechaInicio = fechaInicioInput.value;
+        const today = new Date().toISOString().split('T')[0];
+        
+        if (!fechaInicio) {
+            mostrarError(fechaInicioInput, 'La fecha de inicio es obligatoria');
+            return false;
+        }
+        
+        if (fechaInicio < today) {
+            mostrarError(fechaInicioInput, 'La fecha de inicio no puede ser anterior a hoy');
+            return false;
+        }
+        
+        eliminarError(fechaInicioInput);
+        
+        // Actualizar fecha mínima para la fecha de fin
+        if (fechaFinInput) {
+            // Calcular el día siguiente a la fecha de inicio
+            const nextDay = new Date(fechaInicio);
+            nextDay.setDate(nextDay.getDate() + 1);
+            const nextDayFormatted = nextDay.toISOString().split('T')[0];
+            
+            fechaFinInput.min = nextDayFormatted;
+            
+            // Si la fecha de fin ya tiene un valor, validarla de nuevo
+            if (fechaFinInput.value) {
+                validarFechaFin(fechaInicioInput, fechaFinInput);
+            }
+        }
+        
+        return true;
+    }
+    
+    // Validar fecha de fin
+    function validarFechaFin(fechaInicioInput, fechaFinInput) {
+        const fechaInicio = fechaInicioInput.value;
+        const fechaFin = fechaFinInput.value;
+        
+        if (!fechaFin) {
+            mostrarError(fechaFinInput, 'La fecha de fin es obligatoria');
+            return false;
+        }
+        
+        if (fechaInicio && fechaFin <= fechaInicio) {
+            mostrarError(fechaFinInput, 'La fecha de fin debe ser posterior a la fecha de inicio');
+            return false;
+        }
+        
+        eliminarError(fechaFinInput);
+        return true;
+    }
+    
+    // Validar que un campo no esté vacío
+    function validarCampoNoVacio(input, mensaje) {
+        if (!input.value.trim()) {
+            mostrarError(input, mensaje);
+            return false;
+        } else {
+            eliminarError(input);
+            return true;
+        }
+    }
+    
+    // Validar el formulario completo
+    function validarFormularioCompleto(campos) {
+        let formularioValido = true;
+        
+        // Validar cada campo del formulario
+        if (campos.descuento && !validarDescuento(campos.descuento)) {
+            formularioValido = false;
+        }
+        
+        if (campos.descripcion && !validarCampoNoVacio(campos.descripcion, 'La descripción no puede estar vacía')) {
+            formularioValido = false;
+        }
+        
+        if (campos.fechaInicio && !validarFechaInicio(campos.fechaInicio, campos.fechaFin)) {
+            formularioValido = false;
+        }
+        
+        if (campos.fechaFin && !validarFechaFin(campos.fechaInicio, campos.fechaFin)) {
+            formularioValido = false;
+        }
+        
+        // Validar selección de cursos
+        const cursosSeleccionados = document.querySelectorAll('input[name="cursos[]"]:checked');
+        const cursosContainer = campos === camposAgregar ? document.querySelector('.max-h-60') : document.getElementById('editCursosContainer');
+        
+        if (cursosSeleccionados.length === 0) {
+            if (cursosContainer) {
+                // Mostrar mensaje de error para la selección de cursos
+                let errorElement = cursosContainer.nextElementSibling;
+                if (!errorElement || !errorElement.classList.contains('error-message')) {
+                    errorElement = document.createElement('span');
+                    errorElement.className = 'error-message';
+                    cursosContainer.parentNode.insertBefore(errorElement, cursosContainer.nextSibling);
+                }
+                errorElement.textContent = 'Debe seleccionar al menos un curso';
+            }
+            formularioValido = false;
+        } else {
+            // Eliminar mensaje de error si existe
+            const errorElement = cursosContainer?.nextElementSibling;
+            if (errorElement && errorElement.classList.contains('error-message')) {
+                errorElement.remove();
+            }
+        }
+        
+        return formularioValido;
+    }
+    
+    // ----- FUNCIONES AUXILIARES -----
+    
+    // Mostrar mensaje de error para un campo
+    function mostrarError(input, mensaje) {
+        input.classList.add('border-red-500');
+        
+        // Verificar si ya existe un mensaje de error
+        let errorElement = input.nextElementSibling;
+        if (!errorElement || !errorElement.classList.contains('error-message')) {
+            errorElement = document.createElement('span');
+            errorElement.className = 'error-message';
+            input.parentNode.insertBefore(errorElement, input.nextSibling);
+        }
+        
+        errorElement.textContent = mensaje;
+    }
+    
+    // Eliminar mensaje de error de un campo
+    function eliminarError(input) {
+        input.classList.remove('border-red-500');
+        
+        const errorElement = input.nextElementSibling;
+        if (errorElement && errorElement.classList.contains('error-message')) {
+            errorElement.remove();
+        }
+    }
+    
+    // Mostrar alerta general
+    function mostrarAlerta(mensaje) {
+        // Usar el modal de confirmación existente
+        const confirmacionModal = document.getElementById('confirmacionModal');
+        const mensajeElement = document.getElementById('confirmacionMensaje');
+        
+        if (confirmacionModal && mensajeElement) {
+            mensajeElement.textContent = mensaje;
+            confirmacionModal.classList.remove('hidden');
+            
+            // Configurar botones
+            const btnCancelar = document.getElementById('cancelarConfirmacion');
+            const btnAceptar = document.getElementById('aceptarConfirmacion');
+            
+            btnCancelar.style.display = 'none'; // Ocultar botón de cancelar
+            
+            // Configurar el botón aceptar para cerrar la alerta
+            btnAceptar.textContent = 'Entendido';
+            btnAceptar.onclick = function() {
+                confirmacionModal.classList.add('hidden');
+                btnCancelar.style.display = ''; // Restaurar visibilidad
+            };
+        } else {
+            // Fallback a alerta estándar si no existe el modal
+            alert(mensaje);
+        }
+    }
+});
     </script>
+
 </body>
 
 </html>
