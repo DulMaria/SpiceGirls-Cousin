@@ -98,3 +98,5 @@ Route::get('/administrador', [EstadisticasController::class, 'index'])->name('ad
 
 //rutas para el visitante inscripcion
 Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController::class, 'formulario'])->name('inscripcion.formulario');
+
+Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
