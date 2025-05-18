@@ -8,6 +8,7 @@ use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PanelEstudianteController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
@@ -91,7 +92,7 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::get('/promociones/{id}/edit', [PromocionController::class, 'edit'])->name('promocion.edit');
     Route::put('/promociones/{id}', [PromocionController::class, 'update'])->name('promocion.update');
     Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
-
+  
     // rutas para el administrador estadisticas
     Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
 });
@@ -100,4 +101,12 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
 Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController::class, 'formulario'])->name('inscripcion.formulario');
 
 
+
+=======
+Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function() {
+    Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinEstudiante');
+    Route::get('/inscripcion', [PanelEstudianteController:: class, 'inscripcion' ])->name('estudiante.inscripcionModulo');
+    Route::get('/cursos', [PanelEstudianteController:: class, 'cursos' ])->name('estudiante.misCursos');
+    Route::get('/calendario', [PanelEstudianteController:: class, 'calendario' ])->name('estudiante.calendario');
+});
 
