@@ -102,7 +102,7 @@ Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController
 
 
 
-=======
+
 Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function() {
     Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinEstudiante');
     Route::get('/inscripcion', [PanelEstudianteController:: class, 'inscripcion' ])->name('estudiante.inscripcionModulo');
