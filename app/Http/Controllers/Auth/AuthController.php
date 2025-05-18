@@ -233,7 +233,7 @@ class AuthController extends Controller
                 return redirect()->route('docente.dashboard');
 
             case 3: // Estudiante
-                return redirect()->route('estudiante.dashboard');
+                return redirect()->route('estudiante.prinEstudiante');
 
             default:
                 return redirect('/');

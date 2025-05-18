@@ -151,7 +151,7 @@
 
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
-        <div class="header">Panel del Estudiante</div>
+        <div class="header">Panel Estudiante</div>
         <nav>
             <!-- Inicio -->
             <a href="{{ route('estudiante.prinEstudiante') }}" class="text-[#127475] hover:text-[#e07a5f] text-lg font-semibold">
@@ -159,35 +159,26 @@
                 <span>Inicio</span>
             </a>
 
-            <!-- Mis Cursos 
-            <a href="{{ route('estudiante.cursos') }}" class="{{ Request::is('estudiante/cursos') ? 'active' : '' }}">
-                <i class="fas fa-book"></i>
+            <a href="{{ route('estudiante.inscripcionModulo') }}" class="{{ Request::is('estudiante/inscripcion') ? 'active' : '' }}">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Inscripciones</span>
+            </a>
+
+            <a href="{{ route('estudiante.misCursos') }}" class="{{ Request::is('estudiante/cursos') ? 'active' : '' }}">
+                <i class="fas fa-graduation-cap"></i>
                 <span>Mis Cursos</span>
             </a>
 
-            <!-- Horario 
-            <a href="{{ route('estudiante.horario') }}" class="{{ Request::is('estudiante/horario') ? 'active' : '' }}">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Mi Horario</span>
+            <a href="{{ route('estudiante.calendario') }}" class="{{ Request::is('estudiante/calendario') ? 'active' : '' }}">
+                <i class="fas fa-calendar-week"></i>
+                <span>Calendario</span>
             </a>
 
-            <!-- Calificaciones 
-            <a href="{{ route('estudiante.calificaciones') }}" class="{{ Request::is('estudiante/calificaciones') ? 'active' : '' }}">
-                <i class="fas fa-star"></i>
-                <span>Calificaciones</span>
+            <a href="/estudiante/reportes" class="{{ Request::is('estudiante/reportes') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i>
+                <span>Reportes</span>
             </a>
-
-            <!-- Asistencia 
-            <a href="{{ route('estudiante.asistencia') }}" class="{{ Request::is('estudiante/asistencia') ? 'active' : '' }}">
-                <i class="fas fa-clipboard-check"></i>
-                <span>Mi Asistencia</span>
-            </a>
-
-            <!-- Pagos 
-            <a href="{{ route('estudiante.pagos') }}" class="{{ Request::is('estudiante/pagos') ? 'active' : '' }}">
-                <i class="fas fa-money-bill-wave"></i>
-                <span>Pagos y Facturas</span>
-            </a>
+            
             <!-- Botón de Cerrar Sesión -->
             <form action="{{ route('logout') }}" method="POST" class="logout-btn">
                 @csrf
