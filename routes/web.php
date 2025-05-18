@@ -13,6 +13,7 @@ use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
+use App\Http\Controllers\EstadisticasController;
 
 
 // Ruta para la página principal
@@ -90,11 +91,13 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::get('/promociones/{id}/edit', [PromocionController::class, 'edit'])->name('promocion.edit');
     Route::put('/promociones/{id}', [PromocionController::class, 'update'])->name('promocion.update');
     Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
-});
 
-// rutas para el administrador estadisticas
-use App\Http\Controllers\EstadisticasController;
-Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+    // rutas para el administrador estadisticas
+    Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+});
 
 //rutas para el visitante inscripcion
 Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController::class, 'formulario'])->name('inscripcion.formulario');
+
+
+
