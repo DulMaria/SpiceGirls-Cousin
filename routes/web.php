@@ -103,6 +103,8 @@ Route::post('/inscripcion/Estudiante', [App\Http\Controllers\InscripVisitanteCon
 
 
 
+// Rutas para el docente con middleware auth y verificacion de 2 pasos
+
 Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function() {
     Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinEstudiante');
     Route::get('/inscripcion', [PanelEstudianteController:: class, 'inscripcion' ])->name('estudiante.inscripcionModulo');
