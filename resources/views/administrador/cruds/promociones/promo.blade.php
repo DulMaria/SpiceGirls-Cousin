@@ -57,10 +57,10 @@
                 <table class="min-w-full table-auto text-sm text-left">
                     <thead class="bg-[#1f1b2e] text-white">
                         <tr>
-                            <th class="px-6 py-3">#</th>
-                            <th class="px-6 py-3">Tipo</th>
-                            <th class="px-6 py-3">Descuento</th>
-                            <th class="px-6 py-3">Descripción</th>
+                            <th class="px-5 py-3">#</th>
+                            <th class="px-2 py-3">Tipo</th>
+                            <th class="px-3 py-3">Descuento</th>
+                            <th class="px-2 py-3">Descripción</th>
                             <th class="px-6 py-3">Fecha Inicio</th>
                             <th class="px-6 py-3">Fecha Fin</th>
                             <th class="px-6 py-3">Estado</th>
@@ -72,7 +72,7 @@
                         @foreach ($promociones as $promocion)
                         <tr class="border-b hover:bg-gray-100">
                             <td class="px-6 py-4">{{ $promocion->ID_Promo }}</td>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4">
                                 @if ($promocion->tipo == 0)
                                     OFERTAS
                                 @elseif ($promocion->tipo == 1)
@@ -81,8 +81,8 @@
                                     Desconocido
                                 @endif
                             </td>
-                            <td class="px-6 py-4">{{ $promocion->descuento }}%</td>
-                            <td class="px-6 py-4">{{ $promocion->descripcion }}</td>
+                            <td class="px-3 py-4">{{ $promocion->descuento }}%</td>
+                            <td class="px-2 py-4">{{ $promocion->descripcion }}</td>
                             <td class="px-6 py-4">{{ date('d/m/Y', strtotime($promocion->fechaInicio)) }}</td>
                             <td class="px-6 py-4">{{ date('d/m/Y', strtotime($promocion->fechaFin)) }}</td>
                             <td class="px-6 py-4">
@@ -100,7 +100,7 @@
                                     @click="showModal = !showModal"
                                     class="bg-black hover:bg-black-700 text-white px-3 py-2 rounded-full flex items-center justify-center gap-2">
                                     
-                                    <i class="bi" :class="showModal ? 'bi-eye' : 'bi-eye-slash'" class="text-lg"></i>
+                                    <i class="bi" :class="showModal ? 'bi-eye-slash': 'bi-eye' " class="text-lg"></i>
                                 </button>
 
                                 <!-- Modal -->

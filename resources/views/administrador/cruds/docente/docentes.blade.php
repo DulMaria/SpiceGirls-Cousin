@@ -87,10 +87,10 @@
                   )">
                   
                   <template x-if="!showModal">
-                    <i class="bi bi-eye-slash text-lg"></i>
+                    <i class="bi bi-eye text-lg"></i>
                   </template>
                   <template x-if="showModal">
-                    <i class="bi bi-eye text-lg"></i>
+                    <i class="bi bi-eye-slash text-lg"></i>
                   </template>
                 </button>
                 <!-- Modal -->

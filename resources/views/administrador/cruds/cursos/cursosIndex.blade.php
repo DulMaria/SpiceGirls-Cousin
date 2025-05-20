@@ -100,7 +100,7 @@
                                     @click="showModal = !showModal"
                                     class="bg-black hover:bg-black-700 text-white px-3 py-2 rounded-full flex items-center justify-center gap-2">
                                     
-                                    <i class="bi" :class="showModal ? 'bi-eye' : 'bi-eye-slash'" class="text-lg"></i>
+                                    <i class="bi" :class="showModal ? ' bi-eye-slash' : 'bi-eye'" class="text-lg"></i>
                                 </button>
 
                                 <!-- Modal -->
