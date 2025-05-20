@@ -15,8 +15,10 @@
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl">
       <h2 class="text-3xl font-bold mb-6 text-[#2e1a47] text-center">Inscripción de Estudiante</h2>
       
-      <form id="formInscripcion" method="POST" action="/inscripcion/estudiante" class="space-y-6">
+      <form id="formInscripcion" method="POST" action="/inscripcion/Estudiante" class="space-y-6">
+        @csrf 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
           <!-- Nombre -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Nombre:</label>
@@ -89,6 +91,10 @@
             <input type="text" name="ci" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
           </div>
         </div>
+        <!-- Curso Recuperado para la inscripcion -->
+          <div>
+            <input type="text" value="{{ $curso->ID_Curso }}" name="curso" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" hidden>
+          </div>
 
         <!-- Botones de acción -->
         <div class="flex justify-center mt-8 space-x-4">
