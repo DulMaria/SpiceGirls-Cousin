@@ -169,7 +169,8 @@
                             <div class="flex justify-center mb-4">
                                 <div
                                     class="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                                    [QR Code]
+                                    <!--[QR Code]-->
+                                    <img src="{{ url('IMG/QR.png') }}" alt="Código QR de Pago" class="max-w-full max-h-full">
                                 </div>
                             </div>
                             <h3 class="text-lg font-semibold text-gray-800 mb-2">Pago por QR</h3>
@@ -194,41 +195,57 @@
                 </div>
             </div>
 
-            <!-- Modal para Pago QR -->
-            <div id="qrModal"
-                class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-                <div class="bg-white rounded-xl max-w-md w-full p-6 modal">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold text-[#127475]">Pago para Inscripción al Siguiente Módulo</h2>
-                        <button onclick="closeModal('qrModal')"
-                            class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-                    </div>
+            <!-- Modal para Pago QR con funcionalidad de zoom -->
+<div id="qrModal"
+    class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full p-6 modal">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-[#127475]">Pago para Inscripción al Siguiente Módulo</h2>
+            <button onclick="closeModal('qrModal')"
+                class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
 
-                    <p class="text-gray-600 mb-6">Por favor escanee el siguiente código QR para realizar el pago de su
-                        inscripción al siguiente módulo:</p>
+        <p class="text-gray-600 mb-6">Por favor escanee el siguiente código QR para realizar el pago de su
+            inscripción al siguiente módulo:</p>
 
-                    <div class="flex justify-center my-6">
-                        <div class="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                            [Código QR de Pago]
-                        </div>
-                    </div>
-
-                    <p class="text-gray-600 mb-6">Una vez realizado el pago, guarde el comprobante y envíelo a <strong
-                            class="text-[#127475]">pagos@formacioneducativa.com</strong> incluyendo su nombre completo
-                        y
-                        documento de identidad.</p>
-
-                    <div class="pt-4 border-t border-gray-200 text-center">
-                        <p class="text-gray-500 text-sm mb-4">¿Tiene problemas para realizar el pago? Contáctenos al
-                            +123
-                            456 7890</p>
-                        <button onclick="closeModal('qrModal')"
-                            class="bg-[#127475] text-white px-6 py-2 rounded-lg hover:bg-[#0e5d5e] transition">
-                            Cerrar
-                        </button>
-                    </div>
-                </div>
+        <div class="flex justify-center my-6">
+            <div class="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400" default>
+                <!--[Código QR de Pago]-->
+                <img src="{{ url('IMG/qr_pago.jpg') }}" alt="Código QR de Pago" class="max-w-full max-h-full cursor-pointer" 
+                     onclick="openZoomModal(this.src)">
             </div>
+        </div>
+
+        <!-- Modal para mostrar la imagen ampliada -->
+        <div id="zoomModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+            <div class="relative max-w-4xl w-full flex flex-col items-center">
+                <button onclick="closeModal('zoomModal')" 
+                        class="absolute top-0 right-0 bg-white rounded-full p-2 m-4 text-gray-800 hover:bg-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 22 22" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <img id="zoomedImage" src="" alt="Imagen Ampliada" class="max-w-full max-h-[76vh] object-contain">
+            </div>
+        </div>
+
+        <p class="text-gray-600 mb-6">Una vez realizado el pago, guarde el comprobante y envíelo a <strong
+                class="text-[#127475]">pagos@formacioneducativa.com</strong> incluyendo su nombre completo
+            y
+            documento de identidad.</p>
+
+        <div class="pt-4 border-t border-gray-200 text-center">
+            <p class="text-gray-500 text-sm mb-4">¿Tiene problemas para realizar el pago? Contáctenos al
+                +123
+                456 7890</p>
+            <button onclick="closeModal('qrModal')"
+                class="bg-[#127475] text-white px-6 py-2 rounded-lg hover:bg-[#0e5d5e] transition">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
 
             <!-- Modal para Pago en Efectivo - Versión mejorada -->
     <div id="cashModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
@@ -325,14 +342,33 @@
         </div>
     </div>
 
-            <script>
+     <script>
+     //funcion de modal para la imagen de pagos 
+            function openZoomModal(imageSrc) {
+             // Establecer la imagen ampliada
+            document.getElementById('zoomedImage').src = imageSrc;
+            // Mostrar el modal de zoom
+             document.getElementById('zoomModal').classList.remove('hidden');
+            document.getElementById('zoomModal').classList.add('flex');
+                // Prevenir el scroll del body
+            document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+                document.getElementById(modalId).classList.remove('flex');
+                // Restaurar el scroll del body cuando se cierra el modal de zoom
+                if (modalId === 'zoomModal') {
+                    document.body.style.overflow = '';
+                }
+            }
                 // Función para abrir modal
                 function openModal(modalId) {
                     document.getElementById(modalId).classList.remove('hidden');
                     
                     // Si es el modal de efectivo, generamos datos
                     if(modalId === 'cashModal') {
-                        document.getElementById('random-num').textContent = Math.floor(Math.random() * 10000);
+                        document.getElementById('random-num').textContent = Math.floor(Math.random() * 9000);
                     }
                 }
 
