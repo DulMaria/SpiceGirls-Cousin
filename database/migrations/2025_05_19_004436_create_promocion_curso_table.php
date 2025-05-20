@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('estudiante', function (Blueprint $table) {
-            $table->string('codigoEstudiantil', 8)->primary();
-            $table->string('nivelAcademico', 20);
-            $table->integer('ID_Usuario')->index('fk_estudiante_usuario');
+        Schema::create('promocion_curso', function (Blueprint $table) {
+            $table->integer('ID_PromoCurso', true);
+            $table->integer('ID_Curso')->index('fk_promocioncurso_curso');
+            $table->integer('ID_Promo')->index('fk_promocioncurso_promocion');
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('estudiante');
+        Schema::dropIfExists('promocion_curso');
     }
 };
