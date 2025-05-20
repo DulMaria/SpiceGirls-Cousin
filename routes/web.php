@@ -16,6 +16,9 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\EstadisticasController;
 
+Route::fallback(function () {
+    return redirect()->back()->with('error', 'La ruta que intentas acceder no existe.');
+});
 
 // Ruta para la página principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
