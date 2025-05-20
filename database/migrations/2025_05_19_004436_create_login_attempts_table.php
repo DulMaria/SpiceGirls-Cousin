@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('promo_cursos', function (Blueprint $table) {
-            $table->id();
+        Schema::create('login_attempts', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('email')->nullable();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->boolean('successful')->default(false);
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('promo_cursos');
+        Schema::dropIfExists('login_attempts');
     }
 };
