@@ -95,7 +95,15 @@
                                     <div class="flex items-center">
                                         <span class="text-gray-500 w-40">Género:</span>
                                         <span
-                                            class="font-medium">{{ $estudiante->genero == 0 ? 'Masculino' : 'Femenino'  }}</span>
+                                            class="font-medium">
+                                            @if ($estudiante->genero == '0')
+                                                Masculino
+                                            @elseif ($estudiante->genero == '1')
+                                                Femenino
+                                            @else
+                                                Otro
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </div>

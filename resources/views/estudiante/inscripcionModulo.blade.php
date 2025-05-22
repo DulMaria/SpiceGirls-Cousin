@@ -84,74 +84,104 @@
                         <span class="font-medium">{{ $usuario->telefono }}</span>
                     </div>
                 </div>
+<!-- Información de los cursos y módulos -->
+            @foreach($datosCursos as $index => $datoCurso)
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-xl font-semibold text-[#127475] border-b border-gray-200 pb-3 mb-4">
+                    Curso: {{ $datoCurso['curso']->nombreCurso }}
+                </h2>
 
-                <!-- Información del módulo -->
-                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                    <h2 class="text-xl font-semibold text-[#127475] border-b border-gray-200 pb-3 mb-4">Información del
-                        Módulo</h2>
+                <!-- Información del estudiante para este curso -->
+                <div class="bg-gray-50 rounded-lg p-5 mb-6 border-l-4 border-[#127475]">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Progreso del Curso</h3>
 
-                    <!-- Información del estudiante -->
-                    <div class="bg-gray-50 rounded-lg p-5 mb-6 border-l-4 border-[#127475]">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Información del Estudiante</h3>
+                    <div class="space-y-2">
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Módulo Actual:</span>
+                            <span class="text-gray-800">{{ $datoCurso['moduloActual'] }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Avance:</span>
+                            <div class="flex items-center">
+                                <span class="text-gray-800 mr-2">{{ $datoCurso['porcentajeAvance'] }}% completado</span>
+                                <div class="w-24 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-[#127475] h-2 rounded-full" style="width: {{ $datoCurso['porcentajeAvance'] }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Siguiente Módulo:</span>
+                            <span class="text-gray-800 font-bold">{{ $datoCurso['siguienteModulo'] }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Estado:</span>
+                            @if($datoCurso['elegibleParaAvanzar'])
+                                <span class="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">Elegible para avanzar</span>
+                            @else
+                                <span class="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-bold">En progreso</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
 
-                        <div class="space-y-2">
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Curso Actual:</span>
-                                <span class="text-gray-800">Desarrollo Web Full Stack</span>
+                @if($datoCurso['tieneSiguienteModulo'])
+                <!-- Detalles del módulo -->
+                <div class="bg-gray-50 rounded-lg p-5 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Detalles del {{ $datoCurso['siguienteModulo'] }}</h3>
+                    <p class="text-gray-600 mb-4">{{ $datoCurso['descripcionSiguienteModulo'] ?: 'Información del módulo próximo a cursar.' }}</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-[#127475] mb-2">Contenido:</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                <li>Contenidos avanzados del módulo</li>
+                                <li>Ejercicios prácticos</li>
+                                <li>Proyectos aplicados</li>
+                                <li>Evaluaciones continuas</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <h4 class="font-semibold text-[#127475]">Duración:</h4>
+                                <p class="text-gray-700">{{ $datoCurso['duracionSiguiente'] }} semanas ({{ $datoCurso['horasSiguiente'] }} horas)</p>
                             </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Módulo Actual:</span>
-                                <span class="text-gray-800">Módulo 2: Nivel Intermedio</span>
+                            <div>
+                                <h4 class="font-semibold text-[#127475]">Costo:</h4>
+                                <p class="text-gray-700 font-bold">Bs. {{ $datoCurso['costoSiguienteModulo'] }}</p>
                             </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Avance:</span>
-                                <span class="text-gray-800">85% completado</span>
-                            </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Siguiente Módulo:</span>
-                                <span class="text-gray-800 font-bold">Módulo 3: Nivel Avanzado</span>
-                            </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Estado:</span>
-                                <span class="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">Elegible para
-                                    avanzar</span>
+                            <div>
+                                <h4 class="font-semibold text-[#127475]">Fecha de inicio:</h4>
+                                <p class="text-gray-700">{{ $datoCurso['fechaInicioSiguiente'] }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Detalles del módulo -->
-                    <div class="bg-gray-50 rounded-lg p-5 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Detalles del Módulo 3: Nivel Avanzado</h3>
-                        <p class="text-gray-600 mb-4">Este módulo se enfoca en técnicas avanzadas de desarrollo web,
-                            frameworks modernos y optimización de aplicaciones.</p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="font-semibold text-[#127475] mb-2">Contenido:</h4>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-700">
-                                    <li>React y Estado Avanzado</li>
-                                    <li>Node.js y Express</li>
-                                    <li>APIs RESTful</li>
-                                    <li>Autenticación y Seguridad</li>
-                                </ul>
-                            </div>
-                            <div class="space-y-3">
-                                <div>
-                                    <h4 class="font-semibold text-[#127475]">Duración:</h4>
-                                    <p class="text-gray-700">8 semanas (64 horas)</p>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#127475]">Valor:</h4>
-                                    <p class="text-gray-700 font-bold">$350.000</p>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#127475]">Fecha de inicio:</h4>
-                                    <p class="text-gray-700">Junio 1, 2025</p>
-                                </div>
-                            </div>
+                    @if($datoCurso['tieneAperturaDisponible'] && $datoCurso['elegibleParaAvanzar'])
+                    <!-- Botón para inscribirse a este módulo específico -->
+                    <div class="mt-6 text-center">
+                        <button onclick="openModal('paymentModal', '{{ $datoCurso['curso']->nombreCurso }}', '{{ $datoCurso['siguienteModulo'] }}', '{{ $datoCurso['costoSiguienteModulo'] }}')" 
+                                class="bg-[#127475] text-white px-6 py-3 rounded-lg hover:bg-[#0e5d5e] transition font-semibold">
+                            Inscribirse a {{ $datoCurso['siguienteModulo'] }}
+                        </button>
+                    </div>
+                    @elseif(!$datoCurso['tieneAperturaDisponible'])
+                    <div class="mt-6 text-center">
+                        <div class="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
+                            <p class="text-yellow-700 font-medium">Apertura del módulo pendiente de programación</p>
                         </div>
-                    </div>                    
+                    </div>
+                    @endif
                 </div>
+                @else
+                <!-- Mensaje cuando no hay siguiente módulo -->
+                <div class="bg-yellow-50 rounded-lg p-5 mb-6 border-l-4 border-yellow-400">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-2">Información Importante</h3>
+                    <p class="text-yellow-700">Has completado todos los módulos disponibles de este curso. ¡Felicitaciones!</p>
+                </div>
+                @endif
+            </div>
+            @endforeach
+
 
                 <!-- Métodos de pago -->
                 <div class="bg-white rounded-xl shadow-lg p-6">
