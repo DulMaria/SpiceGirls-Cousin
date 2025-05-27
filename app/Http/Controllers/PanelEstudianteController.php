@@ -58,6 +58,9 @@ class PanelEstudianteController extends Controller
     if (!$usuario || !$estudiante) {
         return redirect()->back()->with('error', 'No se encontraron datos del estudiante');
     }
+    
+    // Recuperar todos los cursos con estado 1
+    $cursos = \App\Models\Curso::where('estado', 1)->get();
 
     // Cursos a los que está inscrito el estudiante
     $cursosInscritos = DB::table('inscripcion')
@@ -168,7 +171,7 @@ class PanelEstudianteController extends Controller
         ];
     }
 
-    return view('estudiante.inscripcionModulo', compact('usuario', 'estudiante', 'cursosInscritos', 'datosCursos'));
+    return view('estudiante.inscripcionModulo', compact('usuario', 'estudiante', 'cursosInscritos', 'datosCursos','cursos'));
 }
 
 
