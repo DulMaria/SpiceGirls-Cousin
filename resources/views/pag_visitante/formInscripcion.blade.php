@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -15,6 +16,34 @@
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl">
       <h2 class="text-3xl font-bold mb-6 text-[#2e1a47] text-center">Inscripción de Estudiante</h2>
       
+      <!-- Mensaje de error para email duplicado -->
+      @if(session('email_error'))
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+        <div class="flex items-center">
+          <i class="bi bi-exclamation-triangle-fill mr-2"></i>
+          <div>
+            <strong class="font-bold">¡Atención!</strong>
+            <span class="block sm:inline">{{ session('email_error') }}</span>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      <!-- Mensajes de error generales -->
+      @if($errors->any())
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+        <div class="flex items-center mb-2">
+          <i class="bi bi-exclamation-triangle-fill mr-2"></i>
+          <strong class="font-bold">Error en el formulario:</strong>
+        </div>
+        <ul class="list-disc list-inside">
+          @foreach($errors->all() as $error)
+          <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
+      
       <form id="formInscripcion" method="POST" action="/inscripcion/Estudiante" class="space-y-6">
         @csrf 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -22,86 +51,123 @@
           <!-- Nombre -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Nombre:</label>
-            <input type="text" name="nombre" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
+            <input type="text" name="nombre" value="{{ old('nombre') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('nombre') border-red-500 @enderror" required>
+            @error('nombre')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
           <!-- Apellido Paterno -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Apellido Paterno:</label>
-            <input type="text" name="apellidoPaterno" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]">
+            <input type="text" name="apellidoPaterno" value="{{ old('apellidoPaterno') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('apellidoPaterno') border-red-500 @enderror">
+            @error('apellidoPaterno')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
           <!-- Apellido Materno -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Apellido Materno:</label>
-            <input type="text" name="apellidoMaterno" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]">
+            <input type="text" name="apellidoMaterno" value="{{ old('apellidoMaterno') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('apellidoMaterno') border-red-500 @enderror">
+            @error('apellidoMaterno')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
-          <!-- Género (NUEVO) -->
+          <!-- Género -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Género:</label>
-            <select name="genero" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
-              <option value="" disabled selected>Seleccione un género</option>
-              <option value="0">Masculino</option>
-              <option value="1">Femenino</option>
-              <option value="2">Otros</option>
+            <select name="genero" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('genero') border-red-500 @enderror" required>
+              <option value="" disabled {{ old('genero') == '' ? 'selected' : '' }}>Seleccione un género</option>
+              <option value="0" {{ old('genero') == '0' ? 'selected' : '' }}>Masculino</option>
+              <option value="1" {{ old('genero') == '1' ? 'selected' : '' }}>Femenino</option>
+              <option value="2" {{ old('genero') == '2' ? 'selected' : '' }}>Otros</option>
             </select>
+            @error('genero')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
-          <!-- Nivel Académico (MODIFICADO a combobox) -->
+          <!-- Nivel Académico -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Nivel Académico:</label>
-            <select name="nivelAcademico" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
-              <option value="" disabled selected>Seleccione un nivel académico</option>
-              <option value="Primaria">Primaria</option>
-              <option value="Secundaria">Secundaria</option>
-              <option value="Bachiller">Bachiller</option>
-              <option value="Licenciado">Licenciado</option>
-              <option value="Otros">Otros</option>
+            <select name="nivelAcademico" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('nivelAcademico') border-red-500 @enderror" required>
+              <option value="" disabled {{ old('nivelAcademico') == '' ? 'selected' : '' }}>Seleccione un nivel académico</option>
+              <option value="Primaria" {{ old('nivelAcademico') == 'Primaria' ? 'selected' : '' }}>Primaria</option>
+              <option value="Secundaria" {{ old('nivelAcademico') == 'Secundaria' ? 'selected' : '' }}>Secundaria</option>
+              <option value="Bachiller" {{ old('nivelAcademico') == 'Bachiller' ? 'selected' : '' }}>Bachiller</option>
+              <option value="Licenciado" {{ old('nivelAcademico') == 'Licenciado' ? 'selected' : '' }}>Licenciado</option>
+              <option value="Otros" {{ old('nivelAcademico') == 'Otros' ? 'selected' : '' }}>Otros</option>
             </select>
+            @error('nivelAcademico')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
           <!-- Teléfono -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Teléfono:</label>
-            <input type="text" name="telefono" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
+            <input type="text" name="telefono" value="{{ old('telefono') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('telefono') border-red-500 @enderror" required>
+            @error('telefono')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
           <!-- Dirección -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Dirección:</label>
-            <input type="text" name="direccion" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
+            <input type="text" name="direccion" value="{{ old('direccion') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('direccion') border-red-500 @enderror" required>
+            @error('direccion')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
           <!-- Fecha de Nacimiento -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Fecha de Nacimiento:</label>
-            <input type="date" name="fechaNacimiento" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
+            <input type="date" name="fechaNacimiento" value="{{ old('fechaNacimiento') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('fechaNacimiento') border-red-500 @enderror" required>
+            @error('fechaNacimiento')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
           <!-- Email -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">Email:</label>
-            <input type="email" name="email" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
+            <input type="email" name="email" value="{{ old('email') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('email') border-red-500 @enderror" required>
+            <div id="email-loading" class="hidden text-blue-500 text-xs mt-1">
+              <i class="bi bi-hourglass-split animate-spin"></i> Verificando email...
+            </div>
+            <div id="email-duplicate-error" class="hidden text-red-500 text-xs mt-1">
+              <i class="bi bi-exclamation-triangle-fill"></i> Este email ya está registrado. Contacte con administración.
+            </div>
+            @error('email')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
           
           <!-- CI -->
           <div>
             <label class="block text-gray-700 font-medium mb-2">CI:</label>
-            <input type="text" name="ci" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" required>
+            <input type="text" name="ci" value="{{ old('ci') }}" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] @error('ci') border-red-500 @enderror" required>
+            @error('ci')
+            <span class="error-message text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror
           </div>
         </div>
+        
         <!-- Curso Recuperado para la inscripcion -->
-          <div>
-            <input type="text" value="{{ $curso->ID_Curso }}" name="curso" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" hidden>
-          </div>
+        <div>
+          <input type="text" value="{{ $curso->ID_Curso }}" name="curso" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475]" hidden>
+        </div>
 
         <!-- Botones de acción -->
         <div class="flex justify-center mt-8 space-x-4">
           <button type="reset" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">
             Limpiar
           </button>
-          <button type="submit" class="px-6 py-3 bg-[#127475] text-white rounded-lg hover:bg-[#0f5f5e] transition duration-300 flex items-center gap-2">
+          <button type="submit" id="btnSubmit" class="px-6 py-3 bg-[#127475] text-white rounded-lg hover:bg-[#0f5f5e] transition duration-300 flex items-center gap-2">
             <i class="bi bi-person-plus"></i> Inscribirse
           </button>
         </div>
@@ -110,6 +176,80 @@
   </div>
 
   <script>
+    // Variable para controlar si el email está siendo verificado
+    let verificandoEmail = false;
+    let emailDuplicado = false;
+
+    // Función para verificar email en tiempo real
+    async function verificarEmailDuplicado(email) {
+      if (!email || email.trim() === '') return;
+      
+      verificandoEmail = true;
+      emailDuplicado = false;
+      
+      const loadingDiv = document.getElementById('email-loading');
+      const errorDiv = document.getElementById('email-duplicate-error');
+      const submitBtn = document.getElementById('btnSubmit');
+      
+      // Mostrar loading
+      loadingDiv.classList.remove('hidden');
+      errorDiv.classList.add('hidden');
+      
+      try {
+        const response = await fetch('/verificar-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                           document.querySelector('input[name="_token"]').value
+          },
+          body: JSON.stringify({ email: email })
+        });
+        
+        const data = await response.json();
+        
+        if (data.existe) {
+          emailDuplicado = true;
+          errorDiv.classList.remove('hidden');
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+          emailDuplicado = false;
+          errorDiv.classList.add('hidden');
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      } catch (error) {
+        console.error('Error verificando email:', error);
+      } finally {
+        verificandoEmail = false;
+        loadingDiv.classList.add('hidden');
+      }
+    }
+
+    // Función para validar campo y mostrar error
+    function validarCampo(input, condicion, mensajeError) {
+      // Eliminar mensajes de error anteriores
+      const errorMsgExistente = input.parentNode.querySelector('.error-message');
+      if (errorMsgExistente) {
+        errorMsgExistente.remove();
+      }
+
+      // Quitar clase de error
+      input.classList.remove('border-red-500');
+
+      // Si no cumple la condición, mostrar error
+      if (!condicion) {
+        input.classList.add('border-red-500');
+        const errorMsg = document.createElement('span');
+        errorMsg.className = 'error-message text-red-500 text-xs mt-1 block';
+        errorMsg.textContent = mensajeError;
+        input.parentNode.appendChild(errorMsg);
+        return false;
+      }
+      return true;
+    }
+    
     // Función para validar campo y mostrar error
     function validarCampo(input, condicion, mensajeError) {
       // Eliminar mensajes de error anteriores

@@ -343,6 +343,7 @@
                     }
                 }
             }
+            
         };
 
         const chart = new ApexCharts(
@@ -360,7 +361,33 @@
         const generoChart = {
             chart: {
                 type: 'donut',
-                height: 350
+                height: 350,
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true, // Añadido botón de descarga
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false
+                    },
+                    export: {
+                        csv: {
+                            filename: 'Distribucion-Genero',
+                            columnDelimiter: ',',
+                            headerCategory: 'Genero',
+                            headerValue: 'Porcentaje',
+                        },
+                        svg: {
+                            filename: 'Distribucion-Genero',
+                        },
+                        png: {
+                            filename: 'Distribucion-Genero',
+                        }
+                    }
+                }
             },
             series: [
                 parseFloat(distribucion.mujeres || 0),
@@ -368,7 +395,7 @@
                 parseFloat(distribucion.otros || 0)
             ],
             labels: ['Mujer', 'Hombre', 'Otro'],
-            colors: ['#E91E63', '#2196F3', '#FFC107'],
+            colors: ['#9D4EDD', '#0077B6', '#90E0EF'], // Cambiado a lila oscuro, verde azulado y celeste
             legend: {
                 position: 'bottom'
             },
@@ -408,7 +435,33 @@
         const edadesChart = {
             chart: {
                 type: 'donut',
-                height: 350
+                height: 350,
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true, // Añadido botón de descarga
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false
+                    },
+                    export: {
+                        csv: {
+                            filename: 'Distribucion-Edades',
+                            columnDelimiter: ',',
+                            headerCategory: 'Rango-Edad',
+                            headerValue: 'Porcentaje',
+                        },
+                        svg: {
+                            filename: 'Distribucion-Edades',
+                        },
+                        png: {
+                            filename: 'Distribucion-Edades',
+                        }
+                    }
+                }
             },
             series: @json($rangoValores ?? []),
             labels: @json($rangoLabels ?? []),
