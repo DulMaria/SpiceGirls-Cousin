@@ -55,7 +55,7 @@ Route::post('/2fa/resend', [TwoFactorController::class, 'resend'])->name('2fa.re
 // Rutas para el administrador con middleware auth y verificacion de 2 pasos
 Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(function () {
 
-    Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
+    //Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
 
     // Rutas para áreas
     Route::get('/areas', [AdminController::class, 'areas'])->name('admin.areas.index');
@@ -97,7 +97,7 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
   
     // rutas para el administrador estadisticas
-    Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+    Route::get('/', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
 });
 
 //rutas para el visitante inscripcion
