@@ -60,16 +60,16 @@
                         <tr class="bg-gray-100">
                             <th class="p-3 border text-center font-semibold text-[#2e1a47]">Hora</th>
                             <th class="p-3 border text-center font-semibold text-[#2e1a47]">
-                                <div>Jueves</div>
-                                <div id="jueves-fecha" class="text-sm font-normal text-gray-600">25 May</div>
-                            </th>
-                            <th class="p-3 border text-center font-semibold text-[#2e1a47]">
                                 <div>Viernes</div>
-                                <div id="viernes-fecha" class="text-sm font-normal text-gray-600">26 May</div>
+                                <div id="viernes-fecha" class="text-sm font-normal text-gray-600">25 May</div>
                             </th>
                             <th class="p-3 border text-center font-semibold text-[#2e1a47]">
                                 <div>Sábado</div>
-                                <div id="sabado-fecha" class="text-sm font-normal text-gray-600">27 May</div>
+                                <div id="sabado-fecha" class="text-sm font-normal text-gray-600">26 May</div>
+                            </th>
+                            <th class="p-3 border text-center font-semibold text-[#2e1a47]">
+                                <div>Domingo</div>
+                                <div id="domingo-fecha" class="text-sm font-normal text-gray-600">27 May</div>
                             </th>
                         </tr>
                     </thead>
@@ -80,19 +80,19 @@
                         <script>
                             // Datos de clases estáticas
                             const horarioClases = {
-                                'Jueves': {
+                                'Viernes': {
                                     '10:00': { materia: 'Programación Web', aula: 'A-302', docente: 'Lic. Pérez', color: 'bg-[#127475]' },
                                     '14:00': { materia: 'Bases de Datos', aula: 'Lab-4', docente: 'Ing. Gómez', color: 'bg-[#2e1a47]' },
                                     '16:00': { materia: 'Matemáticas', aula: 'B-105', docente: 'Dr. Rodríguez', color: 'bg-purple-600' },
                                     '18:00': { materia: 'Taller Práctico', aula: 'Lab-1', docente: 'Ing. Torres', color: 'bg-blue-600' }
                                 },
-                                'Viernes': {
+                                'Sábado': {
                                     '8:00': { materia: 'Inglés Técnico', aula: 'C-201', docente: 'Prof. Smith', color: 'bg-blue-600' },
                                     '12:00': { materia: 'Redes', aula: 'Lab-3', docente: 'Ing. López', color: 'bg-[#127475]' },
                                     '15:00': { materia: 'Sistemas Operativos', aula: 'Lab-2', docente: 'Ing. Castro', color: 'bg-[#2e1a47]' },
                                     '19:00': { materia: 'Ética Profesional', aula: 'A-205', docente: 'Dra. Martínez', color: 'bg-purple-600' }
                                 },
-                                'Sábado': {
+                                'Domingo': {
                                     '9:00': { materia: 'Proyecto Integrador', aula: 'A-301', docente: 'Lic. Fernández', color: 'bg-[#127475]' },
                                     '11:00': { materia: 'Seminario', aula: 'Auditorio', docente: 'Mg. Vargas', color: 'bg-[#2e1a47]' },
                                     '16:00': { materia: 'Tutoría', aula: 'A-103', docente: 'Lic. Pérez', color: 'bg-blue-600' }
@@ -108,13 +108,13 @@
                                 <tr class="border-b">
                                     <td class="p-2 border-r text-center bg-gray-50 font-medium hora-cell">${horaFormatted}</td>
                                     <td class="p-0 border-r relative hora-cell">
-                                        ${renderClase('Jueves', horaFormatted)}
-                                    </td>
-                                    <td class="p-0 border-r relative hora-cell">
                                         ${renderClase('Viernes', horaFormatted)}
                                     </td>
-                                    <td class="p-0 relative hora-cell">
+                                    <td class="p-0 border-r relative hora-cell">
                                         ${renderClase('Sábado', horaFormatted)}
+                                    </td>
+                                    <td class="p-0 relative hora-cell">
+                                        ${renderClase('Domingo', horaFormatted)}
                                     </td>
                                 </tr>
                                 `;
@@ -174,9 +174,9 @@
             const days = getWeekDays(currentDate);
             document.getElementById('semana-actual').textContent = 
                 `${formatDate(days[0])} - ${formatDate(days[2])}`;
-            document.getElementById('jueves-fecha').textContent = formatDate(days[0]);
-            document.getElementById('viernes-fecha').textContent = formatDate(days[1]);
-            document.getElementById('sabado-fecha').textContent = formatDate(days[2]);
+            document.getElementById('viernes-fecha').textContent = formatDate(days[0]);
+            document.getElementById('sábado-fecha').textContent = formatDate(days[1]);
+            document.getElementById('domingo-fecha').textContent = formatDate(days[2]);
         }
         
         function getWeekDays(date) {
