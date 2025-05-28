@@ -241,202 +241,258 @@
 
             <!-- Scripts para los gráficos - Asegúrate de cargar Chart.js primero -->
             <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>-->
-            @push('scripts')
-                <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+@push('scripts')
+ <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-                <script>
-                    // Grafica de cursos populares
-                    document.addEventListener("DOMContentLoaded", () => {
-                        const nombres = @json($nombres ?? []);
-                        const inscritos = @json($inscritos ?? []);
+ <script>
+    // Grafica de cursos populares
+    document.addEventListener("DOMContentLoaded", () => {
+        const nombres = @json($nombres ?? []);
+        const inscritos = @json($inscritos ?? []);
 
-                        // Paleta de colores púrpura (6 tonos)
-                        const coloresPurpura = [
-                            '#4C1D95', '#5B21B6', '#6D28D9',
-                            '#7C3AED', '#8B5CF6', '#A78BFA'
+        // Paleta de colores púrpura (6 tonos)
+        const coloresPurpura = [
+            '#4C1D95', '#5B21B6', '#6D28D9',
+            '#7C3AED', '#8B5CF6', '#A78BFA'
+        ];
+
+        const options = {
+            chart: {
+                type: 'bar',
+                height: 350,
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true, // Mostrar solo el botón de descarga
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false
+                    },
+                    export: {
+                        csv: {
+                            filename: 'Cursos-Populares',
+                            columnDelimiter: ',',
+                            headerCategory: 'Curso',
+                            headerValue: 'Inscritos',
+                        },
+                        svg: {
+                            filename: 'Cursos-Populares',
+                        },
+                        png: {
+                            filename: 'Cursos-Populares',
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Inscritos',
+                data: inscritos
+            }],
+            xaxis: {
+                categories: nombres,
+                labels: {
+                    style: {
+                        fontSize: '12px',
+                        colors: '#6B7280'
+                    },
+                    formatter: function(value) {
+                        // Acortar nombres muy largos
+                        return value.length > 20 ? value.substring(0, 18) + '...' : value;
+                    }
+                },
+                axisBorder: {
+                    show: false
+                }
+            },
+            yaxis: {
+                min: 0,
+                labels: {
+                    style: {
+                        colors: '#6B7280'
+                    }
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 7.5,
+                    columnWidth: '60%',
+                    distributed: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            colors: coloresPurpura,
+            grid: {
+                borderColor: '#E5E7EB',
+                strokeDashArray: 5,
+                padding: {
+                    top: 0,
+                    right: 60,
+                    bottom: 0,
+                    left: 20
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(value) {
+                        return value + ' inscritos';
+                    }
+                }
+            }
+            
+        };
+
+        const chart = new ApexCharts(
+            document.querySelector("#chart-cursos-populares"),
+            options
+        );
+        chart.render();
+    });
+
+    // * * * * * * Gráfico de distribución por género * * * * * * * * * *//
+    document.addEventListener("DOMContentLoaded", () => {
+        // Convierte los datos PHP a variables JavaScript
+        const distribucion = @json($distribucion ?? []);
+        
+        const generoChart = {
+            chart: {
+                type: 'donut',
+                height: 350,
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true, // Añadido botón de descarga
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false
+                    },
+                    export: {
+                        csv: {
+                            filename: 'Distribucion-Genero',
+                            columnDelimiter: ',',
+                            headerCategory: 'Genero',
+                            headerValue: 'Porcentaje',
+                        },
+                        svg: {
+                            filename: 'Distribucion-Genero',
+                        },
+                        png: {
+                            filename: 'Distribucion-Genero',
+                        }
+                    }
+                }
+            },
+            series: [
+                parseFloat(distribucion.mujeres || 0),
+                parseFloat(distribucion.hombres || 0),
+                parseFloat(distribucion.otros || 0)
+            ],
+            labels: ['Mujer', 'Hombre', 'Otro'],
+            colors: ['#9D4EDD', '#0077B6', '#90E0EF'], // Cambiado a lila oscuro, verde azulado y celeste
+            legend: {
+                position: 'bottom'
+            },
+            dataLabels: {
+                formatter: function(val, opts) {
+                    return val.toFixed(1) + "%";
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val, opts) {
+                        // Obtener el índice de la serie actual
+                        const seriesIndex = opts.seriesIndex;
+
+                        // Array con las cantidades absolutas
+                        const cantidades = [
+                            distribucion.mujeres_cantidad || 0,
+                            distribucion.hombres_cantidad || 0,
+                            distribucion.otros_cantidad || 0
                         ];
 
-                        const options = {
-                            chart: {
-                                type: 'bar',
-                                height: 350,
-                                toolbar: {
-                                    show: true,
-                                    tools: {
-                                        download: true, // Mostrar solo el botón de descarga
-                                        selection: false,
-                                        zoom: false,
-                                        zoomin: false,
-                                        zoomout: false,
-                                        pan: false,
-                                        reset: false
-                                    },
-                                    export: {
-                                        csv: {
-                                            filename: 'Cursos-Populares',
-                                            columnDelimiter: ',',
-                                            headerCategory: 'Curso',
-                                            headerValue: 'Inscritos',
-                                        },
-                                        svg: {
-                                            filename: 'Cursos-Populares',
-                                        },
-                                        png: {
-                                            filename: 'Cursos-Populares',
-                                        }
-                                    }
-                                }
-                            },
-                            series: [{
-                                name: 'Inscritos',
-                                data: inscritos
-                            }],
-                            xaxis: {
-                                categories: nombres,
-                                labels: {
-                                    style: {
-                                        fontSize: '12px',
-                                        colors: '#6B7280'
-                                    },
-                                    formatter: function(value) {
-                                        // Acortar nombres muy largos
-                                        return value.length > 20 ? value.substring(0, 18) + '...' : value;
-                                    }
-                                },
-                                axisBorder: {
-                                    show: false
-                                }
-                            },
-                            yaxis: {
-                                min: 0,
-                                labels: {
-                                    style: {
-                                        colors: '#6B7280'
-                                    }
-                                }
-                            },
-                            plotOptions: {
-                                bar: {
-                                    borderRadius: 7.5,
-                                    columnWidth: '60%',
-                                    distributed: true
-                                }
-                            },
-                            dataLabels: {
-                                enabled: false
-                            },
-                            colors: coloresPurpura,
-                            grid: {
-                                borderColor: '#E5E7EB',
-                                strokeDashArray: 5,
-                                padding: {
-                                    top: 0,
-                                    right: 60,
-                                    bottom: 0,
-                                    left: 20
-                                }
-                            },
-                            tooltip: {
-                                y: {
-                                    formatter: function(value) {
-                                        return value + ' inscritos';
-                                    }
-                                }
-                            }
-                        };
+                        // Mostrar la cantidad absoluta según el índice
+                        return cantidades[seriesIndex] + " personas";
+                    }
+                }
+            }
+        };
 
-                        const chart = new ApexCharts(
-                            document.querySelector("#chart-cursos-populares"),
-                            options
-                        );
-                        chart.render();
-                    });
+        new ApexCharts(
+            document.querySelector("#chart-genero"),
+            generoChart
+        ).render();
+    });
 
-                    // * * * * * * Gráfico de distribución por género * * * * * * * * * *//
-                    document.addEventListener("DOMContentLoaded", () => {
-                        const generoChart = {
-                            chart: {
-                                type: 'donut',
-                                height: 350
-                            },
-                            series: [
-                                distribucion.mujeres,
-                                distribucion.hombres,
-                                distribucion.otros
-                            ],
-                            labels: ['Mujer', 'Hombre', 'Otro'],
-                            colors: ['#E91E63', '#2196F3', '#FFC107'],
-                            legend: {
-                                position: 'bottom'
-                            },
-                            dataLabels: {
-                                formatter: function(val, opts) {
-                                    return val.toFixed(1) + "%";
-                                }
-                            },
-                            tooltip: {
-                                y: {
-                                    formatter: function(val, opts) {
-                                        // Obtener el índice de la serie actual
-                                        const seriesIndex = opts.seriesIndex;
+    //DISTRIBUCIÓN DE EDADES
+    document.addEventListener("DOMContentLoaded", () => {
+        const edadesChart = {
+            chart: {
+                type: 'donut',
+                height: 350,
+                toolbar: {
+                    show: true,
+                    tools: {
+                        download: true, // Añadido botón de descarga
+                        selection: false,
+                        zoom: false,
+                        zoomin: false,
+                        zoomout: false,
+                        pan: false,
+                        reset: false
+                    },
+                    export: {
+                        csv: {
+                            filename: 'Distribucion-Edades',
+                            columnDelimiter: ',',
+                            headerCategory: 'Rango-Edad',
+                            headerValue: 'Porcentaje',
+                        },
+                        svg: {
+                            filename: 'Distribucion-Edades',
+                        },
+                        png: {
+                            filename: 'Distribucion-Edades',
+                        }
+                    }
+                }
+            },
+            series: @json($rangoValores ?? []),
+            labels: @json($rangoLabels ?? []),
+            colors: ['#6D28D9', '#9333EA', '#A855F7', '#C084FC', '#DDD6FE'],
+            legend: {
+                position: 'bottom'
+            },
 
-                                        // Array con las cantidades absolutas
-                                        const cantidades = [
-                                            distribucion.mujeres_cantidad,
-                                            distribucion.hombres_cantidad,
-                                            distribucion.otros_cantidad
-                                        ];
+            dataLabels: {
+                formatter: function(val) {
+                    return val.toFixed(1) + "%";
+                }
+            },
+            tooltip: {
+                custom: function({
+                    series,
+                    seriesIndex,
+                    dataPointIndex,
+                    w
+                }) {
+                    // Obtener el contenido original del tooltip (como "18-24: 17")
+                    const label = w.config.labels[seriesIndex];
+                    const value = w.globals.series[seriesIndex];
 
-                                        // Mostrar la cantidad absoluta según el índice
-                                        return cantidades[seriesIndex] + " personas";
-                                    }
-                                }
-                            }
-                        };
+                    // Simplemente añadir la palabra "personas" al final
+                    return `<div class="apexcharts-tooltip-title">${label}: ${value} personas</div>`;
+                }
+            }
+        };
 
-                        new ApexCharts(
-                            document.querySelector("#chart-genero"),
-                            generoChart
-                        ).render();
-                    });
-
-                    //DISTRIBUCIÓN DE EDADES
-                    document.addEventListener("DOMContentLoaded", () => {
-                        const edadesChart = {
-                            chart: {
-                                type: 'donut',
-                                height: 350
-                            },
-                            series: @json($rangoValores ?? []),
-                            labels: @json($rangoLabels ?? []),
-                            colors: ['#6D28D9', '#9333EA', '#A855F7', '#C084FC', '#DDD6FE'],
-                            legend: {
-                                position: 'bottom'
-                            },
-
-                            dataLabels: {
-                                formatter: function(val) {
-                                    return val.toFixed(1) + "%";
-                                }
-                            },
-                            tooltip: {
-                                custom: function({
-                                    series,
-                                    seriesIndex,
-                                    dataPointIndex,
-                                    w
-                                }) {
-                                    // Obtener el contenido original del tooltip (como "18-24: 17")
-                                    const label = w.config.labels[seriesIndex];
-                                    const value = w.globals.series[seriesIndex];
-
-                                    // Simplemente añadir la palabra "personas" al final
-                                    return `<div class="apexcharts-tooltip-title">${label}: ${value} personas</div>`;
-                                }
-                            }
-                        };
-
-                        new ApexCharts(document.querySelector("#chart-edades"), edadesChart).render();
-                    });
-                </script>
-                @stack('scripts')
+        new ApexCharts(document.querySelector("#chart-edades"), edadesChart).render();
+    });
+</script>
+@stack('scripts')

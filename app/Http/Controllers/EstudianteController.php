@@ -36,7 +36,7 @@ class EstudianteController extends Controller
         $usuario->apellidoPaterno = $request->apellidoPaterno;
         $usuario->apellidoMaterno = $request->apellidoMaterno;
         $usuario->email = $request->email;
-        $usuario->contrasenia = bcrypt('EST123'); // Aquí puedes mejorar la generación de la contraseña
+        $usuario->contrasenia = bcrypt('123456789'); // Aquí puedes mejorar la generación de la contraseña
         $usuario->telefono = $request->telefono;
         $usuario->direccion = $request->direccion;
         $usuario->fechaNacimiento = $request->fechaNacimiento;

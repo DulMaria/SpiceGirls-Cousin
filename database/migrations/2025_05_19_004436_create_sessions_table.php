@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('login_attempts', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->nullable();
-            $table->ipAddress('ip_address')->nullable();
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
-            $table->boolean('successful')->default(false);
-            $table->timestamps();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('login_attempts');
+        Schema::dropIfExists('sessions');
     }
 };

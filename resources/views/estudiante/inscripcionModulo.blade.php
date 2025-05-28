@@ -83,75 +83,257 @@
                         <span class="text-gray-500 w-32">Teléfono:</span>
                         <span class="font-medium">{{ $usuario->telefono }}</span>
                     </div>
+                    <button onclick="openModal('newCourseModal')" 
+                                class="bg-[#127475] text-white px-6 py-3 rounded-lg hover:bg-[#0e5d5e] transition font-semibold">
+                            Inscribirse a un nuevo curso
+                    </button>
+                </div>
+<!-- Información de los cursos y módulos -->
+            @foreach($datosCursos as $index => $datoCurso)
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-xl font-semibold text-[#127475] border-b border-gray-200 pb-3 mb-4">
+                    Curso: {{ $datoCurso['curso']->nombreCurso }}
+                </h2>
+
+                <!-- Información del estudiante para este curso -->
+                <div class="bg-gray-50 rounded-lg p-5 mb-6 border-l-4 border-[#127475]">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Progreso del Curso</h3>
+
+                    <div class="space-y-2">
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Módulo Actual:</span>
+                            <span class="text-gray-800">{{ $datoCurso['moduloActual'] }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Avance:</span>
+                            <div class="flex items-center">
+                                <span class="text-gray-800 mr-2">{{ $datoCurso['porcentajeAvance'] }}% completado</span>
+                                <div class="w-24 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-[#127475] h-2 rounded-full" style="width: {{ $datoCurso['porcentajeAvance'] }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Siguiente Módulo:</span>
+                            <span class="text-gray-800 font-bold">{{ $datoCurso['siguienteModulo'] }}</span>
+                        </div>
+                        <div class="flex">
+                            <span class="text-gray-600 font-medium w-40">Estado:</span>
+                            @if($datoCurso['elegibleParaAvanzar'])
+                                <span class="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">Elegible para avanzar</span>
+                            @else
+                                <span class="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-bold">En progreso</span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Información del módulo -->
-                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                    <h2 class="text-xl font-semibold text-[#127475] border-b border-gray-200 pb-3 mb-4">Información del
-                        Módulo</h2>
+                @if($datoCurso['tieneSiguienteModulo'])
+                <!-- Detalles del módulo -->
+                <div class="bg-gray-50 rounded-lg p-5 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Detalles del {{ $datoCurso['siguienteModulo'] }}</h3>
+                    <p class="text-gray-600 mb-4">{{ $datoCurso['descripcionSiguienteModulo'] ?: 'Información del módulo próximo a cursar.' }}</p>
 
-                    <!-- Información del estudiante -->
-                    <div class="bg-gray-50 rounded-lg p-5 mb-6 border-l-4 border-[#127475]">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Información del Estudiante</h3>
-
-                        <div class="space-y-2">
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Curso Actual:</span>
-                                <span class="text-gray-800">Desarrollo Web Full Stack</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-[#127475] mb-2">Contenido:</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                <li>Contenidos avanzados del módulo</li>
+                                <li>Ejercicios prácticos</li>
+                                <li>Proyectos aplicados</li>
+                                <li>Evaluaciones continuas</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <h4 class="font-semibold text-[#127475]">Duración:</h4>
+                                <p class="text-gray-700">{{ $datoCurso['duracionSiguiente'] }} semanas ({{ $datoCurso['horasSiguiente'] }} horas)</p>
                             </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Módulo Actual:</span>
-                                <span class="text-gray-800">Módulo 2: Nivel Intermedio</span>
+                            <div>
+                                <h4 class="font-semibold text-[#127475]">Costo:</h4>
+                                <p class="text-gray-700 font-bold">Bs. {{ $datoCurso['costoSiguienteModulo'] }}</p>
                             </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Avance:</span>
-                                <span class="text-gray-800">85% completado</span>
-                            </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Siguiente Módulo:</span>
-                                <span class="text-gray-800 font-bold">Módulo 3: Nivel Avanzado</span>
-                            </div>
-                            <div class="flex">
-                                <span class="text-gray-600 font-medium w-40">Estado:</span>
-                                <span class="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">Elegible para
-                                    avanzar</span>
+                            <div>
+                                <h4 class="font-semibold text-[#127475]">Fecha de inicio:</h4>
+                                <p class="text-gray-700">{{ $datoCurso['fechaInicioSiguiente'] }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Detalles del módulo -->
-                    <div class="bg-gray-50 rounded-lg p-5 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Detalles del Módulo 3: Nivel Avanzado</h3>
-                        <p class="text-gray-600 mb-4">Este módulo se enfoca en técnicas avanzadas de desarrollo web,
-                            frameworks modernos y optimización de aplicaciones.</p>
+                    @if($datoCurso['tieneAperturaDisponible'] && $datoCurso['elegibleParaAvanzar'])
+                    <!-- Botón para inscribirse a este módulo específico -->
+                    <div class="mt-6 text-center">
+                        <button onclick="openModal('paymentModal', '{{ $datoCurso['curso']->nombreCurso }}', '{{ $datoCurso['siguienteModulo'] }}', '{{ $datoCurso['costoSiguienteModulo'] }}')" 
+                                class="bg-[#127475] text-white px-6 py-3 rounded-lg hover:bg-[#0e5d5e] transition font-semibold">
+                            Inscribirse a {{ $datoCurso['siguienteModulo'] }}
+                        </button>
+                    </div>
+                    @elseif(!$datoCurso['tieneAperturaDisponible'])
+                    <div class="mt-6 text-center">
+                        <div class="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
+                            <p class="text-yellow-700 font-medium">Apertura del módulo pendiente de programación</p>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                @else
+                <!-- Mensaje cuando no hay siguiente módulo -->
+                <div class="bg-yellow-50 rounded-lg p-5 mb-6 border-l-4 border-yellow-400">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-2">Información Importante</h3>
+                    <p class="text-yellow-700">Has completado todos los módulos disponibles de este curso. ¡Felicitaciones!</p>
+                </div>
+                @endif
+            </div>
+            @endforeach
+<!-- Modal para Inscripción a Nuevo Curso -->
+    <div id="newCourseModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl w-full max-w-2xl p-6 modal max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-[#127475]">Inscripción a Nuevo Curso</h2>
+                <button onclick="closeModal('newCourseModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <h4 class="font-semibold text-[#127475] mb-2">Contenido:</h4>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-700">
-                                    <li>React y Estado Avanzado</li>
-                                    <li>Node.js y Express</li>
-                                    <li>APIs RESTful</li>
-                                    <li>Autenticación y Seguridad</li>
-                                </ul>
-                            </div>
-                            <div class="space-y-3">
-                                <div>
-                                    <h4 class="font-semibold text-[#127475]">Duración:</h4>
-                                    <p class="text-gray-700">8 semanas (64 horas)</p>
+            <form id="newCourseForm" class="space-y-6">
+                <!-- Selección de Curso -->
+                <div>
+                    <label for="courseSelect" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Seleccione el Curso
+                    </label>
+                    <select id="courseSelect" name="course" onchange="updateCourseDetails()" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#127475] focus:border-[#127475] transition">
+                        <option value="">Seleccione un curso...</option>
+                        <option value="desarrollo-web" data-price="1200" data-duration="16" data-hours="120" data-start="2025-06-15">
+                            Desarrollo Web Full Stack
+                        </option>
+                        <option value="marketing-digital" data-price="950" data-duration="12" data-hours="90" data-start="2025-06-20">
+                            Marketing Digital Avanzado
+                        </option>
+                        <option value="diseno-grafico" data-price="800" data-duration="10" data-hours="80" data-start="2025-07-01">
+                            Diseño Gráfico Profesional
+                        </option>
+                        <option value="excel-avanzado" data-price="600" data-duration="8" data-hours="60" data-start="2025-06-25">
+                            Excel Avanzado para Empresas
+                        </option>
+                        <option value="photoshop" data-price="700" data-duration="8" data-hours="64" data-start="2025-07-05">
+                            Adobe Photoshop Profesional
+                        </option>
+                        <option value="ingles-negocios" data-price="1100" data-duration="20" data-hours="160" data-start="2025-06-18">
+                            Inglés para Negocios
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Detalles del Curso Seleccionado -->
+                <div id="courseDetails" class="hidden bg-gray-50 rounded-lg p-4 border-l-4 border-[#127475]">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Detalles del Curso</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-[#127475] mb-2">Información General:</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Duración:</span>
+                                    <span id="courseDuration" class="font-medium">-</span>
                                 </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#127475]">Valor:</h4>
-                                    <p class="text-gray-700 font-bold">$350.000</p>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Horas académicas:</span>
+                                    <span id="courseHours" class="font-medium">-</span>
                                 </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#127475]">Fecha de inicio:</h4>
-                                    <p class="text-gray-700">Junio 1, 2025</p>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Fecha de inicio:</span>
+                                    <span id="courseStart" class="font-medium">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Modalidad:</span>
+                                    <span class="font-medium">Presencial/Virtual</span>
                                 </div>
                             </div>
                         </div>
-                    </div>                    
+                        
+                        <div>
+                            <h4 class="font-semibold text-[#127475] mb-2">Inversión:</h4>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-[#127475]" id="coursePrice">Bs. -</div>
+                                <p class="text-sm text-gray-600 mt-1">Precio total del curso</p>
+                                <div class="mt-2 text-sm">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                                        Certificado incluido
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descripción del curso -->
+                    <div class="mt-4">
+                        <h4 class="font-semibold text-[#127475] mb-2">¿Qué aprenderás?</h4>
+                        <div id="courseDescription" class="text-sm text-gray-700">
+                            <!-- Se llenará dinámicamente -->
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Horarios Disponibles -->
+                <div id="scheduleSection" class="hidden">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Seleccione el Horario
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="schedule" value="morning" class="mr-3">
+                            <div>
+                                <div class="font-medium">Mañana</div>
+                                <div class="text-sm text-gray-500">08:00 - 12:00</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="schedule" value="afternoon" class="mr-3">
+                            <div>
+                                <div class="font-medium">Tarde</div>
+                                <div class="text-sm text-gray-500">14:00 - 18:00</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="schedule" value="evening" class="mr-3">
+                            <div>
+                                <div class="font-medium">Noche</div>
+                                <div class="text-sm text-gray-500">18:00 - 22:00</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="schedule" value="weekend" class="mr-3">
+                            <div>
+                                <div class="font-medium">Fin de Semana</div>
+                                <div class="text-sm text-gray-500">Sáb y Dom 09:00 - 13:00</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Comentarios adicionales -->
+                <div>
+                    <label for="comments" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Comentarios o consultas (Opcional)
+                    </label>
+                    <textarea id="comments" name="comments" rows="3" 
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#127475] focus:border-[#127475] resize-none"
+                              placeholder="Escriba aquí cualquier consulta o requerimiento especial..."></textarea>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
+                    <button type="button" onclick="closeModal('newCourseModal')" 
+                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                        Cancelar
+                    </button>
+                    <button type="submit" id="enrollButton" disabled
+                            class="px-6 py-3 bg-[#127475] text-white rounded-lg hover:bg-[#0e5d5e] transition disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        Proceder con la Inscripción
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
                 <!-- Métodos de pago -->
                 <div class="bg-white rounded-xl shadow-lg p-6">
@@ -169,7 +351,8 @@
                             <div class="flex justify-center mb-4">
                                 <div
                                     class="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                                    [QR Code]
+                                    <!--[QR Code]-->
+                                    <img src="{{ url('IMG/QR.png') }}" alt="Código QR de Pago" class="max-w-full max-h-full">
                                 </div>
                             </div>
                             <h3 class="text-lg font-semibold text-gray-800 mb-2">Pago por QR</h3>
@@ -194,43 +377,59 @@
                 </div>
             </div>
 
-            <!-- Modal para Pago QR -->
-            <div id="qrModal"
-                class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-                <div class="bg-white rounded-xl max-w-md w-full p-6 modal">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold text-[#127475]">Pago para Inscripción al Siguiente Módulo</h2>
-                        <button onclick="closeModal('qrModal')"
-                            class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-                    </div>
+            <!-- Modal para Pago QR con funcionalidad de zoom -->
+<div id="qrModal"
+    class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full p-6 modal">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-[#127475]">Pago para Inscripción al Siguiente Módulo</h2>
+            <button onclick="closeModal('qrModal')"
+                class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
 
-                    <p class="text-gray-600 mb-6">Por favor escanee el siguiente código QR para realizar el pago de su
-                        inscripción al siguiente módulo:</p>
+        <p class="text-gray-600 mb-6">Por favor escanee el siguiente código QR para realizar el pago de su
+            inscripción al siguiente módulo:</p>
 
-                    <div class="flex justify-center my-6">
-                        <div class="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                            [Código QR de Pago]
-                        </div>
-                    </div>
-
-                    <p class="text-gray-600 mb-6">Una vez realizado el pago, guarde el comprobante y envíelo a <strong
-                            class="text-[#127475]">pagos@formacioneducativa.com</strong> incluyendo su nombre completo
-                        y
-                        documento de identidad.</p>
-
-                    <div class="pt-4 border-t border-gray-200 text-center">
-                        <p class="text-gray-500 text-sm mb-4">¿Tiene problemas para realizar el pago? Contáctenos al
-                            +123
-                            456 7890</p>
-                        <button onclick="closeModal('qrModal')"
-                            class="bg-[#127475] text-white px-6 py-2 rounded-lg hover:bg-[#0e5d5e] transition">
-                            Cerrar
-                        </button>
-                    </div>
-                </div>
+        <div class="flex justify-center my-6">
+            <div class="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400" default>
+                <!--[Código QR de Pago]-->
+                <img src="{{ url('IMG/qr_pago.jpg') }}" alt="Código QR de Pago" class="max-w-full max-h-full cursor-pointer" 
+                     onclick="openZoomModal(this.src)">
             </div>
+        </div>
 
-            <!-- Modal para Pago en Efectivo - Versión mejorada -->
+        <!-- Modal para mostrar la imagen ampliada -->
+        <div id="zoomModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+            <div class="relative max-w-4xl w-full flex flex-col items-center">
+                <button onclick="closeModal('zoomModal')" 
+                        class="absolute top-0 right-0 bg-white rounded-full p-2 m-4 text-gray-800 hover:bg-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 22 22" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <img id="zoomedImage" src="" alt="Imagen Ampliada" class="max-w-full max-h-[76vh] object-contain">
+            </div>
+        </div>
+
+        <p class="text-gray-600 mb-6">Una vez realizado el pago, guarde el comprobante y envíelo a <strong
+                class="text-[#127475]">pagos@formacioneducativa.com</strong> incluyendo su nombre completo
+            y
+            documento de identidad.</p>
+
+        <div class="pt-4 border-t border-gray-200 text-center">
+            <p class="text-gray-500 text-sm mb-4">¿Tiene problemas para realizar el pago? Contáctenos al
+                +123
+                456 7890</p>
+            <button onclick="closeModal('qrModal')"
+                class="bg-[#127475] text-white px-6 py-2 rounded-lg hover:bg-[#0e5d5e] transition">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Modal para Pago en Efectivo - Versión mejorada -->
     <div id="cashModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-xl w-full max-w-lg p-6 modal overflow-y-auto" style="max-height: 90vh;">
             <div class="flex justify-between items-start mb-4">
@@ -325,14 +524,33 @@
         </div>
     </div>
 
-            <script>
+     <script>
+     //funcion de modal para la imagen de pagos 
+            function openZoomModal(imageSrc) {
+             // Establecer la imagen ampliada
+            document.getElementById('zoomedImage').src = imageSrc;
+            // Mostrar el modal de zoom
+             document.getElementById('zoomModal').classList.remove('hidden');
+            document.getElementById('zoomModal').classList.add('flex');
+                // Prevenir el scroll del body
+            document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+                document.getElementById(modalId).classList.remove('flex');
+                // Restaurar el scroll del body cuando se cierra el modal de zoom
+                if (modalId === 'zoomModal') {
+                    document.body.style.overflow = '';
+                }
+            }
                 // Función para abrir modal
                 function openModal(modalId) {
                     document.getElementById(modalId).classList.remove('hidden');
                     
                     // Si es el modal de efectivo, generamos datos
                     if(modalId === 'cashModal') {
-                        document.getElementById('random-num').textContent = Math.floor(Math.random() * 10000);
+                        document.getElementById('random-num').textContent = Math.floor(Math.random() * 9000);
                     }
                 }
 

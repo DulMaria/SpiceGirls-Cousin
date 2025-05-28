@@ -36,7 +36,7 @@ class DocenteController extends Controller
         $usuario->apellidoPaterno = $request->apellidoPaterno;
         $usuario->apellidoMaterno = $request->apellidoMaterno;
         $usuario->email = $request->email;
-        $usuario->contrasenia = bcrypt('password'); // Aquí puedes mejorar la generación de la contraseña
+        $usuario->contrasenia = bcrypt('docente123'); // Aquí puedes mejorar la generación de la contraseña
         $usuario->telefono = $request->telefono;
         $usuario->direccion = $request->direccion;
         $usuario->fechaNacimiento = $request->fechaNacimiento;

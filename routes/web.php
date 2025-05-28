@@ -16,6 +16,9 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\EstadisticasController;
 
+Route::fallback(function () {
+    return redirect()->back()->with('error', 'La ruta que intentas acceder no existe.');
+});
 
 // Ruta para la página principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -52,7 +55,7 @@ Route::post('/2fa/resend', [TwoFactorController::class, 'resend'])->name('2fa.re
 // Rutas para el administrador con middleware auth y verificacion de 2 pasos
 Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(function () {
 
-    Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
+    //Route::get('/', [AdminController::class, 'dashboard'])->name('administrador.prinAdmi');
 
     // Rutas para áreas
     Route::get('/areas', [AdminController::class, 'areas'])->name('admin.areas.index');
@@ -94,12 +97,14 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
   
     // rutas para el administrador estadisticas
-    Route::get('/administrador', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+    Route::get('/', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
 });
 
 //rutas para el visitante inscripcion
 Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController::class, 'formulario'])->name('inscripcion.formulario');
+Route::post('/inscripcion/Estudiante', [App\Http\Controllers\InscripVisitanteController::class, 'store'])->name('inscripcion.store');
 
+// Rutas para el estudiante con middleware auth y verificacion de 2 pasos
 Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function() {
     Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinEstudiante');
     Route::get('/inscripcion', [PanelEstudianteController:: class, 'inscripcion' ])->name('estudiante.inscripcionModulo');
