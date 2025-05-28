@@ -100,9 +100,6 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
 //rutas para el visitante inscripcion
 Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController::class, 'formulario'])->name('inscripcion.formulario');
 
-
-
-=======
 Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function() {
     Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinEstudiante');
     Route::get('/inscripcion', [PanelEstudianteController:: class, 'inscripcion' ])->name('estudiante.inscripcionModulo');
@@ -110,3 +107,6 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
     Route::get('/calendario', [PanelEstudianteController:: class, 'calendario' ])->name('estudiante.calendario');
 });
 
+Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function() {
+    Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinDocente');
+});
