@@ -221,7 +221,7 @@
                     <canvas id="graduadosChart"></canvas>
                     </div>
                 </div>-->
-                    <!-- Distribución de edades -->
+                    <!-- Distribución de edades-->
                     <div class="bg-white rounded-2xl shadow-md p-6">
                         <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">Distribución por Edades</h3>
                         <div class="relative h-100"> <!-- Aumenté la altura para mejor visualización -->
