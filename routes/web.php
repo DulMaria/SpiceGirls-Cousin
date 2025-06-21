@@ -15,6 +15,8 @@ use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\EstadisticasController;
+use App\Http\Controllers\AperturaModuloController;
+use App\Models\AperturaModulo;
 
 Route::fallback(function () {
     return redirect()->back()->with('error', 'La ruta que intentas acceder no existe.');
@@ -37,7 +39,9 @@ Route::get('/curso_asociado/{id}', [CursoController::class, 'mostrarPorArea'])->
 //Rutas de Logeo
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
-Route::get('/verify-2fa', function () {return view('emails.auth.two-factor');})->name('verify-2fa');
+Route::get('/verify-2fa', function () {
+    return view('emails.auth.two-factor');
+})->name('verify-2fa');
 Route::post('/verify-2fa', [AuthController::class, 'verify2fa'])->name('verify-2fa.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/2fa', [TwoFactorController::class, 'show'])->name('2fa.show');
@@ -86,7 +90,7 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::get('/estudiantes/{codigoEstudiantil}/{ID_Usuario}/edit', [EstudianteController::class, 'edit'])->name('estudiantes.edit');
     Route::put('/estudiantes/{codigoEstudiantil}', [EstudianteController::class, 'update'])->name('estudiantes.update');
     Route::post('/estudiantes/{codigoEstudiantil}/cambiar-estado', [EstudianteController::class, 'cambiarEstado'])
-    ->name('estudiantes.cambiarEstado');    
+        ->name('estudiantes.cambiarEstado');
 
     // Rutas para promociones
     Route::get('/promociones', [PromocionController::class, 'index'])->name('administrador.promociones.index');
@@ -95,9 +99,19 @@ Route::prefix('administrador')->middleware(CheckRole::class . ':1')->group(funct
     Route::get('/promociones/{id}/edit', [PromocionController::class, 'edit'])->name('promocion.edit');
     Route::put('/promociones/{id}', [PromocionController::class, 'update'])->name('promocion.update');
     Route::get('/cursos-disponibles', [App\Http\Controllers\CursoController::class, 'getCursosDisponibles'])->name('cursos.disponibles');
-  
+
     // rutas para el administrador estadisticas
     Route::get('/', [EstadisticasController::class, 'index'])->name('administrador.prinAdmi');
+
+    // Ruta para apertura de modulo
+    Route::prefix('apertura-modulos')->group(function () {
+        Route::get('/', [AperturaModuloController::class, 'index'])->name('administrador.aperturaModulo.index');
+        Route::post('/', [AperturaModuloController::class, 'store'])->name('administrador.aperturaModulo.store');
+        Route::get('/apertura-modulos/modulos-por-curso/{cursoId}', [AperturaModuloController::class, 'getModulosPorCurso']);
+        Route::put('/{id}', [AperturaModuloController::class, 'update'])->name('administrador.aperturaModulo.update');
+        Route::delete('/{id}', [AperturaModuloController::class, 'destroy'])->name('administrador.aperturaModulo.destroy');
+        Route::patch('/toggle-status/{id}', [AperturaModuloController::class, 'toggleStatus'])->name('administrador.aperturaModulo.toggle-status');
+    });
 });
 
 //rutas para el visitante inscripcion
@@ -105,13 +119,13 @@ Route::get('/inscripcion/{id}', [App\Http\Controllers\InscripVisitanteController
 Route::post('/inscripcion/Estudiante', [App\Http\Controllers\InscripVisitanteController::class, 'store'])->name('inscripcion.store');
 
 // Rutas para el estudiante con middleware auth y verificacion de 2 pasos
-Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function() {
+Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function () {
     Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinEstudiante');
-    Route::get('/inscripcion', [PanelEstudianteController:: class, 'inscripcion' ])->name('estudiante.inscripcionModulo');
-    Route::get('/cursos', [PanelEstudianteController:: class, 'cursos' ])->name('estudiante.misCursos');
-    Route::get('/calendario', [PanelEstudianteController:: class, 'calendario' ])->name('estudiante.calendario');
+    Route::get('/inscripcion', [PanelEstudianteController::class, 'inscripcion'])->name('estudiante.inscripcionModulo');
+    Route::get('/cursos', [PanelEstudianteController::class, 'cursos'])->name('estudiante.misCursos');
+    Route::get('/calendario', [PanelEstudianteController::class, 'calendario'])->name('estudiante.calendario');
 });
 
-Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function() {
+Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
     Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinDocente');
 });

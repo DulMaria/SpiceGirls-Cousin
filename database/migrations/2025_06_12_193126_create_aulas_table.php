@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pago', function (Blueprint $table) {
-            $table->integer('ID_Pago')->primary();
-            $table->string('metodoPago', 20);
-            $table->char('estadoPago', 1);
-            $table->date('fechaPago');
-            $table->integer('ID_Historial')->index('fk_pago_historial');
+        Schema::create('aulas', function (Blueprint $table) {
+            $table->integer('Id_Aula', true);
+            $table->string('nombre', 20);
+            $table->string('descripcion', 50);
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pago');
+        Schema::dropIfExists('aulas');
     }
 };
