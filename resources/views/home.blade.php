@@ -133,7 +133,30 @@
                     </ul>
                     <a href="{{ url('/certificados') }}" class="benefit-link">Ver certificaciones disponibles →</a>
                 </div>
-            </div>
+            </div><div class="benefit-item">
+    <button class="benefit-btn" aria-expanded="false" aria-controls="vocacional-content">
+        <div class="benefit-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 16v-4"></path>
+                <path d="M12 8h.01"></path>
+            </svg>
+        </div>
+        <span class="benefit-title">¿No sabes qué curso estudiar?</span>
+        <span class="arrow">▼</span>
+    </button>
+    <div class="benefit-content" id="vocacional-content">
+        <p>Descubre qué curso se adapta mejor a tus intereses y habilidades completando nuestro test vocacional gratuito.</p>
+        <ul>
+            <li>Preguntas simples y personalizadas</li>
+            <li>Resultados inmediatos y orientativos</li>
+            <li>Recomendaciones según tu perfil</li>
+        </ul>
+        <a href="{{ route('test.formulario') }}" class="benefit-link">Realizar el test vocacional →</a>
+    </div>
+</div>
+
         </section>
 
         <script>

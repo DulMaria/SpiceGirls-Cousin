@@ -26,6 +26,7 @@
             <h2 id="countdown-title">Tiempo de Inscripción</h2>
             <p id="countdown"></p>
         </div>
+        
 
         <!-- Sección de cursos -->
         <section class="course-section">
@@ -65,6 +66,13 @@
             </div>
         </div>
         @endforeach
+        <div style="align-content: center; text-align: center; margin-top: 20px;">
+            <h2>¿No sabes que curso elegir?</h2>
+            <p>¡No te preocupes! Puedes hacer una predicción de tu curso ideal.</p>
+            <p>Haz clic en el botón de abajo para comenzar.</p>
+            <button class="btn" onclick="window.location.href='/test-vocacional'" style="text-align: center">Test Vocacional</button>
+        </div>
+        <br>
 
         @include('partials.footer')
     </div>
