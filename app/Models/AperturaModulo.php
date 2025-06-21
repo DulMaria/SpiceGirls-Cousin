@@ -56,5 +56,10 @@ class AperturaModulo extends Model
     {
         return $this->hasMany(Historial_Academico::class, 'ID_Apertura');
     }
-}
 
+    // En app/Models/ModuloCurso.php
+    public function curso()
+    {
+        return $this->belongsTo(Curso::class, 'ID_Curso');
+    }
+}

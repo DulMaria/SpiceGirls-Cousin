@@ -18,6 +18,8 @@ return new class extends Migration
             $table->char('estado', 1);
             $table->integer('orden');
             $table->integer('ID_Curso')->index('fk_modulocurso_curso');
+            $table->time('fechaInicio');
+            $table->time('fechaFin');
         });
     }
 

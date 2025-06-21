@@ -162,9 +162,9 @@
                 <span>Gestionar Estudiantes</span>
             </a>
 
-            <a href="/admin/reportes" class="{{ Request::is('admin/reportes') ? 'active' : '' }}">
+            <a href="{{ route('administrador.aperturaModulo.index') }}" class="{{ Request::is('administrador.aperturaModulo') ? 'active' : '' }}">
                 <i class="fas fa-chart-line"></i>
-                <span>Reportes</span>
+                <span>Apertura Modulo</span>
             </a>
 
             <a href="{{ route('administrador.promociones.index') }}" class="{{ Request::is('administrador/promociones') ? 'active' : '' }}">

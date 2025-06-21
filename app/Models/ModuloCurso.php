@@ -35,6 +35,5 @@ class ModuloCurso extends Model
     public function curso()
     {
         return $this->belongsTo(Curso::class, 'ID_Curso', 'ID_Curso');
-        // belongsTo(RelatedModel, foreign_key, owner_key)
     }
 }

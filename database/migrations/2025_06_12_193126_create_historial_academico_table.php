@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('historial_academico', function (Blueprint $table) {
-            $table->integer('ID_Historial')->primary();
+            $table->integer('ID_Historial', true);
             $table->char('estado', 1);
             $table->integer('ID_Apertura')->index('fk_historialacademico_apertura');
             $table->string('codigoEstudiantil', 8)->index('fk_historialacademico_estudiante');
             $table->date('fechaRegistro');
+            $table->integer('participacion');
         });
     }
 
