@@ -129,3 +129,20 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
 Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
     Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinDocente');
 });
+/* routes/web.php
+Route::get('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'mostrarFormulario'])->name('test.formulario');
+Route::post('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'guardarRespuesta'])->name('test.guardar');
+Route::get('/test/reiniciar', function () {
+    session()->forget('respuestas');
+    return redirect()->route('test.formulario');
+})->name('test.reiniciar');*/
+// Rutas existentes
+Route::get('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'mostrarFormulario'])->name('test.formulario');
+Route::post('/test-vocacionale', [App\Http\Controllers\TestVocacionalController::class, 'guardarRespuesta'])->name('test.guardar');
+Route::get('/test/reiniciar', function () {
+    session()->forget('respuestas');
+    return redirect()->route('test.formulario');
+})->name('test.reiniciar');
+// Nuevas rutas para ML
+Route::post('/admin/test/entrenar-modelo', [App\Http\Controllers\TestVocacionalController::class, 'entrenarModelo'])->name('admin.test.entrenar');
+Route::get('/admin/test/estadisticas', [App\Http\Controllers\TestVocacionalController::class, 'estadisticas'])->name('admin.test.estadisticas');
