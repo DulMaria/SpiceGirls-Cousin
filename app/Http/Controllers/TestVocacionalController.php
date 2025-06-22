@@ -104,7 +104,7 @@ class TestVocacionalController extends Controller
             case 14:
                 return 15;
             default:
-                return 15;
+                return null;
         }
     }
     

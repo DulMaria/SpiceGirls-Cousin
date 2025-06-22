@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscripción al Curso</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+<!-- Agregar en el <head> de tu HTML -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
          @keyframes modalopen {
             from {
@@ -83,11 +86,16 @@
                         <span class="text-gray-500 w-32">Teléfono:</span>
                         <span class="font-medium">{{ $usuario->telefono }}</span>
                     </div>
-                    <button onclick="openModal('newCourseModal')" 
-                                class="bg-[#127475] text-white px-6 py-3 rounded-lg hover:bg-[#0e5d5e] transition font-semibold">
-                            Inscribirse a un nuevo curso
-                    </button>
+                    
+<!--Boton para nuevo curso este envia a la vista de cursos disponibles-->
+                    <div class="mt-4">
+                        <a href="{{ route('estudiante.inscripcionAntiguo') }}"
+                            class="bg-[#127475] text-white px-6 py-2 rounded-lg hover:bg-[#0e5d5e] transition font-semibold">
+                            Ver Cursos Disponibles
+                        </a>
+                    </div>
                 </div>
+            </div>
 <!-- Información de los cursos y módulos -->
             @foreach($datosCursos as $index => $datoCurso)
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
@@ -185,156 +193,6 @@
                 @endif
             </div>
             @endforeach
-<!-- Modal para Inscripción a Nuevo Curso -->
-    <div id="newCourseModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl w-full max-w-2xl p-6 modal max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-[#127475]">Inscripción a Nuevo Curso</h2>
-                <button onclick="closeModal('newCourseModal')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            </div>
-
-            <form id="newCourseForm" class="space-y-6">
-                <!-- Selección de Curso -->
-                <div>
-                    <label for="courseSelect" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Seleccione el Curso
-                    </label>
-                    <select id="courseSelect" name="course" onchange="updateCourseDetails()" 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#127475] focus:border-[#127475] transition">
-                        <option value="">Seleccione un curso...</option>
-                        <option value="desarrollo-web" data-price="1200" data-duration="16" data-hours="120" data-start="2025-06-15">
-                            Desarrollo Web Full Stack
-                        </option>
-                        <option value="marketing-digital" data-price="950" data-duration="12" data-hours="90" data-start="2025-06-20">
-                            Marketing Digital Avanzado
-                        </option>
-                        <option value="diseno-grafico" data-price="800" data-duration="10" data-hours="80" data-start="2025-07-01">
-                            Diseño Gráfico Profesional
-                        </option>
-                        <option value="excel-avanzado" data-price="600" data-duration="8" data-hours="60" data-start="2025-06-25">
-                            Excel Avanzado para Empresas
-                        </option>
-                        <option value="photoshop" data-price="700" data-duration="8" data-hours="64" data-start="2025-07-05">
-                            Adobe Photoshop Profesional
-                        </option>
-                        <option value="ingles-negocios" data-price="1100" data-duration="20" data-hours="160" data-start="2025-06-18">
-                            Inglés para Negocios
-                        </option>
-                    </select>
-                </div>
-
-                <!-- Detalles del Curso Seleccionado -->
-                <div id="courseDetails" class="hidden bg-gray-50 rounded-lg p-4 border-l-4 border-[#127475]">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Detalles del Curso</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <h4 class="font-semibold text-[#127475] mb-2">Información General:</h4>
-                            <div class="space-y-2 text-sm">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Duración:</span>
-                                    <span id="courseDuration" class="font-medium">-</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Horas académicas:</span>
-                                    <span id="courseHours" class="font-medium">-</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Fecha de inicio:</span>
-                                    <span id="courseStart" class="font-medium">-</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Modalidad:</span>
-                                    <span class="font-medium">Presencial/Virtual</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h4 class="font-semibold text-[#127475] mb-2">Inversión:</h4>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold text-[#127475]" id="coursePrice">Bs. -</div>
-                                <p class="text-sm text-gray-600 mt-1">Precio total del curso</p>
-                                <div class="mt-2 text-sm">
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                                        Certificado incluido
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Descripción del curso -->
-                    <div class="mt-4">
-                        <h4 class="font-semibold text-[#127475] mb-2">¿Qué aprenderás?</h4>
-                        <div id="courseDescription" class="text-sm text-gray-700">
-                            <!-- Se llenará dinámicamente -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Horarios Disponibles -->
-                <div id="scheduleSection" class="hidden">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        Seleccione el Horario
-                    </label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="schedule" value="morning" class="mr-3">
-                            <div>
-                                <div class="font-medium">Mañana</div>
-                                <div class="text-sm text-gray-500">08:00 - 12:00</div>
-                            </div>
-                        </label>
-                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="schedule" value="afternoon" class="mr-3">
-                            <div>
-                                <div class="font-medium">Tarde</div>
-                                <div class="text-sm text-gray-500">14:00 - 18:00</div>
-                            </div>
-                        </label>
-                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="schedule" value="evening" class="mr-3">
-                            <div>
-                                <div class="font-medium">Noche</div>
-                                <div class="text-sm text-gray-500">18:00 - 22:00</div>
-                            </div>
-                        </label>
-                        <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="schedule" value="weekend" class="mr-3">
-                            <div>
-                                <div class="font-medium">Fin de Semana</div>
-                                <div class="text-sm text-gray-500">Sáb y Dom 09:00 - 13:00</div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Comentarios adicionales -->
-                <div>
-                    <label for="comments" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Comentarios o consultas (Opcional)
-                    </label>
-                    <textarea id="comments" name="comments" rows="3" 
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#127475] focus:border-[#127475] resize-none"
-                              placeholder="Escriba aquí cualquier consulta o requerimiento especial..."></textarea>
-                </div>
-
-                <!-- Botones de acción -->
-                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
-                    <button type="button" onclick="closeModal('newCourseModal')" 
-                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
-                        Cancelar
-                    </button>
-                    <button type="submit" id="enrollButton" disabled
-                            class="px-6 py-3 bg-[#127475] text-white rounded-lg hover:bg-[#0e5d5e] transition disabled:bg-gray-300 disabled:cursor-not-allowed">
-                        Proceder con la Inscripción
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
                 <!-- Métodos de pago -->
                 <div class="bg-white rounded-xl shadow-lg p-6">
                     <h2 class="text-xl font-semibold text-[#127475] border-b border-gray-200 pb-3 mb-4">Método de Pago
@@ -575,6 +433,7 @@
                         });
                     }
                 });
+
             </script>
 </body>
 
