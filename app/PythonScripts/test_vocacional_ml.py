@@ -330,7 +330,7 @@ if __name__ == "__main__":
     respuestas_ejemplo_no = {
         0: 'No',    # No cómodo con sangre
         1: 'Sí',    # No prefiere cuerpo y movimiento
-        2: 'Sí',    # Sí gusta tecnología
+        2: 'No',    # Sí gusta tecnología
     }
     
     resultado = ml_system.predecir(respuestas_ejemplo_no)

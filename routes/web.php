@@ -16,6 +16,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\EstadisticasController;
 use App\Http\Controllers\AperturaModuloController;
+use App\Http\Controllers\InscripAntiguoController;
 use App\Models\AperturaModulo;
 
 Route::fallback(function () {
@@ -124,6 +125,10 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
     Route::get('/inscripcion', [PanelEstudianteController::class, 'inscripcion'])->name('estudiante.inscripcionModulo');
     Route::get('/cursos', [PanelEstudianteController::class, 'cursos'])->name('estudiante.misCursos');
     Route::get('/calendario', [PanelEstudianteController::class, 'calendario'])->name('estudiante.calendario');
+    //ruta para formulario de inscripcion antiguo
+    Route::get('/inscripcion-antiguo', [InscripAntiguoController::class, 'index'])->name('estudiante.inscripcionAntiguo');
+    Route::post('/inscripciones', [InscripAntiguoController::class, 'store'])->name('inscripciones.store');
+
 });
 
 Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
