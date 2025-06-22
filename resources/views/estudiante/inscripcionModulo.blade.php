@@ -169,13 +169,104 @@
                     </div>
 
                     @if($datoCurso['tieneAperturaDisponible'] && $datoCurso['elegibleParaAvanzar'])
-                    <!-- Botón para inscribirse a este módulo específico -->
-                    <div class="mt-6 text-center">
-                        <button onclick="openModal('paymentModal', '{{ $datoCurso['curso']->nombreCurso }}', '{{ $datoCurso['siguienteModulo'] }}', '{{ $datoCurso['costoSiguienteModulo'] }}')" 
-                                class="bg-[#127475] text-white px-6 py-3 rounded-lg hover:bg-[#0e5d5e] transition font-semibold">
-                            Inscribirse a {{ $datoCurso['siguienteModulo'] }}
-                        </button>
-                    </div>
+                    <!-- Sección del formulario de inscripción corregida -->
+<div class="mt-6 text-center">
+    <form method="POST" action="{{ route('inscripcion.siguienteModulo') }}" id="inscripcionForm-{{ $datoCurso['curso']->ID_Curso }}">
+        @csrf
+        <input type="hidden" name="curso_id" value="{{ $datoCurso['curso']->ID_Curso }}">
+        <input type="hidden" name="siguiente_modulo" value="{{ $datoCurso['siguienteModulo'] }}">
+        <button type="submit" 
+                class="bg-[#127475] text-white px-6 py-3 rounded-lg hover:bg-[#0e5d5e] transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                id="btnInscripcion-{{ $datoCurso['curso']->ID_Curso }}"
+                onclick="return confirmarInscripcion('{{ $datoCurso['siguienteModulo'] }}', {{ $datoCurso['curso']->ID_Curso }})">
+            <span class="btn-text">Inscribirse a {{ $datoCurso['siguienteModulo'] }}</span>
+            <span class="btn-loading hidden">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Procesando...
+            </span>
+        </button>
+    </form>
+</div>
+
+<script>
+function confirmarInscripcion(nombreModulo, cursoId) {
+    if (confirm('¿Estás seguro de que deseas inscribirte al módulo ' + nombreModulo + '?')) {
+        const form = document.getElementById('inscripcionForm-' + cursoId);
+        const btn = document.getElementById('btnInscripcion-' + cursoId);
+        const btnText = btn.querySelector('.btn-text');
+        const btnLoading = btn.querySelector('.btn-loading');
+        
+        // Cambiar estado del botón
+        btn.disabled = true;
+        btnText.classList.add('hidden');
+        btnLoading.classList.remove('hidden');
+        
+        // Enviar formulario
+        form.submit();
+        
+        return true;
+    }
+    return false;
+}
+
+// Manejo de respuestas de error/éxito
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar si hay mensajes de éxito o error
+    @if(session('success'))
+        showNotification('success', '{{ session('success') }}');
+    @endif
+    
+    @if(session('error'))
+        showNotification('error', '{{ session('error') }}');
+    @endif
+    
+    @if($errors->any())
+        @foreach($errors->all() as $error)
+            showNotification('error', '{{ $error }}');
+        @endforeach
+    @endif
+});
+
+function showNotification(type, message) {
+    // Crear notificación
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    }`;
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                ${type === 'success' ? 
+                    '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>' :
+                    '<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>'
+                }
+            </div>
+            <div class="ml-3">
+                <p class="font-medium">${message}</p>
+            </div>
+            <div class="ml-4 flex-shrink-0">
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="inline-flex text-white hover:text-gray-200 focus:outline-none">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-eliminar después de 5 segundos
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+</script>
                     @elseif(!$datoCurso['tieneAperturaDisponible'])
                     <div class="mt-6 text-center">
                         <div class="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
@@ -188,7 +279,7 @@
                 <!-- Mensaje cuando no hay siguiente módulo -->
                 <div class="bg-yellow-50 rounded-lg p-5 mb-6 border-l-4 border-yellow-400">
                     <h3 class="text-lg font-semibold text-yellow-800 mb-2">Información Importante</h3>
-                    <p class="text-yellow-700">Has completado todos los módulos disponibles de este curso. ¡Felicitaciones!</p>
+                    <p class="text-yellow-700">Modulo aun no esta disponible, espera indicaciones del Administrador</p>
                 </div>
                 @endif
             </div>

@@ -128,6 +128,8 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
     //ruta para formulario de inscripcion antiguo
     Route::get('/inscripcion-antiguo', [InscripAntiguoController::class, 'index'])->name('estudiante.inscripcionAntiguo');
     Route::post('/inscripciones', [InscripAntiguoController::class, 'store'])->name('inscripciones.store');
+    Route::post('/inscripcion/siguiente-modulo', [InscripAntiguoController::class, 'inscribirSiguienteModulo'])
+    ->name('inscripcion.siguienteModulo');
 
 });
 
