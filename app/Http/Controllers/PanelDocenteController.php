@@ -10,30 +10,84 @@ class PanelDocenteController extends Controller
 {
     public function dashboard()
     {
-        // Obtener ID del usuario autenticado
-        $idUsuario = Auth::id();
+        // Obtener el usuario autenticado (o por ID si no usas Auth)
+        $usuarioId = Auth::id(); // O usar: $usuarioId = 1; para testing
 
-        // Consulta para obtener datos del usuario
-        $usuario = DB::table('usuario')
-            ->where('ID_Usuario', $idUsuario)
-            ->select('ID_Usuario', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'telefono', 'email', 'ci')
+        // Consulta JOIN para obtener datos del usuario y docente
+        $datosCompletos = DB::table('usuario as u')
+            ->join('docente as d', 'u.ID_Usuario', '=', 'd.ID_Usuario')
+            ->select([
+                'u.ID_Usuario',
+                'u.nombre',
+                'u.apellidoPaterno',
+                'u.apellidoMaterno',
+                'u.telefono',
+                'u.direccion',
+                'u.fechaNacimiento',
+                'u.email',
+                'u.ci',
+                'u.estado',
+                'd.codigoDocente',
+                'd.especialidad'
+            ])
+            ->where('u.ID_Usuario', $usuarioId)
             ->first();
 
-        // Consulta para obtener datos de estudiante relacionados
-        $estudiante = DB::table('estudiante')
-            ->where('ID_Usuario', $idUsuario)
-            ->select('codigoEstudiantil', 'nivelAcademico', 'genero')
-            ->first();
-
-        // Verificar si se encontraron datos
-        if (!$usuario) {
-            return redirect()->back()->with('error', 'No se encontraron datos del usuario');
+        // Si no existe el usuario/docente
+        if (!$datosCompletos) {
+            return redirect()->back()->with('error', 'Usuario no encontrado');
         }
 
-        // Pasar datos a la vista
-        return view('estudiante.prinEstudiante', [
-            'usuario' => $usuario,
-            'estudiante' => $estudiante
-        ]);
+        // Crear objetos separados para el view (como en tu código original)
+        $usuario = (object) [
+            'ID_Usuario' => $datosCompletos->ID_Usuario,
+            'nombre' => $datosCompletos->nombre,
+            'apellidoPaterno' => $datosCompletos->apellidoPaterno,
+            'apellidoMaterno' => $datosCompletos->apellidoMaterno,
+            'telefono' => $datosCompletos->telefono,
+            'direccion' => $datosCompletos->direccion,
+            'fechaNacimiento' => $datosCompletos->fechaNacimiento,
+            'email' => $datosCompletos->email,
+            'ci' => $datosCompletos->ci,
+            'estado' => $datosCompletos->estado
+        ];
+
+        $docente = (object) [
+            'codigoDocente' => $datosCompletos->codigoDocente,
+            'especialidad' => $datosCompletos->especialidad,
+            'ID_Usuario' => $datosCompletos->ID_Usuario
+        ];
+
+        // Contar cursos activos del docente desde la base de datos
+        $cursosActivos = DB::table('apertura_modulo')
+            ->where('codigoDocente', $datosCompletos->codigoDocente)
+            ->where('estado', 'A') // Asumiendo que 'A' = Activo
+            ->where('fechaInicio', '<=', now()) // Ya iniciado
+            ->where('fechaFin', '>=', now()) // Aún no terminado
+            ->count();
+
+        // Contar total de estudiantes únicos en cursos activos del docente
+        $totalEstudiantes = DB::table('inscripcion as i')
+            ->join('apertura_modulo as am', 'i.ID_Curso', '=', 'am.ID_Apertura') // Corrección del JOIN
+            ->where('am.codigoDocente', $datosCompletos->codigoDocente)
+            ->where('am.estado', 'A') // Apertura activa
+            ->where('am.fechaInicio', '<=', now())
+            ->where('am.fechaFin', '>=', now())
+            ->distinct('i.codigoEstudiantil') // Campo correcto de la tabla inscripcion
+            ->count();
+
+        // Calcular años de experiencia basado en fecha más antigua de cursos del docente
+        $anosExperiencia = DB::table('apertura_modulo')
+            ->where('codigoDocente', $datosCompletos->codigoDocente)
+            ->selectRaw('TIMESTAMPDIFF(YEAR, MIN(fechaInicio), CURDATE()) as anos')
+            ->value('anos') ?? 0;
+
+        return view('docente.prinDocente', compact(
+            'usuario',
+            'docente',
+            'cursosActivos',
+            'totalEstudiantes',
+            'anosExperiencia'
+        ));
     }
 }

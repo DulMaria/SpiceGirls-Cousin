@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PanelEstudianteController;
+use App\Http\Controllers\PanelDocenteController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
@@ -127,5 +128,5 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
 });
 
 Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
-    Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinDocente');
+    Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('docente.prinDocente');
 });

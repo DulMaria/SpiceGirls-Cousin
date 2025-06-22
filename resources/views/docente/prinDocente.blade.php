@@ -1,295 +1,296 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Docente</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons (versión CDN) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Dashboard Docente</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Estilos personalizados */
-        .sidebar-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .bg-gradient-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .sidebar-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
+
+        .bg-teal-custom {
+            background-color: #127475;
         }
-        .progress-ring {
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
+
+        .text-teal-custom {
+            color: #127475;
+        }
+
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .profile-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <div id="app" class="flex h-screen bg-gray-100">  
-        <!-- Main content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Top header -->
-            <header class="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
-                <div class="flex items-center">
-                    <i data-lucide="clock" class="w-5 h-5 text-purple-600 mr-2"></i>
-                    <span class="text-gray-600">Hoy: <span id="current-date"></span></span>
+
+<body class="bg-gray-100 font-sans text-gray-800">
+    <!-- Menú lateral -->
+    @include('partials.navDocente')
+
+    <!-- Contenido principal con margen para el sidebar -->
+    <div class="ml-0 lg:ml-64 transition-all duration-300">
+        <!-- Header móvil -->
+        @include('partials.headerMovilAdmin')
+
+        <!-- Contenido del dashboard -->
+        <div class="min-h-screen w-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Welcome Section -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900 mb-2">Sistema Académico</h1>
+                            <h2 class="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido de vuelta!</h2>
+                            <p class="text-gray-600">Aquí tienes un resumen de tu perfil y actividad académica</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                                <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 17h5l-5 5v-5z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 17H4l5 5v-5z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                                <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button class="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg hover:bg-purple-200 transition-colors">
-                        Mi perfil
-                    </button>
-                </div>
-            </header>
-            
-            <!-- Main dashboard -->
-            <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
-                <div class="border-b pb-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                    <h1 class="text-2xl sm:text-3xl font-bold text-[#2e1a47] leading-tight">Mi Panel de Docente</h1>
-                    <span class="text-sm text-gray-500">Bienvenido a tu espacio personal, Prof. Demo</span>
-                </div>
-                
-                <!-- Información personal del docente - Tarjeta 1 -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="bg-white rounded-xl shadow-md p-6">
-                        <div class="flex justify-between items-start">
-                            <div class="w-full">
-                                <h3 class="text-lg font-semibold text-purple-900 mb-4">Datos Personales</h3>
-                                <div class="space-y-3">
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-32">Nombre:</span>
-                                        <span class="font-medium">Profesor Demo</span>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Perfil del Docente -->
+                    <div class="lg:col-span-1">
+                        <div class="profile-card rounded-2xl p-6 text-white card-hover">
+                            <div class="text-center">
+                                <div
+                                    class="mx-auto h-24 w-24 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-4">
+                                    <svg class="h-12 w-12 text-black" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-bold mb-2">{{ $usuario->nombre }}
+                                    {{ $usuario->apellidoPaterno }}
+                                </h3>
+                                <p class="text-blue-100 mb-4">{{ $docente->especialidad }}</p>
+                                <div class="bg-white bg-opacity-20 rounded-lg p-3 mb-4">
+                                    <p class="text-sm text-black font-semibold">Código Docente</p>
+                                    <p class="text-lg text-black">{{ $docente->codigoDocente }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información Personal -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6 mt-6 card-hover">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                <svg class="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Información Personal
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Email:</span>
+                                    <span class="font-medium">{{ $usuario->email }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Teléfono:</span>
+                                    <span class="font-medium">{{ $usuario->telefono }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">CI:</span>
+                                    <span class="font-medium">{{ $usuario->ci }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Fecha Nac.:</span>
+                                    <span
+                                        class="font-medium">{{ date('d/m/Y', strtotime($usuario->fechaNacimiento)) }}</span>
+                                </div>
+                                <div class="pt-2 border-t">
+                                    <span class="text-gray-600">Dirección:</span>
+                                    <p class="font-medium mt-1">{{ $usuario->direccion }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Principal -->
+                    <div class="lg:col-span-2">
+                        <!-- Estadísticas Rápidas -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-500 text-sm">Cursos Activos</p>
+                                        <p class="text-3xl font-bold text-purple-600">{{ $cursosActivos ?? 4 }}</p>
                                     </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-32">Apellidos:</span>
-                                        <span class="font-medium">Apellido Apellido</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-32">CI:</span>
-                                        <span class="font-medium">12345678</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-32">Email:</span>
-                                        <span class="font-medium">profesor.demo@universidad.edu</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-32">Teléfono:</span>
-                                        <span class="font-medium">+591 77777777</span>
+                                    <div class="bg-purple-100 p-3 rounded-full">
+                                        <svg class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-purple-100 p-3 rounded-lg">
-                                <i data-lucide="user" class="h-6 w-6 text-purple-900"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Información adicional del docente - Tarjeta 2 -->
-                    <div class="bg-white rounded-xl shadow-md p-6">
-                        <div class="flex justify-between items-start">
-                            <div class="w-full">
-                                <h3 class="text-lg font-semibold text-purple-900 mb-4">Información Adicional</h3>
-                                <div class="space-y-3">
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-40">Código Docente:</span>
-                                        <span class="font-medium">DOC-2024</span>
+
+                            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-500 text-sm">Total Estudiantes</p>
+                                        <p class="text-3xl font-bold text-teal-custom">{{ $totalEstudiantes ?? 156 }}
+                                        </p>
                                     </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-40">Especialidad:</span>
-                                        <span class="font-medium">Matemáticas Avanzadas</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-40">Departamento:</span>
-                                        <span class="font-medium">Ciencias Exactas</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-500 w-40">Antigüedad:</span>
-                                        <span class="font-medium">5 años</span>
+                                    <div class="bg-teal-50 p-3 rounded-full">
+                                        <svg class="h-8 w-8 text-teal-custom" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-purple-100 p-3 rounded-lg">
-                                <i data-lucide="award" class="h-6 w-6 text-purple-900"></i>
+
+                            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-500 text-sm">Años Experiencia</p>
+                                        <p class="text-3xl font-bold text-green-600">{{ $anosExperiencia ?? 8 }}</p>
+                                    </div>
+                                    <div class="bg-green-50 p-3 rounded-full">
+                                        <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Panel de estadísticas -->
-                <div class="bg-white rounded-2xl p-6 shadow-md mb-8">
-                    <h3 class="text-lg font-semibold text-purple-900 mb-4">Mi Actividad Docente</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Asignaciones completadas -->
-                        <div class="bg-teal-50 rounded-lg p-4 border border-teal-100">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium text-teal-700">Asistencias</span>
-                                <span class="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full">95%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-teal-700 h-2 rounded-full" style="width: 95%"></div>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2">19 de 20 clases impartidas</p>
                         </div>
 
-                        <!-- Evaluaciones realizadas -->
-                        <div class="bg-teal-50 rounded-lg p-4 border border-teal-100">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium text-teal-700">Evaluaciones</span>
-                                <span class="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full">80%</span>
+                        <!-- Acciones Rápidas -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 card-hover">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                                <svg class="h-6 w-6 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                Acciones Rápidas
+                            </h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <button
+                                    class="flex flex-col items-center p-4 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors">
+                                    <div class="bg-blue-500 p-3 rounded-full mb-2">
+                                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">Mis Cursos</span>
+                                </button>
+
+                                <button
+                                    class="flex flex-col items-center p-4 rounded-xl bg-green-50 hover:bg-green-100 transition-colors">
+                                    <div class="bg-green-500 p-3 rounded-full mb-2">
+                                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">Estudiantes</span>
+                                </button>
+
+                                <button
+                                    class="flex flex-col items-center p-4 rounded-xl bg-purple-50 hover:bg-purple-100 transition-colors">
+                                    <div class="bg-purple-500 p-3 rounded-full mb-2">
+                                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">Evaluaciones</span>
+                                </button>
+
+                                <button
+                                    class="flex flex-col items-center p-4 rounded-xl bg-orange-50 hover:bg-orange-100 transition-colors">
+                                    <div class="bg-orange-500 p-3 rounded-full mb-2">
+                                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700">Configuración</span>
+                                </button>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-teal-700 h-2 rounded-full" style="width: 80%"></div>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2">16 de 20 evaluaciones calificadas</p>
                         </div>
 
-                        <!-- Material compartido -->
-                        <div class="bg-teal-50 rounded-lg p-4 border border-teal-100">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium text-teal-700">Material Compartido</span>
-                                <span class="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full">12</span>
+                        <!-- Estado del Sistema -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                                <svg class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Estado del Sistema
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                                        <span class="text-sm font-medium text-gray-700">Conexión DB</span>
+                                    </div>
+                                    <span class="text-xs text-green-600 font-semibold">Activa</span>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                                        <span class="text-sm font-medium text-gray-700">Estado:
+                                            {{ $usuario->estado ?? 'Activo' }}</span>
+                                    </div>
+                                    <span class="text-xs text-green-600 font-semibold">Online</span>
+                                </div>
                             </div>
-                            <p class="text-sm font-medium text-teal-700">Recursos didácticos</p>
-                            <p class="text-xs text-gray-500 mt-1">Documentos, presentaciones, etc.</p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Resumen de cursos -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <!-- Total de cursos -->
-                    <div class="bg-white rounded-lg shadow p-6 border-t-4 border-purple-600">
-                        <div class="flex justify-between">
-                            <div>
-                                <h3 class="font-bold text-gray-700 mb-2">Total de Cursos</h3>
-                                <p class="text-3xl font-bold text-purple-800">5</p>
-                            </div>
-                            <div class="bg-purple-100 p-3 rounded-full">
-                                <i data-lucide="book" class="h-6 w-6 text-purple-800"></i>
-                            </div>
-                        </div>
-                        <button class="mt-4 w-full py-2 bg-purple-100 text-purple-800 rounded font-medium hover:bg-purple-200 transition-colors">
-                            Ver Mis Cursos
-                        </button>
-                    </div>
-                    
-                    <!-- Estudiantes activos -->
-                    <div class="bg-white rounded-lg shadow p-6 border-t-4 border-teal-500">
-                        <div class="flex justify-between">
-                            <div>
-                                <h3 class="font-bold text-gray-700 mb-2">Estudiantes Activos</h3>
-                                <p class="text-3xl font-bold text-teal-600">87</p>
-                            </div>
-                            <div class="bg-teal-100 p-3 rounded-full">
-                                <i data-lucide="users" class="h-6 w-6 text-teal-700"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-sm text-gray-600">
-                            <p>En 5 grupos diferentes</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Horas de clase -->
-                    <div class="bg-white rounded-lg shadow p-6 border-t-4 border-purple-600">
-                        <div class="flex justify-between">
-                            <div>
-                                <h3 class="font-bold text-gray-700 mb-2">Horas de Clase</h3>
-                                <p class="text-3xl font-bold text-purple-800">24</p>
-                            </div>
-                            <div class="bg-purple-100 p-3 rounded-full">
-                                <i data-lucide="clock" class="h-6 w-6 text-purple-800"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-sm text-gray-600">
-                            <p>Por semana lectiva</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Cursos actuales -->
-                <div class="bg-white rounded-2xl p-6 shadow-md mb-8">
-                    <h3 class="text-lg font-semibold text-purple-900 mb-4">Mis Cursos Actuales</h3>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white">
-                            <thead class="bg-purple-50">
-                                <tr>
-                                    <th class="py-3 px-4 text-left text-xs font-medium text-purple-800 uppercase tracking-wider">
-                                        Curso
-                                    </th>
-                                    <th class="py-3 px-4 text-left text-xs font-medium text-purple-800 uppercase tracking-wider">
-                                        Nivel
-                                    </th>
-                                    <th class="py-3 px-4 text-left text-xs font-medium text-purple-800 uppercase tracking-wider">
-                                        Horario
-                                    </th>
-                                    <th class="py-3 px-4 text-left text-xs font-medium text-purple-800 uppercase tracking-wider">
-                                        Progreso
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                <tr>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">Matemáticas Avanzadas</div>
-                                        <div class="text-sm text-gray-500">Cálculo Multivariable</div>
-                                    </td>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Tercer Año</div>
-                                    </td>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Lunes y Miércoles</div>
-                                        <div class="text-xs text-gray-500">09:00 - 11:00</div>
-                                    </td>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="w-full bg-gray-200 rounded-full h-2 mb-1">
-                                            <div class="bg-teal-700 h-2 rounded-full" style="width: 75%"></div>
-                                        </div>
-                                        <div class="text-xs text-gray-500">75% completado</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">Álgebra Lineal</div>
-                                        <div class="text-sm text-gray-500">Matrices y Vectores</div>
-                                    </td>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Segundo Año</div>
-                                    </td>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Martes y Jueves</div>
-                                        <div class="text-xs text-gray-500">14:00 - 16:00</div>
-                                    </td>
-                                    <td class="py-4 px-4 whitespace-nowrap">
-                                        <div class="w-full bg-gray-200 rounded-full h-2 mb-1">
-                                            <div class="bg-teal-700 h-2 rounded-full" style="width: 60%"></div>
-                                        </div>
-                                        <div class="text-xs text-gray-500">60% completado</div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
+            </div>
         </div>
     </div>
-
-    <script>
-        // Inicializar los íconos de Lucide
-        lucide.createIcons();
-        
-        // Mostrar la fecha actual
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('es-ES', options);
-        
-        // Simular funcionalidad de tabs (puedes mejorar esto)
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Aquí podrías cargar contenido diferente según la pestaña seleccionada
-                console.log('Cambiando a:', this.querySelector('span').textContent);
-            });
-        });
-    </script>
 </body>
+
 </html>
