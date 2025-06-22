@@ -201,4 +201,169 @@ class InscripAntiguoController extends Controller
             return redirect()->back()->with('error', 'Error al procesar la inscripción: ' . $e->getMessage());
         }
     }
+
+public function inscribirSiguienteModulo(Request $request)
+{
+    try {
+        // Validar los datos de entrada
+        $request->validate([
+            'curso_id' => 'required|exists:curso,ID_Curso',
+            'siguiente_modulo' => 'required|string'
+        ]);
+
+        // Recuperar el id del usuario autenticado
+        $idUsuario = Auth::id();
+        
+        // Recuperar el estudiante
+        $estudiante = Estudiante::where('ID_Usuario', $idUsuario)->first();
+        if (!$estudiante) {
+            if ($request->ajax()) {
+                return response()->json(['error' => 'No se encontró el estudiante asociado al usuario.'], 404);
+            }
+            return redirect()->back()->with('error', 'No se encontró el estudiante asociado al usuario.');
+        }
+        
+        $codigoEstudiantil = $estudiante->codigoEstudiantil;
+        
+        // Verificar que el curso existe y está activo
+        $curso = Curso::where('ID_Curso', $request->curso_id)
+            ->where('estado', 1)
+            ->first();
+            
+        if (!$curso) {
+            if ($request->ajax()) {
+                return response()->json(['error' => 'El curso seleccionado no está disponible.'], 400);
+            }
+            return redirect()->back()->with('error', 'El curso seleccionado no está disponible.');
+        }
+
+        // Buscar el módulo por nombre y curso
+        $modulo = ModuloCurso::where('ID_Curso', $request->curso_id)
+            ->where('nombreModulo', $request->siguiente_modulo)
+            ->where('estado', 1)
+            ->first();
+
+        if (!$modulo) {
+            if ($request->ajax()) {
+                return response()->json(['error' => 'No se encontró el módulo especificado para este curso.'], 400);
+            }
+            return redirect()->back()->with('error', 'No se encontró el módulo especificado para este curso.');
+        }
+
+        // Verificar que el estudiante esté inscrito en el curso
+        $inscripcionCurso = Inscripcion::where('ID_Curso', $request->curso_id)
+            ->where('codigoEstudiantil', $codigoEstudiantil)
+            ->first();
+
+        if (!$inscripcionCurso) {
+            if ($request->ajax()) {
+                return response()->json(['error' => 'No estás inscrito en este curso.'], 400);
+            }
+            return redirect()->back()->with('error', 'No estás inscrito en este curso.');
+        }
+
+        // Verificar que el estudiante no esté ya inscrito en este módulo
+        $yaInscritoModulo = DB::table('historial_academico as ha')
+            ->join('apertura_modulo as am', 'ha.ID_Apertura', '=', 'am.ID_Apertura')
+            ->where('am.ID_Modulo', $modulo->ID_Modulo) // Asegurarse de que sea el siguiente módulo
+            ->where('ha.codigoEstudiantil', $codigoEstudiantil)
+            ->exists();
+        //mostrar el id de apertura del módulo
+        
+
+        if ($yaInscritoModulo) {
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Ya estás inscrito en este módulo.'], 400);
+            }
+            return redirect()->back()->with('error', 'Ya estás inscrito en este módulo.');
+        }
+
+        // Verificar que el estudiante sea elegible para avanzar al siguiente módulo
+        // (debe haber completado el módulo anterior)
+        $moduloAnterior = ModuloCurso::where('ID_Curso', $request->curso_id)
+            ->where('orden', $modulo->orden - 1)
+            ->first();
+
+        if ($moduloAnterior) {
+            $completoModuloAnterior = DB::table('historial_academico as ha')
+                ->join('apertura_modulo as am', 'ha.ID_Apertura', '=', 'am.ID_Apertura')
+                ->where('am.ID_Modulo', $moduloAnterior->ID_Modulo)
+                ->where('ha.codigoEstudiantil', $codigoEstudiantil)
+                ->where('ha.estado', 1) // 1 = completado
+                ->exists();
+
+            if (!$completoModuloAnterior) {
+                if ($request->ajax()) {
+                    return response()->json(['error' => 'Debes completar el módulo anterior antes de inscribirte al siguiente.'], 400);
+                }
+                return redirect()->back()->with('error', 'Debes completar el módulo anterior antes de inscribirte al siguiente.');
+            }
+        }
+
+        // Buscar la apertura disponible para este módulo
+        $apertura = AperturaModulo::where('ID_Modulo', $modulo->ID_Modulo)
+            ->where('estado', 1) // Solo aperturas activas
+            ->whereDate('fechaInicio', '>=', now()) // Fecha de inicio futura o actual
+            ->orderBy('fechaInicio', 'asc')
+            ->first();
+            
+        if (!$apertura) {
+            if ($request->ajax()) {
+                return response()->json(['error' => 'No se encontró una apertura disponible para este módulo.'], 400);
+            }
+            return redirect()->back()->with('error', 'No se encontró una apertura disponible para este módulo.');
+        }
+
+        // Iniciar transacción para asegurar consistencia
+        DB::beginTransaction();
+
+        try {
+            // Crear registro en historial académico
+            $historialAcademico = new Historial_Academico();
+            $historialAcademico->ID_Apertura = $apertura->ID_Apertura;
+            $historialAcademico->codigoEstudiantil = $codigoEstudiantil;
+            $historialAcademico->estado = 0; // 0 = inscrito, pendiente de completar
+            $historialAcademico->fechaRegistro = now();
+            $historialAcademico->save();
+
+            // Confirmar transacción
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Inscripción al módulo realizada exitosamente.',
+                    'data' => [
+                        'modulo' => $modulo->nombreModulo,
+                        'curso' => $curso->nombreCurso,
+                        'fecha_inicio' => $apertura->fechaInicio,
+                        'costo' => $apertura->CostoModulo,
+                        'fecha_inscripcion' => $historialAcademico->fechaRegistro->format('d/m/Y')
+                    ]
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Inscripción al módulo ' . $modulo->nombreModulo . ' realizada exitosamente.');
+
+        } catch (\Exception $e) {
+            // Revertir transacción en caso de error
+            DB::rollback();
+            throw $e;
+        }
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        if ($request->ajax()) {
+            return response()->json(['error' => 'Datos inválidos proporcionados.'], 422);
+        }
+        return redirect()->back()->withErrors($e->errors())->withInput();
+        
+    } catch (\Exception $e) {
+        if ($request->ajax()) {
+            return response()->json(['error' => 'Error al procesar la inscripción: ' . $e->getMessage()], 500);
+        }
+        return redirect()->back()->with('error', 'Error al procesar la inscripción: ' . $e->getMessage());
+    }
+}
+
+
 }
