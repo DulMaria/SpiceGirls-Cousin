@@ -169,40 +169,7 @@
                 </div>-->
 
 
-                <!-- Gráfico de Pagos con responsividad mejorada
-                    <div class="mt-8 bg-white rounded-2xl p-4  shadow-md">
-                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Pagos Recibidos por Tipo</h2>
-
-                         Filtros con mejor adaptación a móviles
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                           <div class="w-full">
-                                <label class="text-xs sm:text-sm font-medium block mb-1">Fecha:</label>
-                                <input type="month" id="filterDate" class="w-full p-1.5 sm:p-2 border rounded-md text-sm" />
-                            </div>
-                            <div class="w-full">
-                                <label class="text-xs sm:text-sm font-medium block mb-1">Curso:</label>
-                                <select id="filterCurso" class="w-full p-1.5 sm:p-2 border rounded-md text-sm">
-                                    <option value="todos">Todos</option>
-                                    <option value="criminologia">Criminología</option>
-                                    <option value="psicologia">Psicología</option>
-                                </select>
-                            </div>
-                            <div class="w-full">
-                                <label class="text-xs sm:text-sm font-medium block mb-1">Tipo de Pago:</label>
-                                <select id="filterTipo" class="w-full p-1.5 sm:p-2 border rounded-md text-sm">
-                                    <option value="todos">Todos</option>
-                                    <option value="completo">Pago Completo</option>
-                                    <option value="beca">Pago con Beca</option>
-                                    <option value="oferta">Pago con Oferta</option>
-                                </select>
-                            </div>
-                        </div>-->
-
-                <!-- Contenedor del gráfico con altura responsiva
-                        <div class="relative" style="height: 580px;">
-                            <canvas id="graficaPagos"></canvas>
-                        </div>
-                    </div>-->
+              
 
 
                 <!-- Cursos populares -->
