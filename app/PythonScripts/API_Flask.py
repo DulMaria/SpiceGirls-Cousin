@@ -16,8 +16,8 @@ CORS(app)
 # Configuración de la base de datos
 DB_CONFIG = {
     'host': 'localhost',
-    'user': 'root',  # Cambiar por tu usuario
-    'password': '',  # Cambiar por tu contraseña
+    'user': 'root',  
+    'password': '', 
     'database': 'spicegirls_cousin2'
 }
 

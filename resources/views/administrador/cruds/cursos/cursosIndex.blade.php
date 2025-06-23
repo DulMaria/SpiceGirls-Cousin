@@ -36,7 +36,92 @@
         margin-top: 0.25rem !important;
         display: block !important;
     }
-    </style>
+    
+   /* Estilos para los filtros */
+.filter-section {
+    background: linear-gradient(135deg, #2e7d32 0%, #5e35b1 100%);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.filter-input {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    background-color: #f3f4f6;
+    color: #2f2f2f;
+}
+
+.filter-input:focus {
+    border-color: #388e3c;
+    box-shadow: 0 0 0 3px rgba(56, 142, 60, 0.2);
+    transform: translateY(-2px);
+}
+
+.filter-button {
+    transition: all 0.3s ease;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.filter-button:hover {
+    background-color: #388e3c;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.filter-button:active {
+    transform: translateY(-1px);
+}
+
+/* Botón de reinicio */
+.reset-button {
+    background: linear-gradient(45deg, #9a1b1b, #7d2e2e);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.reset-button:hover {
+    background: linear-gradient(45deg, #2e7d32, #6a1b9a);
+}
+
+/* Animación para mostrar/ocultar filtros */
+.filter-collapse {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+}
+
+.filter-collapse.show {
+    max-height: 500px;
+    opacity: 1;
+}
+
+/* Efectos visuales adicionales */
+.glass-effect {
+    backdrop-filter: blur(8px);
+    background: rgba(50, 50, 50, 0.1);
+    border: 1px solid rgba(100, 100, 100, 0.2);
+}
+
+/* Contador de resultados */
+.results-counter {
+    background: linear-gradient(45deg, #388e3c, #5e35b1);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(50, 50, 50, 0.3);
+}
+
+</style>
+
 </head>
 
 <body class="bg-gray-100 text-gray-800">
@@ -50,6 +135,103 @@
                 <button onclick="toggleModal()" class="bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg shadow">
                     + Añadir Curso
                 </button>
+            </div>
+
+            <!-- Sección de Filtros -->
+            <div class="filter-section p-6 mb-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <i class="bi bi-funnel-fill text-2xl"></i>
+                        <h2 class="text-xl font-bold">Filtros de Búsqueda</h2>
+                    </div>
+                    <button 
+                        onclick="toggleFilters()" 
+                        id="toggleFiltersBtn"
+                        class="filter-button bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg flex items-center gap-2 glass-effect">
+                        <i class="bi bi-chevron-down" id="chevronIcon"></i>
+                        <span>Mostrar Filtros</span>
+                    </button>
+                </div>
+                
+                <div id="filtersContent" class="filter-collapse">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                        <!-- Filtro por ID -->
+                        <div class="space-y-2">
+                            <label for="filtroId" class="block text-sm font-medium">
+                                <i class="bi bi-hash mr-1"></i>ID del Curso
+                            </label>
+                            <input 
+                                type="number" 
+                                id="filtroId" 
+                                placeholder="Ej: 123"
+                                class="filter-input w-full px-4 py-2 rounded-lg bg-white bg-opacity-90 text-gray-800 placeholder-gray-500 focus:bg-white focus:outline-none">
+                        </div>
+
+                        <!-- Filtro por Área -->
+                        <div class="space-y-2">
+                            <label for="filtroArea" class="block text-sm font-medium">
+                                <i class="bi bi-collection mr-1"></i>Área
+                            </label>
+                            <select 
+                                id="filtroArea" 
+                                class="filter-input w-full px-4 py-2 rounded-lg bg-white bg-opacity-90 text-gray-800 focus:bg-white focus:outline-none">
+                                <option value="">Todas las áreas</option>
+                                @foreach($areas as $area)
+                                <option value="{{ $area->nombreArea }}">{{ $area->nombreArea }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Filtro por Nombre del Curso -->
+                        <div class="space-y-2">
+                            <label for="filtroCurso" class="block text-sm font-medium">
+                                <i class="bi bi-book mr-1"></i>Nombre del Curso
+                            </label>
+                            <input 
+                                type="text" 
+                                id="filtroCurso" 
+                                placeholder="Buscar curso..."
+                                class="filter-input w-full px-4 py-2 rounded-lg bg-white bg-opacity-90 text-gray-800 placeholder-gray-500 focus:bg-white focus:outline-none">
+                        </div>
+
+                        <!-- Filtro por Estado -->
+                        <div class="space-y-2">
+                            <label for="filtroEstado" class="block text-sm font-medium">
+                                <i class="bi bi-toggle-on mr-1"></i>Estado
+                            </label>
+                            <select 
+                                id="filtroEstado" 
+                                class="filter-input w-full px-4 py-2 rounded-lg bg-white bg-opacity-90 text-gray-800 focus:bg-white focus:outline-none">
+                                <option value="">Todos los estados</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="flex flex-wrap gap-3 items-center justify-between">
+                        <div class="flex gap-3">
+                            <button 
+                                onclick="aplicarFiltros()" 
+                                class="filter-button bg-[#127475] hover:bg-[#0f5f5e] px-6 py-2 rounded-lg flex items-center gap-2 font-medium">
+                                <i class="bi bi-search"></i>
+                                Buscar
+                            </button>
+                            <button 
+                                onclick="limpiarFiltros()" 
+                                class="filter-button reset-button px-6 py-2 rounded-lg flex items-center gap-2 font-medium text-white">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                                Limpiar
+                            </button>
+                        </div>
+                        
+                        <!-- Contador de resultados -->
+                        <div class="results-counter" id="contadorResultados">
+                            Total: <span id="totalCursos">{{ count($cursos) }}</span> cursos
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Tabla de Cursos -->
@@ -67,9 +249,13 @@
                             <th class="px-6 py-3 text-center">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tablaCursos">
                         @foreach ($cursos as $curso)
-                        <tr class="border-b hover:bg-gray-100">
+                        <tr class="border-b hover:bg-gray-100 curso-row" 
+                            data-id="{{ $curso->ID_Curso }}"
+                            data-area="{{ $curso->area->nombreArea ?? 'Sin Área' }}"
+                            data-curso="{{ $curso->nombreCurso }}"
+                            data-estado="{{ $curso->estado }}">
                             <td class="px-6 py-4">{{ $curso->ID_Curso }}</td>
                             <td class="px-6 py-4">{{ $curso->area->nombreArea ?? 'Sin Área' }}</td>
                             <td class="px-6 py-4">{{ $curso->nombreCurso }}</td>
@@ -169,6 +355,20 @@
                         @endforeach
                     </tbody>
                 </table>
+                
+                <!-- Mensaje cuando no hay resultados -->
+                <div id="noResultados" class="hidden p-8 text-center text-gray-500">
+                    <div class="flex flex-col items-center space-y-4">
+                        <i class="bi bi-search text-6xl text-gray-300"></i>
+                        <h3 class="text-xl font-medium">No se encontraron cursos</h3>
+                        <p class="text-gray-400">Intenta ajustar los filtros de búsqueda</p>
+                        <button 
+                            onclick="limpiarFiltros()" 
+                            class="bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg">
+                            Mostrar todos los cursos
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -310,7 +510,360 @@
 </html>
 
 <script>
+    // =========================
+// FUNCIONES DE FILTRADO COMPLETAS
+// =========================
+
+// Función para mostrar/ocultar la sección de filtros
+function toggleFilters() {
+    const filtersContent = document.getElementById('filtersContent');
+    const chevronIcon = document.getElementById('chevronIcon');
+    const toggleBtn = document.getElementById('toggleFiltersBtn');
     
+    if (filtersContent.classList.contains('show')) {
+        filtersContent.classList.remove('show');
+        chevronIcon.classList.remove('bi-chevron-up');
+        chevronIcon.classList.add('bi-chevron-down');
+        toggleBtn.querySelector('span').textContent = 'Mostrar Filtros';
+    } else {
+        filtersContent.classList.add('show');
+        chevronIcon.classList.remove('bi-chevron-down');
+        chevronIcon.classList.add('bi-chevron-up');
+        toggleBtn.querySelector('span').textContent = 'Ocultar Filtros';
+    }
+}
+
+// Función para aplicar los filtros
+function aplicarFiltros() {
+    const filtroId = document.getElementById('filtroId').value.trim();
+    const filtroArea = document.getElementById('filtroArea').value.trim();
+    const filtroCurso = document.getElementById('filtroCurso').value.trim().toLowerCase();
+    const filtroEstado = document.getElementById('filtroEstado').value;
+    
+    const filas = document.querySelectorAll('#tablaCursos .curso-row');
+    const tabla = document.querySelector('#tablaCursos').closest('table');
+    const noResultados = document.getElementById('noResultados');
+    let cursosVisibles = 0;
+    
+    filas.forEach(fila => {
+        let mostrar = true;
+        
+        // Filtro por ID
+        if (filtroId && !fila.dataset.id.includes(filtroId)) {
+            mostrar = false;
+        }
+        
+        // Filtro por área
+        if (filtroArea && fila.dataset.area !== filtroArea) {
+            mostrar = false;
+        }
+        
+        // Filtro por nombre del curso
+        if (filtroCurso && !fila.dataset.curso.toLowerCase().includes(filtroCurso)) {
+            mostrar = false;
+        }
+        
+        // Filtro por estado
+        if (filtroEstado && fila.dataset.estado !== filtroEstado) {
+            mostrar = false;
+        }
+        
+        // Mostrar u ocultar la fila
+        if (mostrar) {
+            fila.style.display = '';
+            cursosVisibles++;
+        } else {
+            fila.style.display = 'none';
+        }
+    });
+    
+    // Actualizar contador de resultados
+    actualizarContador(cursosVisibles);
+    
+    // Mostrar u ocultar mensaje de "no hay resultados"
+    if (cursosVisibles === 0) {
+        tabla.style.display = 'none';
+        noResultados.classList.remove('hidden');
+    } else {
+        tabla.style.display = 'table';
+        noResultados.classList.add('hidden');
+    }
+    
+    // Mostrar animación visual de búsqueda aplicada
+    mostrarAnimacionBusqueda();
+}
+
+// Función para limpiar todos los filtros
+function limpiarFiltros() {
+    // Limpiar todos los campos de filtro
+    document.getElementById('filtroId').value = '';
+    document.getElementById('filtroArea').value = '';
+    document.getElementById('filtroCurso').value = '';
+    document.getElementById('filtroEstado').value = '';
+    
+    // Mostrar todas las filas
+    const filas = document.querySelectorAll('#tablaCursos .curso-row');
+    filas.forEach(fila => {
+        fila.style.display = '';
+    });
+    
+    // Actualizar contador con total de cursos
+    const totalCursos = filas.length;
+    actualizarContador(totalCursos);
+    
+    // Ocultar mensaje de "no hay resultados" y mostrar tabla
+    const tabla = document.querySelector('#tablaCursos').closest('table');
+    const noResultados = document.getElementById('noResultados');
+    
+    tabla.style.display = 'table';
+    noResultados.classList.add('hidden');
+    
+    // Mostrar animación de filtros limpiados
+    mostrarAnimacionLimpiar();
+}
+
+// Función para actualizar el contador de resultados
+function actualizarContador(cantidad) {
+    const totalCursos = document.getElementById('totalCursos');
+    const contadorResultados = document.getElementById('contadorResultados');
+    
+    if (totalCursos) {
+        totalCursos.textContent = cantidad;
+        
+        // Cambiar el color del contador según la cantidad
+        contadorResultados.className = 'results-counter';
+        if (cantidad === 0) {
+            contadorResultados.style.background = 'linear-gradient(45deg, #e74c3c, #c0392b)';
+        } else if (cantidad < 5) {
+            contadorResultados.style.background = 'linear-gradient(45deg, #f39c12, #e67e22)';
+        } else {
+            contadorResultados.style.background = 'linear-gradient(45deg, #4facfe, #00f2fe)';
+        }
+        
+        // Animación de actualización del contador
+        contadorResultados.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            contadorResultados.style.transform = 'scale(1)';
+        }, 200);
+    }
+}
+
+// Función para mostrar animación cuando se aplican los filtros
+function mostrarAnimacionBusqueda() {
+    const btnBuscar = document.querySelector('button[onclick="aplicarFiltros()"]');
+    const iconoBuscar = btnBuscar.querySelector('i');
+    
+    // Cambiar temporalmente el ícono
+    iconoBuscar.classList.remove('bi-search');
+    iconoBuscar.classList.add('bi-check-circle-fill');
+    btnBuscar.style.background = 'linear-gradient(45deg, #2ecc71, #27ae60)';
+    
+    setTimeout(() => {
+        iconoBuscar.classList.remove('bi-check-circle-fill');
+        iconoBuscar.classList.add('bi-search');
+        btnBuscar.style.background = '';
+    }, 1500);
+}
+
+// Función para mostrar animación cuando se limpian los filtros
+function mostrarAnimacionLimpiar() {
+    const btnLimpiar = document.querySelector('button[onclick="limpiarFiltros()"]');
+    const iconoLimpiar = btnLimpiar.querySelector('i');
+    
+    // Animación de rotación
+    iconoLimpiar.style.transform = 'rotate(360deg)';
+    iconoLimpiar.style.transition = 'transform 0.6s ease';
+    
+    setTimeout(() => {
+        iconoLimpiar.style.transform = 'rotate(0deg)';
+    }, 600);
+}
+
+// Función para aplicar filtros automáticamente mientras se escribe
+function configurarFiltroEnTiempoReal() {
+    const filtroId = document.getElementById('filtroId');
+    const filtroCurso = document.getElementById('filtroCurso');
+    const filtroArea = document.getElementById('filtroArea');
+    const filtroEstado = document.getElementById('filtroEstado');
+    
+    // Configurar filtrado en tiempo real con debounce
+    let timeoutId;
+    
+    function aplicarFiltroConDelay() {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            aplicarFiltros();
+        }, 300); // 300ms de delay
+    }
+    
+    // Agregar event listeners
+    if (filtroId) {
+        filtroId.addEventListener('input', aplicarFiltroConDelay);
+    }
+    
+    if (filtroCurso) {
+        filtroCurso.addEventListener('input', aplicarFiltroConDelay);
+    }
+    
+    if (filtroArea) {
+        filtroArea.addEventListener('change', aplicarFiltros);
+    }
+    
+    if (filtroEstado) {
+        filtroEstado.addEventListener('change', aplicarFiltros);
+    }
+}
+
+// Función para resaltar texto coincidente en los resultados
+function resaltarTextoCoincidente() {
+    const filtroCurso = document.getElementById('filtroCurso').value.trim().toLowerCase();
+    
+    if (!filtroCurso) {
+        // Remover resaltados existentes
+        document.querySelectorAll('.highlight').forEach(el => {
+            el.outerHTML = el.innerHTML;
+        });
+        return;
+    }
+    
+    const filasVisibles = document.querySelectorAll('#tablaCursos .curso-row[style=""]');
+    
+    filasVisibles.forEach(fila => {
+        const celdaCurso = fila.children[2]; // Tercera columna (nombre del curso)
+        const textoOriginal = fila.dataset.curso;
+        
+        // Crear regex para buscar coincidencias
+        const regex = new RegExp(`(${filtroCurso})`, 'gi');
+        const textoResaltado = textoOriginal.replace(regex, '<span class="highlight" style="background-color: #fff3cd; padding: 2px 4px; border-radius: 3px;">$1</span>');
+        
+        celdaCurso.innerHTML = textoResaltado;
+    });
+}
+
+// Función para exportar resultados filtrados (funcionalidad adicional)
+function exportarResultadosFiltrados() {
+    const filasVisibles = document.querySelectorAll('#tablaCursos .curso-row[style=""]');
+    
+    if (filasVisibles.length === 0) {
+        alert('No hay cursos para exportar con los filtros actuales.');
+        return;
+    }
+    
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "ID,Área,Nombre del Curso,Descripción,Estado\n";
+    
+    filasVisibles.forEach(fila => {
+        const id = fila.dataset.id;
+        const area = fila.dataset.area;
+        const curso = fila.dataset.curso;
+        const descripcion = fila.children[3].textContent.trim();
+        const estado = fila.dataset.estado === '1' ? 'Activo' : 'Inactivo';
+        
+        csvContent += `"${id}","${area}","${curso}","${descripcion}","${estado}"\n`;
+    });
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "cursos_filtrados.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Función para guardar filtros en localStorage (persistencia)
+function guardarFiltros() {
+    const filtros = {
+        id: document.getElementById('filtroId').value,
+        area: document.getElementById('filtroArea').value,
+        curso: document.getElementById('filtroCurso').value,
+        estado: document.getElementById('filtroEstado').value
+    };
+    
+    localStorage.setItem('filtrosCursos', JSON.stringify(filtros));
+}
+
+// Función para cargar filtros guardados
+function cargarFiltrosGuardados() {
+    const filtrosGuardados = localStorage.getItem('filtrosCursos');
+    
+    if (filtrosGuardados) {
+        const filtros = JSON.parse(filtrosGuardados);
+        
+        document.getElementById('filtroId').value = filtros.id || '';
+        document.getElementById('filtroArea').value = filtros.area || '';
+        document.getElementById('filtroCurso').value = filtros.curso || '';
+        document.getElementById('filtroEstado').value = filtros.estado || '';
+        
+        // Aplicar los filtros cargados
+        aplicarFiltros();
+    }
+}
+
+// Función para mostrar estadísticas de filtrado
+function mostrarEstadisticasFiltrado() {
+    const totalCursos = document.querySelectorAll('#tablaCursos .curso-row').length;
+    const cursosVisibles = document.querySelectorAll('#tablaCursos .curso-row[style=""]').length;
+    const cursosOcultos = totalCursos - cursosVisibles;
+    
+    console.log(`Estadísticas de filtrado:
+    Total de cursos: ${totalCursos}
+    Cursos visibles: ${cursosVisibles}
+    Cursos ocultos: ${cursosOcultos}
+    Porcentaje mostrado: ${((cursosVisibles / totalCursos) * 100).toFixed(1)}%`);
+}
+
+// Inicialización cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    // Configurar filtrado en tiempo real
+    configurarFiltroEnTiempoReal();
+    
+    // Cargar filtros guardados (opcional)
+    // cargarFiltrosGuardados();
+    
+    // Agregar event listener para guardar filtros al cambiar
+    ['filtroId', 'filtroArea', 'filtroCurso', 'filtroEstado'].forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.addEventListener('change', guardarFiltros);
+        }
+    });
+    
+    // Configurar teclas de acceso rápido
+    document.addEventListener('keydown', function(e) {
+        // Ctrl + F para enfocar en el filtro de curso
+        if (e.ctrlKey && e.key === 'f') {
+            e.preventDefault();
+            document.getElementById('filtroCurso').focus();
+        }
+        
+        // Escape para limpiar filtros
+        if (e.key === 'Escape') {
+            limpiarFiltros();
+        }
+        
+        // Enter para aplicar filtros cuando se está en un campo de filtro
+        if (e.key === 'Enter' && 
+            ['filtroId', 'filtroCurso'].includes(e.target.id)) {
+            aplicarFiltros();
+        }
+    });
+});
+
+// Función adicional para agregar un botón de exportar (opcional)
+function agregarBotonExportar() {
+    const contadorResultados = document.getElementById('contadorResultados');
+    
+    if (contadorResultados && !document.getElementById('btnExportar')) {
+        const btnExportar = document.createElement('button');
+        btnExportar.id = 'btnExportar';
+        btnExportar.className = 'ml-3 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm flex items-center gap-1';
+        btnExportar.innerHTML = '<i class="bi bi-download"></i> Exportar';
+        btnExportar.onclick = exportarResultadosFiltrados;
+        
+        contadorResultados.parentNode.appendChild(btnExportar);
+    }
+}
 
     // Función para mostrar el modal de confirmación personalizado
     function mostrarConfirmacion(mensaje) {
