@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -40,6 +41,77 @@
         </button>
       </div>
 
+      <!-- Sección de Filtros -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 class="text-lg font-semibold text-[#2e1a47] mb-4 flex items-center">
+          <i class="bi bi-filter mr-2"></i>
+          Filtros de Búsqueda
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <!-- Filtro por Código Estudiantil -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Código Estudiantil</label>
+            <input 
+              type="text" 
+              id="filtroCodigo" 
+              placeholder="Buscar por código..."
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#127475] focus:border-transparent"
+            >
+          </div>
+
+          <!-- Filtro por Nombre -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
+            <input 
+              type="text" 
+              id="filtroNombre" 
+              placeholder="Buscar por nombre..."
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#127475] focus:border-transparent"
+            >
+          </div>
+
+          <!-- Filtro por Estado -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
+            <select 
+              id="filtroEstado"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#127475] focus:border-transparent"
+            >
+              <option value="">Todos los estados</option>
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+            </select>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="flex gap-2">
+            <button 
+              onclick="aplicarFiltros()" 
+              class="bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition duration-200"
+            >
+              <i class="bi bi-search"></i>
+              Buscar
+            </button>
+            <button 
+              onclick="limpiarFiltros()" 
+              class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition duration-200"
+            >
+              <i class="bi bi-arrow-clockwise"></i>
+              Limpiar
+            </button>
+          </div>
+        </div>
+
+        <!-- Contador de resultados -->
+        <div class="mt-4 pt-4 border-t border-gray-200">
+          <div class="flex justify-between items-center text-sm text-gray-600">
+            <span id="contadorResultados">Mostrando todos los estudiantes</span>
+            <span id="totalEstudiantes"></span>
+          </div>
+        </div>
+      </div>
+
       <!-- Tabla de Estudiantes -->
       <div class="bg-white rounded-lg shadow overflow-x-auto">
         <table class="w-full min-w-[1000px] text-sm text-left">
@@ -51,20 +123,16 @@
               <th class="px-6 py-3">Nombre</th>
               <th class="px-6 py-3">Nivel Academico</th>
               <th class="px-6 py-3">Información</th>
-              <!--
-              <th class="px-6 py-3">Telefono</th>
-              <th class="px-6 py-3">Direccion</th>
-              <th class="px-6 py-3">fecha Nacimiento</th>
-              <th class="px-6 py-3">Email</th>
-              <th class="px-6 py-3">CI</th>
--->
               <th class="px-6 py-3">Estado</th>
               <th class="px-6 py-3 text-center">Acciones</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tablaEstudiantes">
             @forelse ($estudiantes as $index => $estudiante)
-            <tr class="border-b hover:bg-gray-100">
+            <tr class="border-b hover:bg-gray-100 fila-estudiante" 
+                data-codigo="{{ $estudiante->codigoEstudiantil }}" 
+                data-nombre="{{ strtolower($estudiante->usuario->nombre . ' ' . $estudiante->usuario->apellidoPaterno . ' ' . $estudiante->usuario->apellidoMaterno) }}" 
+                data-estado="{{ $estudiante->usuario->estado }}">
               <td class="px-6 py-4">{{ $index + 1 }}</td>
               <td class="px-6 py-4">{{ $estudiante->codigoEstudiantil }}</td>
               <td class="px-6 py-4">
@@ -99,23 +167,7 @@
                   
                 </div>
               </td>
-              <!--
-              <td class="px-6 py-4">
-                {{ $estudiante->usuario->telefono }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $estudiante->usuario->direccion }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $estudiante->usuario->fechaNacimiento }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $estudiante->usuario->email }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $estudiante->usuario->ci }}
-              </td>
--->
+
               <td class="px-6 py-4">
                   <div class="inline-flex items-center gap-2">
                       <span class="w-3.5 h-3.5 rounded-full {{ $estudiante->usuario->estado == 1 ? 'bg-green-500' : 'bg-red-500' }}"></span>
@@ -155,11 +207,20 @@
             </tr>
             @empty
             <tr>
-              <td colspan="5" class="text-center py-4 text-gray-500">No hay estudiantes registrados.</td>
+              <td colspan="7" class="text-center py-4 text-gray-500">No hay estudiantes registrados.</td>
             </tr>
             @endforelse
           </tbody>
         </table>
+        
+        <!-- Mensaje cuando no hay resultados de filtro -->
+        <div id="sinResultados" class="hidden text-center py-8">
+          <div class="flex flex-col items-center justify-center text-gray-500">
+            <i class="bi bi-search text-4xl mb-2"></i>
+            <p class="text-lg font-medium">No se encontraron estudiantes</p>
+            <p class="text-sm">Intenta ajustar los filtros de búsqueda</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -337,6 +398,176 @@
 
   <!-- Scripts opcionales -->
   <script>
+    // Variables globales para el filtrado
+    let filasOriginales = [];
+    let totalEstudiantes = 0;
+
+    // Función para mostrar el modal de confirmación personalizado
+    function mostrarConfirmacion(mensaje) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmacionModal');
+            const mensajeElement = document.getElementById('confirmacionMensaje');
+            
+            mensajeElement.textContent = mensaje;
+            modal.classList.remove('hidden');
+            
+            const btnAceptar = document.getElementById('aceptarConfirmacion');
+            const btnCancelar = document.getElementById('cancelarConfirmacion');
+            
+            function limpiarEventos() {
+                btnAceptar.removeEventListener('click', handleAceptar);
+                btnCancelar.removeEventListener('click', handleCancelar);
+            }
+            
+            function handleAceptar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(true);
+            }
+            
+            function handleCancelar() {
+                modal.classList.add('hidden');
+                limpiarEventos();
+                resolve(false);
+            }
+            
+            btnAceptar.addEventListener('click', handleAceptar);
+            btnCancelar.addEventListener('click', handleCancelar);
+        });
+    }
+
+    // Función para aplicar filtros
+    function aplicarFiltros() {
+      const filtroCodigo = document.getElementById('filtroCodigo').value.toLowerCase().trim();
+      const filtroNombre = document.getElementById('filtroNombre').value.toLowerCase().trim();
+      const filtroEstado = document.getElementById('filtroEstado').value;
+
+      const filas = document.querySelectorAll('.fila-estudiante');
+      let contadorVisibles = 0;
+      let numeroFila = 1;
+
+      filas.forEach(fila => {
+        const codigo = fila.getAttribute('data-codigo').toLowerCase();
+        const nombre = fila.getAttribute('data-nombre');
+        const estado = fila.getAttribute('data-estado');
+
+        let mostrar = true;
+
+        // Filtro por código
+        if (filtroCodigo && !codigo.includes(filtroCodigo)) {
+          mostrar = false;
+        }
+
+        // Filtro por nombre
+        if (filtroNombre && !nombre.includes(filtroNombre)) {
+          mostrar = false;
+        }
+
+        // Filtro por estado
+        if (filtroEstado && estado !== filtroEstado) {
+          mostrar = false;
+        }
+
+        if (mostrar) {
+          fila.style.display = '';
+          // Actualizar número de fila
+          fila.querySelector('td:first-child').textContent = numeroFila;
+          numeroFila++;
+          contadorVisibles++;
+        } else {
+          fila.style.display = 'none';
+        }
+      });
+
+      // Actualizar contador de resultados
+      actualizarContador(contadorVisibles);
+      
+      // Mostrar/ocultar mensaje de sin resultados
+      const sinResultados = document.getElementById('sinResultados');
+      if (contadorVisibles === 0) {
+        sinResultados.classList.remove('hidden');
+      } else {
+        sinResultados.classList.add('hidden');
+      }
+    }
+
+    // Función para limpiar filtros
+    function limpiarFiltros() {
+      document.getElementById('filtroCodigo').value = '';
+      document.getElementById('filtroNombre').value = '';
+      document.getElementById('filtroEstado').value = '';
+      
+      // Mostrar todas las filas y resetear numeración
+      const filas = document.querySelectorAll('.fila-estudiante');
+      filas.forEach((fila, index) => {
+        fila.style.display = '';
+        fila.querySelector('td:first-child').textContent = index + 1;
+      });
+
+      // Ocultar mensaje de sin resultados
+      document.getElementById('sinResultados').classList.add('hidden');
+      
+      // Actualizar contador
+      actualizarContador(filas.length);
+    }
+
+    // Función para actualizar contador de resultados
+    function actualizarContador(visible) {
+      const contadorElement = document.getElementById('contadorResultados');
+      const totalElement = document.getElementById('totalEstudiantes');
+      
+      if (visible === totalEstudiantes) {
+        contadorElement.textContent = 'Mostrando todos los estudiantes';
+      } else {
+        contadorElement.textContent = `Mostrando ${visible} de ${totalEstudiantes} estudiantes`;
+      }
+      
+      totalElement.textContent = `Total: ${totalEstudiantes}`;
+    }
+
+    // Función para filtrado en tiempo real
+    function configurarFiltradoTiempoReal() {
+      const inputs = ['filtroCodigo', 'filtroNombre', 'filtroEstado'];
+      
+      inputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+          input.addEventListener('input', aplicarFiltros);
+          if (input.tagName === 'SELECT') {
+            input.addEventListener('change', aplicarFiltros);
+          }
+        }
+      });
+    }
+
+    // Función para permitir filtrado con Enter
+    function configurarEnterParaFiltrar() {
+      const inputs = ['filtroCodigo', 'filtroNombre'];
+      
+      inputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+          input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              aplicarFiltros();
+            }
+          });
+        }
+      });
+    }
+
+    // Inicializar filtros cuando se carga la página
+    document.addEventListener('DOMContentLoaded', function() {
+      // Contar total de estudiantes
+      totalEstudiantes = document.querySelectorAll('.fila-estudiante').length;
+      actualizarContador(totalEstudiantes);
+      
+      // Configurar filtrado en tiempo real
+      configurarFiltradoTiempoReal();
+      
+      // Configurar filtrado con Enter
+      configurarEnterParaFiltrar();
+    });
     // Función para mostrar el modal de confirmación personalizado
     function mostrarConfirmacion(mensaje) {
         return new Promise((resolve) => {
