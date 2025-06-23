@@ -128,8 +128,6 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
     Route::get('/calendario', [PanelEstudianteController::class, 'calendario'])->name('estudiante.calendario');
 });
 
-
-
 Route::prefix('docente')
     ->middleware(['auth', CheckRole::class . ':2'])
     ->name('docente.')
