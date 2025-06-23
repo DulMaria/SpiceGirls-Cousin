@@ -4,13 +4,11 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\TwoFactorController;
-use App\Http\Controllers\ZoomController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PanelEstudianteController;
-use App\Http\Controllers\PanelDocenteController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
@@ -18,7 +16,8 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\EstadisticasController;
 use App\Http\Controllers\AperturaModuloController;
-use App\Http\Controllers\DocenteCursoController;
+use App\Http\Controllers\InscripAntiguoController;
+use App\Models\AperturaModulo;
 
 Route::fallback(function () {
     return redirect()->back()->with('error', 'La ruta que intentas acceder no existe.');
@@ -126,26 +125,34 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
     Route::get('/inscripcion', [PanelEstudianteController::class, 'inscripcion'])->name('estudiante.inscripcionModulo');
     Route::get('/cursos', [PanelEstudianteController::class, 'cursos'])->name('estudiante.misCursos');
     Route::get('/calendario', [PanelEstudianteController::class, 'calendario'])->name('estudiante.calendario');
+    //ruta para formulario de inscripcion antiguo
+    Route::get('/inscripcion-antiguo', [InscripAntiguoController::class, 'index'])->name('estudiante.inscripcionAntiguo');
+    Route::post('/inscripciones', [InscripAntiguoController::class, 'store'])->name('inscripciones.store');
+    Route::post('/inscripcion/siguiente-modulo', [InscripAntiguoController::class, 'inscribirSiguienteModulo'])
+    ->name('inscripcion.siguienteModulo');
+
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
+    Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinDocente');
+});
+/* routes/web.php
+Route::get('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'mostrarFormulario'])->name('test.formulario');
+Route::post('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'guardarRespuesta'])->name('test.guardar');
+Route::get('/test/reiniciar', function () {
+    session()->forget('respuestas');
+    return redirect()->route('test.formulario');
+})->name('test.reiniciar');*/
+// Rutas existentes
+Route::get('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'mostrarFormulario'])->name('test.formulario');
+Route::post('/test-vocacionale', [App\Http\Controllers\TestVocacionalController::class, 'guardarRespuesta'])->name('test.guardar');
+Route::get('/test/reiniciar', function () {
+    session()->forget('respuestas');
+    return redirect()->route('test.formulario');
+})->name('test.reiniciar');
+// Nuevas rutas para ML
+Route::post('/admin/test/entrenar-modelo', [App\Http\Controllers\TestVocacionalController::class, 'entrenarModelo'])->name('admin.test.entrenar');
+Route::get('/admin/test/estadisticas', [App\Http\Controllers\TestVocacionalController::class, 'estadisticas'])->name('admin.test.estadisticas');
 
 Route::prefix('docente')
     ->middleware(['auth', CheckRole::class . ':2'])

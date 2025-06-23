@@ -34,7 +34,7 @@
                     <div class="bg-white rounded-xl shadow-md p-6 transition-transform duration-300 hover:scale-105">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-sm text-gray-500">Curso más cursado</h3>
+                                <h3 class="text-sm text-gray-500">Curso con mayor Demanda</h3>
                                 <p class="text-2xl font-semibold text-purple-900">{{ $cursoMasCursado ?? 'Sin datos' }}
                                 </p>
                                 <p class="text-green-500 mt-1 text-sm flex items-center">
@@ -150,59 +150,9 @@
                     </div>
                 </div>
 
-                <!-- Filtros y gráfico de inscripciones-->
-
-                <!--<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
-                    <div>
-                    <h2 class="text-xl font-semibold text-gray-800">Inscripciones</h2>
-                    <p class="text-sm text-gray-500">Filtra por categoría y rango de fechas</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2">
-                    <button id="btnInscripciones" class="px-3 py-1 rounded-md border border-gray-300 bg-black text-white text-sm font-medium focus:outline-none focus:ring">Inscripciones</button>
-                    <button id="btnGraduados" class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium hover:bg-gray-100">Graduados</button>
-                    <button id="btnTotales" class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium hover:bg-gray-100">Totales</button><!-- este es para -->
-                <!--<input type="date" id="startDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
-                    <input type="date" id="endDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
-                    </div>
-                </div>
-                <canvas id="inscripcionesChart" height="100"></canvas>
-                </div>-->
 
 
-                <!-- Gráfico de Pagos con responsividad mejorada
-                    <div class="mt-8 bg-white rounded-2xl p-4  shadow-md">
-                        <h2 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Pagos Recibidos por Tipo</h2>
-
-                         Filtros con mejor adaptación a móviles
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                           <div class="w-full">
-                                <label class="text-xs sm:text-sm font-medium block mb-1">Fecha:</label>
-                                <input type="month" id="filterDate" class="w-full p-1.5 sm:p-2 border rounded-md text-sm" />
-                            </div>
-                            <div class="w-full">
-                                <label class="text-xs sm:text-sm font-medium block mb-1">Curso:</label>
-                                <select id="filterCurso" class="w-full p-1.5 sm:p-2 border rounded-md text-sm">
-                                    <option value="todos">Todos</option>
-                                    <option value="criminologia">Criminología</option>
-                                    <option value="psicologia">Psicología</option>
-                                </select>
-                            </div>
-                            <div class="w-full">
-                                <label class="text-xs sm:text-sm font-medium block mb-1">Tipo de Pago:</label>
-                                <select id="filterTipo" class="w-full p-1.5 sm:p-2 border rounded-md text-sm">
-                                    <option value="todos">Todos</option>
-                                    <option value="completo">Pago Completo</option>
-                                    <option value="beca">Pago con Beca</option>
-                                    <option value="oferta">Pago con Oferta</option>
-                                </select>
-                            </div>
-                        </div>-->
-
-                <!-- Contenedor del gráfico con altura responsiva
-                        <div class="relative" style="height: 580px;">
-                            <canvas id="graficaPagos"></canvas>
-                        </div>
-                    </div>-->
+              
 
 
                 <!-- Cursos populares -->

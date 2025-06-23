@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -21,6 +22,10 @@
           max-height: calc(90vh - 40px); /* altura máxima menos padding */
           overflow-y: auto;
       }
+      /* Estilo para resaltar las filas filtradas */
+      .row-highlight {
+          background-color: #f0f9ff !important;
+      }
   </style>
 </head>
 
@@ -37,6 +42,76 @@
         <button onclick="toggleModal('modalAddDocente')" class="bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg shadow">
           + Añadir Docente
         </button>
+      </div>
+
+      <!-- Sección de Filtros -->
+      <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h2 class="text-lg font-semibold text-[#2e1a47] mb-4 flex items-center">
+          <i class="bi bi-funnel mr-2"></i>
+          Filtros de Búsqueda
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <!-- Filtro por Código -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Código de Docente</label>
+            <input 
+              type="text" 
+              id="filtro-codigo" 
+              placeholder="Buscar por código..."
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] focus:border-transparent"
+            >
+          </div>
+          
+          <!-- Filtro por Nombre -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
+            <input 
+              type="text" 
+              id="filtro-nombre" 
+              placeholder="Buscar por nombre..."
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] focus:border-transparent"
+            >
+          </div>
+          
+          <!-- Filtro por Estado -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
+            <select 
+              id="filtro-estado"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#127475] focus:border-transparent"
+            >
+              <option value="">Todos los estados</option>
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+            </select>
+          </div>
+          
+          <!-- Botones de acción -->
+          <div class="flex items-end gap-2">
+            <button 
+              onclick="limpiarFiltros()" 
+              class="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center"
+            >
+              <i class="bi bi-arrow-clockwise mr-1"></i>
+              Limpiar
+            </button>
+            <button 
+              onclick="aplicarFiltros()" 
+              class="flex-1 bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center"
+            >
+              <i class="bi bi-search mr-1"></i>
+              Filtrar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Contador de resultados -->
+        <div class="mt-4 pt-4 border-t border-gray-200">
+          <p class="text-sm text-gray-600">
+            <span id="contador-resultados">0</span> docente(s) encontrado(s)
+            <span id="total-docentes" class="text-gray-400"></span>
+          </p>
+        </div>
       </div>
 
       <!-- Tabla de Docentes -->
@@ -62,9 +137,9 @@
               <th class="px-6 py-3 text-center">Acciones</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tabla-docentes">
             @forelse ($docentes as $index => $docente)
-            <tr class="border-b hover:bg-gray-100">
+            <tr class="border-b hover:bg-gray-100 fila-docente" data-codigo="{{ $docente->codigoDocente }}" data-nombre="{{ strtolower($docente->usuario->nombre . ' ' . $docente->usuario->apellidoPaterno . ' ' . $docente->usuario->apellidoMaterno) }}" data-estado="{{ $docente->usuario->estado }}">
               <td class="px-6 py-4">{{ $index + 1 }}</td>
               <td class="px-6 py-4">{{ $docente->codigoDocente }}</td>
               <td class="px-6 py-4">
@@ -152,12 +227,21 @@
               </td>
             </tr>
             @empty
-            <tr>
-              <td colspan="5" class="text-center py-4 text-gray-500">No hay docentes registrados.</td>
+            <tr id="no-docentes">
+              <td colspan="7" class="text-center py-4 text-gray-500">No hay docentes registrados.</td>
             </tr>
             @endforelse
           </tbody>
         </table>
+        
+        <!-- Mensaje cuando no hay resultados de filtros -->
+        <div id="no-resultados" class="hidden text-center py-8">
+          <div class="flex flex-col items-center justify-center text-gray-500">
+            <i class="bi bi-search text-4xl mb-2"></i>
+            <p class="text-lg font-medium">No se encontraron docentes</p>
+            <p class="text-sm">Intenta ajustar los filtros de búsqueda</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -334,6 +418,111 @@
   </div>
   <!-- Scripts opcionales -->
   <script>
+    // ====== FUNCIONES DE FILTRADO ======
+    
+    let totalDocentes = 0;
+    
+    // Inicializar filtros al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      // Contar total de docentes al cargar
+      totalDocentes = document.querySelectorAll('.fila-docente').length;
+      actualizarContador(totalDocentes);
+      
+      // Agregar event listeners para filtrado en tiempo real
+      document.getElementById('filtro-codigo').addEventListener('input', aplicarFiltros);
+      document.getElementById('filtro-nombre').addEventListener('input', aplicarFiltros);
+      document.getElementById('filtro-estado').addEventListener('change', aplicarFiltros);
+      
+      // Aplicar filtros iniciales
+      aplicarFiltros();
+    });
+    
+    function aplicarFiltros() {
+      const filtroCodigo = document.getElementById('filtro-codigo').value.toLowerCase().trim();
+      const filtroNombre = document.getElementById('filtro-nombre').value.toLowerCase().trim();
+      const filtroEstado = document.getElementById('filtro-estado').value;
+      
+      const filas = document.querySelectorAll('.fila-docente');
+      let resultadosVisibles = 0;
+      
+      filas.forEach((fila, index) => {
+        const codigo = fila.getAttribute('data-codigo').toLowerCase();
+        const nombre = fila.getAttribute('data-nombre');
+        const estado = fila.getAttribute('data-estado');
+        
+        let mostrarFila = true;
+        
+        // Filtrar por código
+        if (filtroCodigo && !codigo.includes(filtroCodigo)) {
+          mostrarFila = false;
+        }
+        
+        // Filtrar por nombre
+        if (filtroNombre && !nombre.includes(filtroNombre)) {
+          mostrarFila = false;
+        }
+        
+        // Filtrar por estado
+        if (filtroEstado && estado !== filtroEstado) {
+          mostrarFila = false;
+        }
+        
+        // Mostrar u ocultar fila
+        if (mostrarFila) {
+          fila.style.display = '';
+          fila.classList.add('row-highlight');
+          resultadosVisibles++;
+          // Actualizar el número de fila
+          fila.querySelector('td:first-child').textContent = resultadosVisibles;
+        } else {
+          fila.style.display = 'none';
+          fila.classList.remove('row-highlight');
+        }
+      });
+      
+      // Mostrar/ocultar mensaje de no resultados
+      const noResultados = document.getElementById('no-resultados');
+      const tablaBody = document.getElementById('tabla-docentes');
+      
+      if (resultadosVisibles === 0) {
+        noResultados.classList.remove('hidden');
+        tablaBody.style.display = 'none';
+      } else {
+        noResultados.classList.add('hidden');
+        tablaBody.style.display = '';
+      }
+      
+      // Actualizar contador
+      actualizarContador(resultadosVisibles);
+    }
+    
+    function limpiarFiltros() {
+      // Limpiar todos los campos de filtro
+      document.getElementById('filtro-codigo').value = '';
+      document.getElementById('filtro-nombre').value = '';
+      document.getElementById('filtro-estado').value = '';
+      
+      // Aplicar filtros (que ahora estarán vacíos)
+      aplicarFiltros();
+      
+      // Quitar resaltado de todas las filas
+      document.querySelectorAll('.fila-docente').forEach(fila => {
+        fila.classList.remove('row-highlight');
+      });
+    }
+    
+    function actualizarContador(resultados) {
+      const contador = document.getElementById('contador-resultados');
+      const total = document.getElementById('total-docentes');
+      
+      contador.textContent = resultados;
+      
+      if (resultados < totalDocentes) {
+        total.textContent = ` de ${totalDocentes} total`;
+      } else {
+        total.textContent = '';
+      }
+    }
 
     // Función para mostrar el modal de confirmación personalizado
     function mostrarConfirmacion(mensaje) {

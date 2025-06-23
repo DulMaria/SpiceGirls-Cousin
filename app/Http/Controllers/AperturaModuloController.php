@@ -19,11 +19,15 @@ class AperturaModuloController extends Controller
             ->get();
 
         $cursos = Curso::where('estado', 1)->get();
+        //recuperamos los ids de los cursos activos
+        $cursosIds = $cursos->pluck('ID_Curso')->toArray();
 
-        // Cargar TODOS los módulos activos con su curso
-        $modulos = ModuloCurso::with('curso')
-            ->where('estado', '1')
+        // Cargar TODOS los módulos activos con su idcurso que esten activos
+        $modulos = ModuloCurso::whereIn('Id_Curso', $cursosIds)
+            ->where('estado', 1)
+            ->select('ID_Modulo', 'nombreModulo', 'Id_Curso')
             ->get();
+
 
         $docentes = Docente::with('usuario')->get();
 
