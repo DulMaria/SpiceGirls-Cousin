@@ -16,6 +16,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\EstadisticasController;
 use App\Http\Controllers\AperturaModuloController;
+use App\Http\Controllers\InscripAntiguoController;
 use App\Models\AperturaModulo;
 
 Route::fallback(function () {
@@ -124,6 +125,12 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
     Route::get('/inscripcion', [PanelEstudianteController::class, 'inscripcion'])->name('estudiante.inscripcionModulo');
     Route::get('/cursos', [PanelEstudianteController::class, 'cursos'])->name('estudiante.misCursos');
     Route::get('/calendario', [PanelEstudianteController::class, 'calendario'])->name('estudiante.calendario');
+    //ruta para formulario de inscripcion antiguo
+    Route::get('/inscripcion-antiguo', [InscripAntiguoController::class, 'index'])->name('estudiante.inscripcionAntiguo');
+    Route::post('/inscripciones', [InscripAntiguoController::class, 'store'])->name('inscripciones.store');
+    Route::post('/inscripcion/siguiente-modulo', [InscripAntiguoController::class, 'inscribirSiguienteModulo'])
+    ->name('inscripcion.siguienteModulo');
+
 });
 
 Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
@@ -146,3 +153,30 @@ Route::get('/test/reiniciar', function () {
 // Nuevas rutas para ML
 Route::post('/admin/test/entrenar-modelo', [App\Http\Controllers\TestVocacionalController::class, 'entrenarModelo'])->name('admin.test.entrenar');
 Route::get('/admin/test/estadisticas', [App\Http\Controllers\TestVocacionalController::class, 'estadisticas'])->name('admin.test.estadisticas');
+
+Route::prefix('docente')
+    ->middleware(['auth', CheckRole::class . ':2'])
+    ->name('docente.')
+    ->group(function () {
+
+        // Panel principal del docente - CORREGIDO
+        Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('prinDocente'); // Cambiado de 'prinDocente' a 'dashboard'
+
+        // Gestión de cursos - todas apuntan a misCursos
+        Route::get('/misCursos', [DocenteCursoController::class, 'misCursos'])->name('misCursos');
+        Route::get('/estudiantes/{curso}', [DocenteCursoController::class, 'misCursos'])->name('estudiantes');
+        Route::get('/seguimiento/{curso}', [DocenteCursoController::class, 'misCursos'])->name('seguimiento');
+        Route::get('/analisis/{curso}', [DocenteCursoController::class, 'misCursos'])->name('analisis');
+        Route::get('/reportes/{curso}', [DocenteCursoController::class, 'misCursos'])->name('reportes');
+
+        // RUTAS DE ZOOM - AGREGADAS
+        Route::get('/zoom/crear', [ZoomController::class, 'mostrarFormulario'])->name('zoom.crear');
+        Route::post('/zoom/crear', [ZoomController::class, 'crearReunion'])->name('zoom.crear.post');
+
+        // API endpoints
+        Route::prefix('api')->group(function () {
+            Route::get('curso/{id}/details', [DocenteCursoController::class, 'getCursoDetails'])->name('api.curso.details');
+            Route::get('misCursos', [DocenteCursoController::class, 'getMisCursos'])->name('api.misCursos');
+            Route::get('estadisticas', [DocenteCursoController::class, 'getEstadisticas'])->name('api.estadisticas');
+        });
+    });
