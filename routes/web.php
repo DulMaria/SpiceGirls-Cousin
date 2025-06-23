@@ -136,10 +136,6 @@ Route::prefix('docente')
         // Panel principal del docente - CORREGIDO
         Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('prinDocente'); // Cambiado de 'prinDocente' a 'dashboard'
 
-        // O si quieres mantener el nombre original, usa:
-        // Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('prinDocente');
-        // Pero entonces en tu código debes usar route('docente.prinDocente')
-
         // Gestión de cursos - todas apuntan a misCursos
         Route::get('/misCursos', [DocenteCursoController::class, 'misCursos'])->name('misCursos');
         Route::get('/estudiantes/{curso}', [DocenteCursoController::class, 'misCursos'])->name('estudiantes');
