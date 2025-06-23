@@ -81,19 +81,19 @@
                             // Datos de clases estáticas
                             const horarioClases = {
                                 'Viernes': {
-                                    '10:00': { materia: 'Programación Web', aula: 'A-302', docente: 'Lic. Pérez', color: 'bg-[#127475]' },
-                                    '14:00': { materia: 'Bases de Datos', aula: 'Lab-4', docente: 'Ing. Gómez', color: 'bg-[#2e1a47]' },
-                                    '16:00': { materia: 'Matemáticas', aula: 'B-105', docente: 'Dr. Rodríguez', color: 'bg-purple-600' },
+                                    '10:00': { materia: 'Introduccion Criminalistica', aula: 'A-302', docente: 'Lic. Pérez', color: 'bg-[#127475]' },
+                                    '14:00': { materia: 'Fundamentos Clave', aula: 'Lab-4', docente: 'Ing. Gómez', color: 'bg-[#2e1a47]' },
+                                    '16:00': { materia: 'Conceptos Eticos', aula: 'B-105', docente: 'Dr. Rodríguez', color: 'bg-purple-600' },
                                     '18:00': { materia: 'Taller Práctico', aula: 'Lab-1', docente: 'Ing. Torres', color: 'bg-blue-600' }
                                 },
                                 'Sábado': {
-                                    '8:00': { materia: 'Inglés Técnico', aula: 'C-201', docente: 'Prof. Smith', color: 'bg-blue-600' },
-                                    '12:00': { materia: 'Redes', aula: 'Lab-3', docente: 'Ing. López', color: 'bg-[#127475]' },
-                                    '15:00': { materia: 'Sistemas Operativos', aula: 'Lab-2', docente: 'Ing. Castro', color: 'bg-[#2e1a47]' },
+                                    '8:00': { materia: 'Practica Presensial', aula: 'C-201', docente: 'Prof. Smith', color: 'bg-blue-600' },
+                                    '12:00': { materia: 'Repaso', aula: 'Lab-3', docente: 'Ing. López', color: 'bg-[#127475]' },
+                                    '15:00': { materia: 'Introduccion a Balistica', aula: 'Lab-2', docente: 'Ing. Castro', color: 'bg-[#2e1a47]' },
                                     '19:00': { materia: 'Ética Profesional', aula: 'A-205', docente: 'Dra. Martínez', color: 'bg-purple-600' }
                                 },
                                 'Domingo': {
-                                    '9:00': { materia: 'Proyecto Integrador', aula: 'A-301', docente: 'Lic. Fernández', color: 'bg-[#127475]' },
+                                    '9:00': { materia: 'Proyecto ', aula: 'A-301', docente: 'Lic. Fernández', color: 'bg-[#127475]' },
                                     '11:00': { materia: 'Seminario', aula: 'Auditorio', docente: 'Mg. Vargas', color: 'bg-[#2e1a47]' },
                                     '16:00': { materia: 'Tutoría', aula: 'A-103', docente: 'Lic. Pérez', color: 'bg-blue-600' }
                                 }

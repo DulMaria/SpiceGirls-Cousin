@@ -34,7 +34,7 @@
                     <div class="bg-white rounded-xl shadow-md p-6 transition-transform duration-300 hover:scale-105">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-sm text-gray-500">Curso más cursado</h3>
+                                <h3 class="text-sm text-gray-500">Curso con mayor Demanda</h3>
                                 <p class="text-2xl font-semibold text-purple-900">{{ $cursoMasCursado ?? 'Sin datos' }}
                                 </p>
                                 <p class="text-green-500 mt-1 text-sm flex items-center">
@@ -150,23 +150,6 @@
                     </div>
                 </div>
 
-                <!-- Filtros y gráfico de inscripciones-->
-
-                <!--<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
-                    <div>
-                    <h2 class="text-xl font-semibold text-gray-800">Inscripciones</h2>
-                    <p class="text-sm text-gray-500">Filtra por categoría y rango de fechas</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2">
-                    <button id="btnInscripciones" class="px-3 py-1 rounded-md border border-gray-300 bg-black text-white text-sm font-medium focus:outline-none focus:ring">Inscripciones</button>
-                    <button id="btnGraduados" class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium hover:bg-gray-100">Graduados</button>
-                    <button id="btnTotales" class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm font-medium hover:bg-gray-100">Totales</button><!-- este es para -->
-                <!--<input type="date" id="startDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
-                    <input type="date" id="endDate" class="px-2 py-1 border border-gray-300 rounded-md text-sm">
-                    </div>
-                </div>
-                <canvas id="inscripcionesChart" height="100"></canvas>
-                </div>-->
 
 
               
