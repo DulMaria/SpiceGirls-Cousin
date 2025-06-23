@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -26,6 +25,73 @@
       .row-highlight {
           background-color: #f0f9ff !important;
       }
+
+      /* Estilos para impresión */
+      @media print {
+          /* Ocultar elementos que no se deben imprimir */
+          .no-print {
+              display: none !important;
+          }
+          
+          /* Configurar página de impresión */
+          @page {
+              margin: 1cm;
+              size: A4 landscape;
+          }
+          
+          body {
+              background: white !important;
+              color: black !important;
+              font-size: 12px;
+          }
+          
+          /* Estilos específicos para la tabla de impresión */
+          .print-table {
+              width: 100% !important;
+              border-collapse: collapse !important;
+              margin-top: 20px;
+          }
+          
+          .print-table th,
+          .print-table td {
+              border: 1px solid #333 !important;
+              padding: 8px 4px !important;
+              text-align: left !important;
+              font-size: 11px !important;
+          }
+          
+          .print-table th {
+              background-color: #f0f0f0 !important;
+              font-weight: bold !important;
+              color: black !important;
+          }
+          
+          .print-header {
+              text-align: center;
+              margin-bottom: 20px;
+              border-bottom: 2px solid #333;
+              padding-bottom: 10px;
+          }
+          
+          .print-header h1 {
+              font-size: 18px !important;
+              margin: 0 !important;
+              color: black !important;
+          }
+          
+          .print-info {
+              font-size: 10px;
+              margin-top: 5px;
+          }
+          
+          .print-filters {
+              margin-bottom: 15px;
+              font-size: 10px;
+              background-color: #f9f9f9;
+              padding: 8px;
+              border: 1px solid #ddd;
+          }
+      }
   </style>
 </head>
 
@@ -39,13 +105,20 @@
     <div class="p-8 w-full">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-[#2e1a47]">Gestión de Docentes</h1>
-        <button onclick="toggleModal('modalAddDocente')" class="bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg shadow">
-          + Añadir Docente
-        </button>
+        <div class="flex gap-3">
+          <!-- Botón de Imprimir -->
+          <button onclick="imprimirLista()" class="no-print bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
+            <i class="bi bi-printer"></i>
+            Imprimir Lista
+          </button>
+          <button onclick="toggleModal('modalAddDocente')" class="no-print bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg shadow">
+            + Añadir Docente
+          </button>
+        </div>
       </div>
 
       <!-- Sección de Filtros -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <div class="bg-white rounded-lg shadow p-6 mb-6 no-print">
         <h2 class="text-lg font-semibold text-[#2e1a47] mb-4 flex items-center">
           <i class="bi bi-funnel mr-2"></i>
           Filtros de Búsqueda
@@ -116,7 +189,7 @@
 
       <!-- Tabla de Docentes -->
       <div class="bg-white rounded-lg shadow overflow-x-auto">
-        <table class="w-full min-w-[1000px] text-sm text-left">
+        <table class="w-full min-w-[1000px] text-sm text-left" id="tabla-principal">
 
           <thead class="bg-[#1f1b2e] text-white">
             <tr>
@@ -125,16 +198,9 @@
               <th class="px-6 py-3">Nombre</th>
               <th class="px-6 py-3">Especialidad</th>
               <!-- Sobre el docente -->
-              <th class="px-6 py-3">Información</th>
-              <!--
-              <th class="px-6 py-3">Telefono</th>
-              <th class="px-6 py-3">Direccion</th>
-              <th class="px-6 py-3">fecha Nacimiento</th>
-              <th class="px-6 py-3">Email</th>
-              <th class="px-6 py-3">CI</th>
--->
+              <th class="px-6 py-3 no-print">Información</th>
               <th class="px-6 py-3">Estado</th>
-              <th class="px-6 py-3 text-center">Acciones</th>
+              <th class="px-6 py-3 text-center no-print">Acciones</th>
             </tr>
           </thead>
           <tbody id="tabla-docentes">
@@ -149,7 +215,7 @@
               </td>
               <td class="px-6 py-4">{{ $docente->especialidad }}</td>
               
-              <td class="px-6 py-4 flex items-center justify-center" x-data="{ showModal: false }">
+              <td class="px-6 py-4 flex items-center justify-center no-print" x-data="{ showModal: false }">
                 <button 
                   class="bg-black hover:bg-black-700 text-white px-3 py-2 rounded-full flex items-center  gap-2"
                   type="button"
@@ -173,40 +239,22 @@
                   
                 </div>
               </td>
-              <!--
-              <td class="px-6 py-4">
-                {{ $docente->usuario->telefono }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $docente->usuario->direccion }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $docente->usuario->fechaNacimiento }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $docente->usuario->email }}
-              </td>
-              <td class="px-6 py-4">
-                {{ $docente->usuario->ci }}
-              </td>
--->
+              
               <td class="px-6 py-4">
                  <div class="inline-flex items-center gap-2">
-                      <span class="w-3.5 h-3.5 rounded-full {{ $docente->usuario->estado == 1 ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                      <span class="w-3.5 h-3.5 rounded-full {{ $docente->usuario->estado == 1 ? 'bg-green-500' : 'bg-red-500' }} print-status-indicator"></span>
                        <span class="text-sm">
                               {{ $docente->usuario->estado == 1 ? 'Activo' : 'Inactivo'}}
                         </span>
                  </div>
               </td>
-              <td class="px-6 py-4 text-center">
+              <td class="px-6 py-4 text-center no-print">
                   <div class="flex items-center gap-4">
                     <button type="button" onclick="openEditModal('{{ $docente->codigoDocente }}', '{{ $docente->ID_Usuario }}')"
                       class="editar-curso bg-purple-800 hover:bg-purple-700 text-white px-4 py-3 rounded-full flex items-center gap-5">
-                      <!-- Nuevo ícono de Bootstrap -->
                       <i class="bi bi-pencil-fill"></i> 
                     </button>
                     
-                    <!-- Formulario Habilitar / Deshabilitar -->
                     <form id="formCambiarEstado" method="POST" action="{{ route('docentes.cambiarEstado', $docente->codigoDocente) }}" 
                           class="inline-block"
                           data-estado="{{ $docente->usuario->estado }}"
@@ -235,7 +283,7 @@
         </table>
         
         <!-- Mensaje cuando no hay resultados de filtros -->
-        <div id="no-resultados" class="hidden text-center py-8">
+        <div id="no-resultados" class="hidden text-center py-8 no-print">
           <div class="flex flex-col items-center justify-center text-gray-500">
             <i class="bi bi-search text-4xl mb-2"></i>
             <p class="text-lg font-medium">No se encontraron docentes</p>
@@ -247,7 +295,7 @@
   </div>
 
   <!-- Modal Añadir Docente -->
-  <div id="modalAddDocente" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div id="modalAddDocente" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 no-print">
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl">
       <div class="modal-container">
         <h2 class="text-2xl font-bold mb-6 text-[#2e1a47]">Añadir Docente</h2>
@@ -315,8 +363,9 @@
       </div>
     </div>
   </div>
+  
   <!-- Modal Editar Docente -->
-  <div id="modalEditDocente" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div id="modalEditDocente" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 no-print">
     <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl">
       <div class="modal-container">
         <h2 class="text-2xl font-bold mb-6 text-[#2e1a47]">Editar Docente</h2>
@@ -386,7 +435,7 @@
   </div>
 
   <!-- Modal para detalles que no son importantes del todo en docente-->
-  <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden no-print">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
       <h2 class="text-xl font-bold mb-4">Detalles del Docente</h2>
       <div class="space-y-2 text-sm">
@@ -402,9 +451,8 @@
     </div>
   </div>
 
-
   <!-- Modal de confirmación personalizado -->
-  <div id="confirmacionModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+  <div id="confirmacionModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50 no-print">
       <div class="bg-white p-6 rounded-lg shadow-lg w-80 max-w-md">
           <div class="mb-4">
               <p class="text-lg font-semibold text-[#2e1a47]">La fundación dice:</p>
@@ -416,8 +464,269 @@
           </div>
       </div>
   </div>
+
   <!-- Scripts opcionales -->
   <script>
+    // ====== FUNCIÓN DE IMPRESIÓN COMPLETA ======
+function imprimirLista() {
+  // Crear una nueva ventana para la impresión
+  const ventanaImpresion = window.open('', '_blank');
+  
+  // Obtener la fecha y hora actual
+  const ahora = new Date();
+  const fechaImpresion = ahora.toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  const horaImpresion = ahora.toLocaleTimeString('es-ES', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  
+  // Obtener información de filtros aplicados
+  const filtroCodigo = document.getElementById('filtro-codigo').value;
+  const filtroNombre = document.getElementById('filtro-nombre').value;
+  const filtroEstado = document.getElementById('filtro-estado');
+  const filtroEstadoTexto = filtroEstado.value ? filtroEstado.options[filtroEstado.selectedIndex].text : 'Todos';
+  
+  // Construir información de filtros
+  let infoFiltros = [];
+  if (filtroCodigo) infoFiltros.push(`Código: "${filtroCodigo}"`);
+  if (filtroNombre) infoFiltros.push(`Nombre: "${filtroNombre}"`);
+  if (filtroEstado.value) infoFiltros.push(`Estado: ${filtroEstadoTexto}`);
+  
+  const filtrosAplicados = infoFiltros.length > 0 ? infoFiltros.join(' | ') : 'Sin filtros aplicados';
+  
+  // Obtener solo las filas visibles
+  const filasVisibles = document.querySelectorAll('.fila-docente');
+  const docentesParaImprimir = [];
+  let contador = 1;
+  
+  filasVisibles.forEach(fila => {
+    if (fila.style.display !== 'none') {
+      const celdas = fila.querySelectorAll('td');
+      docentesParaImprimir.push({
+        numero: contador++,
+        codigo: celdas[1].textContent.trim(),
+        nombre: celdas[2].textContent.trim(),
+        especialidad: celdas[3].textContent.trim(),
+        estado: celdas[5].textContent.trim()
+      });
+    }
+  });
+  
+  // Crear el HTML para la impresión
+  const htmlImpresion = `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Lista de Docentes - Impresión</title>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-family: Arial, sans-serif;
+          background: white;
+          color: black;
+          font-size: 12px;
+          line-height: 1.4;
+          padding: 20px;
+        }
+        
+        @page {
+          margin: 1cm;
+          size: A4 landscape;
+        }
+        
+        .print-header {
+          text-align: center;
+          margin-bottom: 20px;
+          border-bottom: 2px solid #333;
+          padding-bottom: 15px;
+        }
+        
+        .print-header h1 {
+          font-size: 20px;
+          margin-bottom: 5px;
+          color: #2e1a47;
+          font-weight: bold;
+        }
+        
+        .print-info {
+          font-size: 11px;
+          color: #666;
+          margin-top: 8px;
+        }
+        
+        .print-filters {
+          margin-bottom: 20px;
+          font-size: 11px;
+          background-color: #f9f9f9;
+          padding: 12px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+        
+        .print-filters strong {
+          color: #2e1a47;
+        }
+        
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+          font-size: 11px;
+        }
+        
+        .print-table th,
+        .print-table td {
+          border: 1px solid #333;
+          padding: 8px 6px;
+          text-align: left;
+          word-wrap: break-word;
+        }
+        
+        .print-table th {
+          background-color: #2e1a47;
+          color: white;
+          font-weight: bold;
+          text-align: center;
+        }
+        
+        .print-table tbody tr:nth-child(even) {
+          background-color: #f8f9fa;
+        }
+        
+        .print-table tbody tr:hover {
+          background-color: #e9ecef;
+        }
+        
+        .estado-activo {
+          color: #28a745;
+          font-weight: bold;
+        }
+        
+        .estado-inactivo {
+          color: #dc3545;
+          font-weight: bold;
+        }
+        
+        .text-center {
+          text-align: center;
+        }
+        
+        .print-footer {
+          margin-top: 30px;
+          font-size: 10px;
+          color: #666;
+          text-align: center;
+          border-top: 1px solid #ddd;
+          padding-top: 10px;
+        }
+        
+        .total-registros {
+          margin-top: 15px;
+          font-size: 12px;
+          font-weight: bold;
+          text-align: right;
+          color: #2e1a47;
+        }
+        
+        .no-data {
+          text-align: center;
+          padding: 40px;
+          color: #666;
+          font-style: italic;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="print-header">
+        <h1>LISTA DE DOCENTES</h1>
+        <div class="print-info">
+          <p><strong>Fecha de impresión:</strong> ${fechaImpresion} - ${horaImpresion}</p>
+        </div>
+      </div>
+      
+      <div class="print-filters">
+        <strong>Filtros aplicados:</strong> ${filtrosAplicados}
+      </div>
+      
+      ${docentesParaImprimir.length > 0 ? `
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th style="width: 8%;">#</th>
+              <th style="width: 15%;">Código</th>
+              <th style="width: 35%;">Nombre Completo</th>
+              <th style="width: 30%;">Especialidad</th>
+              <th style="width: 12%;">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${docentesParaImprimir.map(docente => `
+              <tr>
+                <td class="text-center">${docente.numero}</td>
+                <td><strong>${docente.codigo}</strong></td>
+                <td>${docente.nombre}</td>
+                <td>${docente.especialidad}</td>
+                <td class="text-center ${docente.estado.toLowerCase().includes('activo') ? 'estado-activo' : 'estado-inactivo'}">
+                  ${docente.estado}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        
+        <div class="total-registros">
+          <p><strong>Total de registros mostrados: ${docentesParaImprimir.length}</strong></p>
+        </div>
+      ` : `
+        <div class="no-data">
+          <p><strong>No hay docentes para mostrar con los filtros aplicados</strong></p>
+        </div>
+      `}
+      
+      <div class="print-footer">
+        <p>Sistema de Gestión de Docentes - Documento generado automáticamente</p>
+        <p>Este documento contiene información confidencial y debe ser tratado con la debida seguridad</p>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  // Escribir el HTML en la nueva ventana
+  ventanaImpresion.document.write(htmlImpresion);
+  ventanaImpresion.document.close();
+  
+  // Esperar a que se cargue completamente y luego imprimir
+  ventanaImpresion.onload = function() {
+    setTimeout(() => {
+      ventanaImpresion.focus();
+      ventanaImpresion.print();
+      
+      // Opcional: cerrar la ventana después de imprimir
+      ventanaImpresion.onafterprint = function() {
+        ventanaImpresion.close();
+      };
+    }, 500);
+  };
+  
+  // Fallback en caso de que onload no funcione
+  setTimeout(() => {
+    if (ventanaImpresion.document.readyState === 'complete') {
+      ventanaImpresion.focus();
+      ventanaImpresion.print();
+    }
+  }, 1000);
+}
     // ====== FUNCIONES DE FILTRADO ======
     
     let totalDocentes = 0;
