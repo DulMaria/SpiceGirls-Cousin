@@ -4,6 +4,7 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\TwoFactorController;
+use App\Http\Controllers\ZoomController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -17,7 +18,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\EstadisticasController;
 use App\Http\Controllers\AperturaModuloController;
-use App\Models\AperturaModulo;
+use App\Http\Controllers\DocenteCursoController;
 
 Route::fallback(function () {
     return redirect()->back()->with('error', 'La ruta que intentas acceder no existe.');
@@ -127,6 +128,33 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
     Route::get('/calendario', [PanelEstudianteController::class, 'calendario'])->name('estudiante.calendario');
 });
 
-Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
-    Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('docente.prinDocente');
-});
+Route::prefix('docente')
+    ->middleware(['auth', CheckRole::class . ':2'])
+    ->name('docente.')
+    ->group(function () {
+
+        // Panel principal del docente - CORREGIDO
+        Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('prinDocente'); // Cambiado de 'prinDocente' a 'dashboard'
+
+        // O si quieres mantener el nombre original, usa:
+        // Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('prinDocente');
+        // Pero entonces en tu código debes usar route('docente.prinDocente')
+
+        // Gestión de cursos - todas apuntan a misCursos
+        Route::get('/misCursos', [DocenteCursoController::class, 'misCursos'])->name('misCursos');
+        Route::get('/estudiantes/{curso}', [DocenteCursoController::class, 'misCursos'])->name('estudiantes');
+        Route::get('/seguimiento/{curso}', [DocenteCursoController::class, 'misCursos'])->name('seguimiento');
+        Route::get('/analisis/{curso}', [DocenteCursoController::class, 'misCursos'])->name('analisis');
+        Route::get('/reportes/{curso}', [DocenteCursoController::class, 'misCursos'])->name('reportes');
+
+        // RUTAS DE ZOOM - AGREGADAS
+        Route::get('/zoom/crear', [ZoomController::class, 'mostrarFormulario'])->name('zoom.crear');
+        Route::post('/zoom/crear', [ZoomController::class, 'crearReunion'])->name('zoom.crear.post');
+
+        // API endpoints
+        Route::prefix('api')->group(function () {
+            Route::get('curso/{id}/details', [DocenteCursoController::class, 'getCursoDetails'])->name('api.curso.details');
+            Route::get('misCursos', [DocenteCursoController::class, 'getMisCursos'])->name('api.misCursos');
+            Route::get('estadisticas', [DocenteCursoController::class, 'getEstadisticas'])->name('api.estadisticas');
+        });
+    });

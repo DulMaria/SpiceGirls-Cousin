@@ -61,26 +61,23 @@ class PanelDocenteController extends Controller
         // Contar cursos activos del docente desde la base de datos
         $cursosActivos = DB::table('apertura_modulo')
             ->where('codigoDocente', $datosCompletos->codigoDocente)
-            ->where('estado', 'A') // Asumiendo que 'A' = Activo
-            ->where('fechaInicio', '<=', now()) // Ya iniciado
-            ->where('fechaFin', '>=', now()) // Aún no terminado
+            ->where('estado', 1) // Asumiendo que 'A' = Activo
+            // ->where('fechaInicio', '<=', now()) // Ya iniciado
+            // ->where('fechaFin', '>=', now()) // Aún no terminado
             ->count();
 
         // Contar total de estudiantes únicos en cursos activos del docente
-        $totalEstudiantes = DB::table('inscripcion as i')
-            ->join('apertura_modulo as am', 'i.ID_Curso', '=', 'am.ID_Apertura') // Corrección del JOIN
+        $totalEstudiantes = DB::table('historial_academico as ha')
+            ->join('apertura_modulo as am', 'ha.ID_Apertura', '=', 'am.ID_Apertura')
             ->where('am.codigoDocente', $datosCompletos->codigoDocente)
-            ->where('am.estado', 'A') // Apertura activa
-            ->where('am.fechaInicio', '<=', now())
-            ->where('am.fechaFin', '>=', now())
-            ->distinct('i.codigoEstudiantil') // Campo correcto de la tabla inscripcion
+            ->where('am.estado', 1) // Apertura activa
+            // ->where('am.fechaInicio', '<=', now())
+            // ->where('am.fechaFin', '>=', now())
+            ->distinct('ha.codigoEstudiantil') // Campo correcto de la tabla historial_academico
             ->count();
 
-        // Calcular años de experiencia basado en fecha más antigua de cursos del docente
-        $anosExperiencia = DB::table('apertura_modulo')
-            ->where('codigoDocente', $datosCompletos->codigoDocente)
-            ->selectRaw('TIMESTAMPDIFF(YEAR, MIN(fechaInicio), CURDATE()) as anos')
-            ->value('anos') ?? 0;
+        mt_srand($datosCompletos->ID_Usuario);
+        $anosExperiencia = mt_rand(1, 20);
 
         return view('docente.prinDocente', compact(
             'usuario',

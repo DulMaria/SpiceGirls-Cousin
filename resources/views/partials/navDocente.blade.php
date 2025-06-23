@@ -66,7 +66,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: left 0.5s;
         }
 
@@ -186,7 +186,7 @@
                 font-size: 1.1rem;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             }
 
             .mobile-toggle:hover {
@@ -230,43 +230,29 @@
             <i class="fas fa-graduation-cap"></i>
             <span>Academia</span>
         </div>
-        
+
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item active">
+            <a href="{{ route('docente.prinDocente') }}" class="nav-item active">
                 <i class="fas fa-home"></i>
                 <span>Inicio</span>
             </a>
-            
-            <a href="#" class="nav-item">
+
+            <a href="{{ route('docente.misCursos') }}"
+                class="nav-item {{ Route::currentRouteName() == 'docente.misCursos' ? 'active' : '' }}">
                 <i class="fas fa-book"></i>
                 <span>Mis Cursos</span>
             </a>
-            
-            <a href="#" class="nav-item">
-                <i class="fas fa-users"></i>
-                <span>Estudiantes</span>
-            </a>
-            
-            <a href="#" class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Seguimiento</span>
-            </a>
-            
-            <a href="#" class="nav-item">
-                <i class="fas fa-file-alt"></i>
-                <span>Reportes</span>
-            </a>
-            
-            <a href="#" class="nav-item">
+
+            <a href="https://classroom.google.com" target="_blank" class="nav-item">
                 <i class="fab fa-google"></i>
                 <span>Google Classroom</span>
             </a>
-            
-            <a href="#" class="nav-item">
+
+            <a href="{{ route('docente.zoom.crear') }}" class="nav-item">
                 <i class="fas fa-video"></i>
                 <span>Crear Zoom</span>
             </a>
-            
+
             <a href="#" class="nav-item" style="margin-top: auto; color: #ff6b6b;">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Cerrar Sesión</span>
@@ -278,7 +264,7 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
-            
+
             sidebar.classList.toggle('open');
             overlay.classList.toggle('show');
         }
