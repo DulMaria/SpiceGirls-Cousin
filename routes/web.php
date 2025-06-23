@@ -129,6 +129,7 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
 });
 
 
+
 Route::prefix('docente')
     ->middleware(['auth', CheckRole::class . ':2'])
     ->name('docente.')
