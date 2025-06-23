@@ -23,6 +23,58 @@
           max-height: calc(90vh - 40px); /* altura máxima menos padding */
           overflow-y: auto;
       }
+
+      /* Estilos para impresión */
+      @media print {
+          body * {
+              visibility: hidden;
+          }
+          
+          #printable-area, #printable-area * {
+              visibility: visible;
+          }
+          
+          #printable-area {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+          }
+          
+          .print-header {
+              text-align: center;
+              margin-bottom: 30px;
+          }
+          
+          .print-table {
+              width: 100%;
+              border-collapse: collapse;
+              font-size: 12px;
+          }
+          
+          .print-table th,
+          .print-table td {
+              border: 1px solid #000;
+              padding: 8px;
+              text-align: left;
+          }
+          
+          .print-table th {
+              background-color: #f5f5f5;
+              font-weight: bold;
+          }
+          
+          .print-footer {
+              margin-top: 30px;
+              text-align: center;
+              font-size: 10px;
+          }
+          
+          /* Ocultar elementos que no se deben imprimir */
+          .no-print {
+              display: none !important;
+          }
+      }
   </style>
 </head>
 
@@ -36,9 +88,15 @@
     <div class="p-8 w-full">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-[#2e1a47]">Gestión de Estudiantes</h1>
-        <button onclick="toggleModal('modalAddEstudiante')" class="bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg shadow">
-          + Añadir Estudiante
-        </button>
+        <div class="flex gap-3">
+          <button onclick="imprimirLista()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2">
+            <i class="bi bi-printer"></i>
+            Imprimir Lista
+          </button>
+          <button onclick="toggleModal('modalAddEstudiante')" class="bg-[#127475] hover:bg-[#0f5f5e] text-white px-4 py-2 rounded-lg shadow">
+            + Añadir Estudiante
+          </button>
+        </div>
       </div>
 
       <!-- Sección de Filtros -->
@@ -114,7 +172,7 @@
 
       <!-- Tabla de Estudiantes -->
       <div class="bg-white rounded-lg shadow overflow-x-auto">
-        <table class="w-full min-w-[1000px] text-sm text-left">
+        <table class="w-full min-w-[1000px] text-sm text-left" id="tablaEstudiantesCompleta">
 
           <thead class="bg-[#1f1b2e] text-white">
             <tr>
@@ -122,9 +180,9 @@
               <th class="px-6 py-3">Código</th>
               <th class="px-6 py-3">Nombre</th>
               <th class="px-6 py-3">Nivel Academico</th>
-              <th class="px-6 py-3">Información</th>
+              <th class="px-6 py-3 no-print">Información</th>
               <th class="px-6 py-3">Estado</th>
-              <th class="px-6 py-3 text-center">Acciones</th>
+              <th class="px-6 py-3 text-center no-print">Acciones</th>
             </tr>
           </thead>
           <tbody id="tablaEstudiantes">
@@ -143,7 +201,7 @@
               <td class="px-6 py-4">{{ $estudiante->nivelAcademico }}</td>
             
 
-              <td class="px-6 py-4 flex items-center justify-center" x-data="{ showModal: false }">
+              <td class="px-6 py-4 flex items-center justify-center no-print" x-data="{ showModal: false }">
                 <button 
                   class="bg-black hover:bg-black-700 text-white px-3 py-2 rounded-full flex items-center  gap-2"
                   type="button"
@@ -177,7 +235,7 @@
                   </div>
               </td>
 
-              <td class="px-6 py-4 text-center">
+              <td class="px-6 py-4 text-center no-print">
                 <div class="flex items-center gap-4">
                   <button type="button" onclick="openEditModal('{{ $estudiante->codigoEstudiantil }}', '{{ $estudiante->ID_Usuario }}')"
                           class="editar-curso bg-purple-800 hover:bg-purple-700 text-white px-4 py-3 rounded-full flex items-center gap-5">
@@ -222,6 +280,36 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Área de impresión (oculta en pantalla) -->
+  <div id="printable-area" style="display: none;">
+    <div class="print-header">
+      <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Lista de Estudiantes</h1>
+      <p id="print-subtitle" style="font-size: 14px; color: #666;"></p>
+      <p style="font-size: 12px; color: #666;">Fecha de impresión: <span id="print-date"></span></p>
+    </div>
+    
+    <table class="print-table" id="print-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Código</th>
+          <th>Nombre Completo</th>
+          <th>Nivel Académico</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="print-table-body">
+        <!-- Los datos se llenarán dinámicamente -->
+      </tbody>
+    </table>
+    
+    <div class="print-footer">
+      <p>Total de estudiantes: <span id="print-total"></span></p>
+      <hr style="margin: 20px 0;">
+      <p>Sistema de Gestión de Estudiantes - Administración</p>
     </div>
   </div>
 
@@ -402,6 +490,83 @@
     let filasOriginales = [];
     let totalEstudiantes = 0;
 
+    // Función para imprimir la lista de estudiantes visibles
+    function imprimirLista() {
+      // Obtener filas visibles
+      const filasVisibles = document.querySelectorAll('.fila-estudiante:not([style*="display: none"])');
+      
+      if (filasVisibles.length === 0) {
+        alert('No hay estudiantes para imprimir. Verifica los filtros aplicados.');
+        return;
+      }
+
+      // Limpiar tabla de impresión
+      const printTableBody = document.getElementById('print-table-body');
+      printTableBody.innerHTML = '';
+
+      // Llenar tabla de impresión con datos visibles
+      let contador = 1;
+      filasVisibles.forEach(fila => {
+        const codigo = fila.getAttribute('data-codigo');
+        const nombre = fila.cells[2].textContent.trim();
+        const nivelAcademico = fila.cells[3].textContent.trim();
+        const estadoElement = fila.cells[5].querySelector('span:last-child');
+        const estado = estadoElement ? estadoElement.textContent.trim() : '';
+
+        const newRow = printTableBody.insertRow();
+        newRow.innerHTML = `
+          <td>${contador}</td>
+          <td>${codigo}</td>
+          <td>${nombre}</td>
+          <td>${nivelAcademico}</td>
+          <td>${estado}</td>
+        `;
+        contador++;
+      });
+
+      // Configurar información de la impresión
+      const printDate = new Date().toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      document.getElementById('print-date').textContent = printDate;
+      document.getElementById('print-total').textContent = filasVisibles.length;
+
+      // Configurar subtítulo basado en filtros aplicados
+      let subtitulo = 'Lista completa de estudiantes';
+      const filtroCodigo = document.getElementById('filtroCodigo').value;
+      const filtroNombre = document.getElementById('filtroNombre').value;
+      const filtroEstado = document.getElementById('filtroEstado').value;
+
+      if (filtroCodigo || filtroNombre || filtroEstado) {
+        subtitulo = 'Lista filtrada de estudiantes';
+        const filtrosAplicados = [];
+        if (filtroCodigo) filtrosAplicados.push(`Código: "${filtroCodigo}"`);
+        if (filtroNombre) filtrosAplicados.push(`Nombre: "${filtroNombre}"`);
+        if (filtroEstado) {
+          const estadoTexto = filtroEstado === '1' ? 'Activo' : 'Inactivo';
+          filtrosAplicados.push(`Estado: ${estadoTexto}`);
+        }
+        subtitulo += ` (${filtrosAplicados.join(', ')})`;
+      }
+
+      document.getElementById('print-subtitle').textContent = subtitulo;
+
+      // Mostrar área de impresión y imprimir
+      const printArea = document.getElementById('printable-area');
+      printArea.style.display = 'block';
+      
+      // Esperar un momento para que se renderice el contenido
+      setTimeout(() => {
+        window.print();
+        // Ocultar área de impresión después de imprimir
+        printArea.style.display = 'none';
+      }, 100);
+    }
     // Función para mostrar el modal de confirmación personalizado
     function mostrarConfirmacion(mensaje) {
         return new Promise((resolve) => {

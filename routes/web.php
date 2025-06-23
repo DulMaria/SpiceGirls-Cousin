@@ -18,6 +18,9 @@ use App\Http\Controllers\EstadisticasController;
 use App\Http\Controllers\AperturaModuloController;
 use App\Http\Controllers\InscripAntiguoController;
 use App\Models\AperturaModulo;
+use App\Http\Controllers\PanelDocenteController;
+use App\Http\Controllers\DocenteCursoController;
+use App\Http\Controllers\ZoomController;
 
 Route::fallback(function () {
     return redirect()->back()->with('error', 'La ruta que intentas acceder no existe.');
@@ -133,9 +136,6 @@ Route::prefix('estudiante')->middleware(CheckRole::class . ':3')->group(function
 
 });
 
-Route::prefix('docente')->middleware(CheckRole::class . ':2')->group(function () {
-    Route::get('/', [PanelEstudianteController::class, 'dashboard'])->name('estudiante.prinDocente');
-});
 /* routes/web.php
 Route::get('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'mostrarFormulario'])->name('test.formulario');
 Route::post('/test-vocacional', [App\Http\Controllers\TestVocacionalController::class, 'guardarRespuesta'])->name('test.guardar');
@@ -160,8 +160,8 @@ Route::prefix('docente')
     ->group(function () {
 
         // Panel principal del docente - CORREGIDO
+        Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('dashboard'); // Cambiado de 'prinDocente' a 'dashboard'
         Route::get('/', [PanelDocenteController::class, 'dashboard'])->name('prinDocente'); // Cambiado de 'prinDocente' a 'dashboard'
-
         // Gestión de cursos - todas apuntan a misCursos
         Route::get('/misCursos', [DocenteCursoController::class, 'misCursos'])->name('misCursos');
         Route::get('/estudiantes/{curso}', [DocenteCursoController::class, 'misCursos'])->name('estudiantes');
