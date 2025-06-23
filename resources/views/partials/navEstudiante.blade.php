@@ -134,7 +134,7 @@
         }
 
         .logout-btn {
-            margin-top: auto;
+            /*margin-top: auto;*/
             padding: 0.8rem;
             border-radius: 8px;
             cursor: pointer;
@@ -174,11 +174,7 @@
                 <span>Calendario</span>
             </a>
 
-            <a href="/estudiante/reportes" class="{{ Request::is('estudiante/reportes') ? 'active' : '' }}">
-                <i class="fas fa-chart-line"></i>
-                <span>Reportes</span>
-            </a>
-            
+      
             <!-- Botón de Cerrar Sesión -->
             <form action="{{ route('logout') }}" method="POST" class="logout-btn">
                 @csrf
